@@ -222,6 +222,53 @@
     box-shadow:0 8px 28px rgba(0,0,0,.16), inset 0 0 0 .5px rgba(0,0,0,.05), inset 0 1.5px 1px rgba(255,255,255,.9)}
   #toast.show{transform:translateX(-50%) translateY(0)}
 
+  /* ============ desktop (MacBook) ============ */
+  #sidebar{display:none}
+  #content{flex:1;display:flex;flex-direction:column;min-width:0;position:relative}
+  @media (min-width:900px){
+    #app{max-width:none;flex-direction:row}
+    nav{display:none}
+    #topbar{display:none}
+    #sidebar{display:flex;flex-direction:column;width:264px;flex:none;padding:28px 14px 20px;
+      background:#fafafa;border-right:.5px solid var(--sep);overflow-y:auto}
+    .sb-logo{font-size:15px;font-weight:700;letter-spacing:.02em;padding:0 12px 22px}
+    .sb-sec{font-size:11px;color:var(--gray);letter-spacing:.08em;font-weight:500;padding:0 12px 6px}
+    .sb-item{display:flex;align-items:center;gap:10px;width:100%;border:none;background:none;font-family:inherit;
+      font-size:13.5px;font-weight:500;color:var(--ink);padding:9px 12px;border-radius:10px;cursor:pointer;text-align:left;
+      transition:background .3s var(--ease-out)}
+    .sb-item:hover{background:rgba(0,0,0,.05)}
+    .sb-item.on{background:rgba(0,0,0,.08)}
+    .sb-item svg{width:16px;height:16px;flex:none;color:var(--gray)}
+    .sb-item .sb-plus{font-size:16px;font-weight:300;width:16px;text-align:center;color:var(--gray)}
+    .sb-goal{display:block;width:100%;border:none;background:none;font-family:inherit;text-align:left;cursor:pointer;
+      padding:9px 12px 10px;border-radius:10px;transition:background .3s var(--ease-out)}
+    .sb-goal:hover{background:rgba(0,0,0,.05)}
+    .sb-goal.on{background:rgba(0,0,0,.08)}
+    .sb-goal .t{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+    .sb-goal .t b{font-size:13.5px;font-weight:500;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+    .sb-goal .t small{flex:none;font-size:11px;color:var(--gray);font-variant-numeric:tabular-nums}
+    .sb-goal .t small.over{color:var(--red)}
+    .sb-goal .bar{height:2px;background:rgba(0,0,0,.08);border-radius:2px;margin-top:7px;overflow:hidden}
+    .sb-goal .bar i{display:block;height:100%;background:var(--ink);border-radius:2px;transition:width .6s var(--ease-out)}
+    main{padding:44px 56px 80px}
+    .screen.active{max-width:760px}
+    .large-title{font-size:30px}
+    .gb-head{padding:20px 16px 6px;margin:0 -16px;border-radius:18px}
+    .gb-head:hover{background:rgba(0,0,0,.03)}
+    .gb-next{padding-bottom:14px}
+    .sub:hover .sub-head span{color:var(--ink)}
+    .sub{border-radius:10px}
+    .t-row{margin:0 -16px}
+    .t-slide{padding:13px 16px}
+    .t-row::after{left:16px;right:16px}
+    .cal-grid{max-width:560px}
+    /* sheet → centered dialog */
+    #sheet.desk{top:50%;left:50%;right:auto;bottom:auto;width:500px;margin:0;border-radius:20px;
+      transform:translate(-50%,-50%);box-shadow:0 30px 80px rgba(0,0,0,.22), 0 0 0 .5px rgba(0,0,0,.06)}
+    #sheet.desk .sh-grab{display:none}
+    #sheet.desk #sheetBody{max-height:70vh;padding:24px 28px 28px}
+  }
+
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -232,23 +279,20 @@
 </filter></svg>
 
 <div id="app">
-<div id="topbar"><span id="topTitle">今日</span></div>
+<aside id="sidebar">
+  <div class="sb-logo">Purpose</div>
+  <div class="sb-sec">ゴール</div>
+  <div id="sbGoals"></div>
+  <button class="sb-item" id="sbAdd"><span class="sb-plus">＋</span>新しいゴール</button>
+  <div class="sb-sec" style="margin-top:18px">ビュー</div>
+  <button class="sb-item" id="sbCal" data-view="cal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3.5"/><path d="M3.5 9.5h17M8 2.8v3.4M16 2.8v3.4"/></svg>カレンダー</button>
+</aside>
+<div id="content">
+<div id="topbar"><span id="topTitle">ゴール</span></div>
 <main id="main">
 
-  <!-- ============ TODAY ============ -->
-  <section class="screen active" id="scr-today">
-    <div class="navrow">
-      <div>
-        <div class="caption" id="todayCap"></div>
-        <h1 class="large-title">今日</h1>
-      </div>
-      <span class="caption" id="todayCount" style="margin-bottom:10px"></span>
-    </div>
-    <div id="todayBody"></div>
-  </section>
-
   <!-- ============ GOALS (matryoshka routes) ============ -->
-  <section class="screen" id="scr-home">
+  <section class="screen active" id="scr-home">
     <div class="navrow">
       <div>
         <div class="caption" id="homeCap"></div>
@@ -276,6 +320,7 @@
   </section>
 
 </main>
+</div>
 
 <div id="dim"></div>
 <div id="sheet"><div class="sh-grab"><div class="sh-handle"></div></div><div id="sheetBody"></div></div>
@@ -294,8 +339,7 @@
 
 <nav><div class="tabbar" id="tabbar">
   <div id="lens"></div>
-  <button class="tab active" data-scr="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.6v4.4l3.1 1.9"/></svg>今日</button>
-  <button class="tab" data-scr="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="4.6"/><circle cx="12" cy="12" r="1.1" fill="currentColor"/></svg>ゴール</button>
+  <button class="tab active" data-scr="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="4.6"/><circle cx="12" cy="12" r="1.1" fill="currentColor"/></svg>ゴール</button>
   <button class="tab" data-scr="cal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3.5"/><path d="M3.5 9.5h17M8 2.8v3.4M16 2.8v3.4"/></svg>カレンダー</button>
 </div></nav>
 
@@ -357,24 +401,32 @@ function onLongPress(el,fn,ms){
 /* ================= sheet ================= */
 const sheet=document.getElementById('sheet'), sheetBody=document.getElementById('sheetBody'), dim=document.getElementById('dim');
 let sheetOpen=false, sheetAnim=null;
+const isDesk=()=>matchMedia('(min-width:900px)').matches;
 function openSheet(build){
   sheetBody.scrollTop=0;
   sheetBody.replaceChildren();
   build(sheetBody);
+  const desk=isDesk();
+  sheet.classList.toggle('desk',desk);
   sheet.style.display='block';sheet.style.transform='';
   dim.classList.add('show');
   if(sheetAnim)sheetAnim.cancel();
-  sheetAnim=sheet.animate([{transform:'translateY(105%)'},{transform:'translateY(0)'}],{duration:420,easing:SPR_SOFT,fill:'both'});
+  sheetAnim=desk
+    ?sheet.animate([{opacity:0,transform:'translate(-50%,-50%) scale(.96)'},{opacity:1,transform:'translate(-50%,-50%) scale(1)'}],{duration:380,easing:SPR_SOFT,fill:'both'})
+    :sheet.animate([{transform:'translateY(105%)'},{transform:'translateY(0)'}],{duration:420,easing:SPR_SOFT,fill:'both'});
   sheetOpen=true;
 }
 function closeSheet(fromY){
   if(!sheetOpen)return;
   if(sheetAnim)sheetAnim.cancel();
   dim.classList.remove('show');
-  sheetAnim=sheet.animate([{transform:`translateY(${fromY||0}px)`},{transform:'translateY(105%)'}],{duration:280,easing:'cubic-bezier(.4,0,.7,1)',fill:'both'});
+  sheetAnim=sheet.classList.contains('desk')
+    ?sheet.animate([{opacity:1,transform:'translate(-50%,-50%) scale(1)'},{opacity:0,transform:'translate(-50%,-50%) scale(.97)'}],{duration:200,easing:'cubic-bezier(.4,0,.7,1)',fill:'both'})
+    :sheet.animate([{transform:`translateY(${fromY||0}px)`},{transform:'translateY(105%)'}],{duration:280,easing:'cubic-bezier(.4,0,.7,1)',fill:'both'});
   sheetAnim.onfinish=()=>{sheet.style.display='none';returnSettingsNode()};
   sheetOpen=false;
 }
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
 onTap(dim,()=>closeSheet());
 function returnSettingsNode(){const n=document.getElementById('setNode');if(n&&n.parentElement===sheetBody){n.style.display='none';document.body.appendChild(n)}}
 let shDrag=null;
@@ -409,9 +461,9 @@ sheet.addEventListener('pointerup',shEnd);
 sheet.addEventListener('pointercancel',shEnd);
 
 /* ================= lens tab bar ================= */
-const TABS=['today','home','cal'];
-const TABTITLE={today:'今日',home:'ゴール',cal:'カレンダー'};
-let curTab='today';
+const TABS=['home','cal'];
+const TABTITLE={home:'ゴール',cal:'カレンダー'};
+let curTab='home';
 const lens=document.getElementById('lens'), tabbar=document.getElementById('tabbar');
 const TABW=86;
 function lensX(x){lens.style.transform=`translateX(${x}px)`;lens.style.setProperty('--lx',(-x*.38)+'px')}
@@ -501,7 +553,7 @@ mainEl.addEventListener('scroll',syncTopbar,{passive:true});
 
 /* ================= render ================= */
 let expandedGoal=null;
-function render(){renderToday();renderHome();renderCal()}
+function render(){renderSidebar();renderHome();renderCal()}
 function sortedGoals(){return [...S.goals].sort((a,b)=>(a.deadline||'9999')<(b.deadline||'9999')?-1:1)}
 function goalTasks(g){return S.tasks.filter(t=>t.goalId===g.id)}
 function mileTasks(m){return S.tasks.filter(t=>t.mileId===m.id).sort((a,b)=>a.date<b.date?-1:1)}
@@ -528,19 +580,25 @@ function taskRow(t,showDate){
     </div>
   </div>`;
 }
-function renderToday(){
-  document.getElementById('todayCap').textContent=`${now.getMonth()+1}月${now.getDate()}日 ${WDJ[now.getDay()]}曜日`;
-  const overdue=S.tasks.filter(t=>t.date<TODAY&&!t.done).sort((a,b)=>a.date<b.date?-1:1);
-  const ts=S.tasks.filter(t=>t.date===TODAY);
-  const undone=ts.filter(t=>!t.done), done=ts.filter(t=>t.done);
-  document.getElementById('todayCount').textContent=ts.length?`${done.length} / ${ts.length}`:'';
-  const b=document.getElementById('todayBody');
-  let html='';
-  if(overdue.length)html+=`<div class="sec-sub">持ち越し</div>`+overdue.map(t=>taskRow(t,true)).join('');
-  if(ts.length)html+=(overdue.length?`<div class="sec-sub">今日</div>`:'')+[...undone,...done].map(t=>taskRow(t)).join('');
-  if(!html)html='<div class="empty">今日やることはまだない。<br>ChatGPTに「明日の分を割り振って」と言うか、<br>ゴールのマトリョーシカから追加。</div>';
-  b.innerHTML=html;
-  bindTasks(b);
+function renderSidebar(){
+  const sb=document.getElementById('sbGoals');if(!sb)return;
+  const gs=sortedGoals();
+  sb.innerHTML=gs.map(g=>{
+    const ms=g.miles||[], dn=ms.filter(m=>m.done).length;
+    const dl=g.deadline?dleft(g.deadline):null;
+    return `<button class="sb-goal${curTab==='home'&&expandedGoal===g.id?' on':''}" data-gid="${g.id}">
+      <div class="t"><b>${esc(g.title)}</b><small${dl!==null&&dl<0?' class="over"':''}>${dl===null?'':(dl<0?`+${-dl}日`:`${dl}日`)}</small></div>
+      <div class="bar"><i style="width:${ms.length?dn/ms.length*100:0}%"></i></div>
+    </button>`;
+  }).join('');
+  sb.querySelectorAll('.sb-goal').forEach(b=>b.onclick=()=>{
+    expandedGoal=b.dataset.gid;
+    if(curTab!=='home')setTab('home');else{renderHome();renderSidebar()}
+    const el=document.querySelector(`.gb[data-gid="${b.dataset.gid}"]`);
+    if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  const cal=document.getElementById('sbCal');
+  if(cal)cal.classList.toggle('on',curTab==='cal');
 }
 
 /* ---- GOALS (3-layer matryoshka routes) ---- */
@@ -631,7 +689,7 @@ function toggleTaskDot(dot){
   if(fill)fill.style.width=(ts.length?dn/ts.length*100:0)+'%';
   const cnt=sub.querySelector('.sub-head small');
   if(cnt)cnt.textContent=ts.length?`${dn}/${ts.length}`:'';
-  saveQuiet();renderToday();
+  saveQuiet();
 }
 
 /* ================= swipe task rows ================= */
@@ -688,9 +746,6 @@ function bindTasks(root){
       if(t.done){const c=el.querySelector('.t-check');
         c.animate([{transform:'scale(1)'},{transform:'scale(1.28)'},{transform:'scale(1)'}],{duration:420,easing:'cubic-bezier(.32,1.6,.45,1)'})}
       saveQuiet();renderHome();
-      const tc=document.getElementById('todayCount');
-      const ts2=S.tasks.filter(x=>x.date===TODAY);
-      tc.textContent=ts2.length?`${ts2.filter(x=>x.done).length} / ${ts2.length}`:'';
     });
     el.addEventListener('pointercancel',()=>{p=null;el.classList.remove('pressed')});
     delBtn.addEventListener('click',()=>{doDelete(el,t);openRow=null});
@@ -732,7 +787,7 @@ function openGoalSheet(gid){
     body.querySelectorAll('#shMiles .mini-t').forEach(row=>onTap(row,()=>openMileSheet(g.id,row.dataset.mid)));
     body.querySelectorAll('#shUntied .mini-t').forEach(row=>onTap(row,()=>{
       const t=S.tasks.find(x=>x.id===row.dataset.tid);if(!t)return;
-      t.done=!t.done;t.u=Date.now();row.classList.toggle('done',t.done);saveQuiet();renderHome();renderToday();
+      t.done=!t.done;t.u=Date.now();row.classList.toggle('done',t.done);saveQuiet();renderHome();
     }));
     const addMile=()=>{
       const inp=body.querySelector('#shMileAdd');const v=inp.value.trim();if(!v)return;
@@ -782,7 +837,7 @@ function openMileSheet(gid,mid){
         if(row.dataset.bound)return;row.dataset.bound=1;
         onTap(row,()=>{
           const t=S.tasks.find(x=>x.id===row.dataset.tid);if(!t)return;
-          t.done=!t.done;t.u=Date.now();row.classList.toggle('done',t.done);saveQuiet();renderHome();renderToday();
+          t.done=!t.done;t.u=Date.now();row.classList.toggle('done',t.done);saveQuiet();renderHome();
         });
       });
     };
@@ -790,7 +845,7 @@ function openMileSheet(gid,mid){
     const add=()=>{
       const inp=body.querySelector('#shTAdd');const v=inp.value.trim();if(!v)return;
       S.tasks.push({id:uid('t'),title:v,date:TODAY,done:false,goalId:g.id,mileId:m.id,u:Date.now()});
-      persist();schedulePush();renderHome();renderToday();inp.value='';
+      persist();schedulePush();renderHome();inp.value='';
       const wrap=body.querySelector('#shMTasks');
       const t=S.tasks[S.tasks.length-1];
       wrap.insertAdjacentHTML('beforeend',`<div class="mini-t" data-tid="${t.id}"><div class="c">${CHECK.replace('width="11" height="11"','width="10" height="10"')}</div><span>${esc(t.title)}</span><i>${t.date.slice(5).replace('-','/')}</i></div>`);
@@ -842,6 +897,8 @@ function openGoalForm(gid){
   });
 }
 onTap(document.getElementById('btnAddGoal'),()=>openGoalForm(null));
+document.getElementById('sbAdd').onclick=()=>openGoalForm(null);
+document.getElementById('sbCal').onclick=()=>goTab('cal');
 onLongPress(document.getElementById('homeTitle'),()=>{
   openSheet(body=>{const n=document.getElementById('setNode');n.style.display='block';body.appendChild(n)});
 },600);
