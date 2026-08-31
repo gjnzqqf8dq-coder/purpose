@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#05060f">
+<title>Purpose</title>
+<style>
+  :root{
+    --bg:#05060f;
+    --glass:rgba(255,255,255,.055);
+    --glass-strong:rgba(255,255,255,.09);
+    --stroke:rgba(255,255,255,.14);
+    --stroke-soft:rgba(255,255,255,.07);
+    --txt:rgba(255,255,255,.92);
+    --txt2:rgba(255,255,255,.55);
+    --txt3:rgba(255,255,255,.32);
+    --accent:#8b9dff;
+    --accent2:#6ee7d8;
+    --radius:26px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Hiragino Sans","Noto Sans JP",sans-serif;
+    overflow:hidden;
+  }
+  /* ---- aurora background ---- */
+  .aurora{position:fixed;inset:0;z-index:0;overflow:hidden;filter:blur(70px) saturate(140%)}
+  .aurora i{position:absolute;border-radius:50%;opacity:.5;will-change:transform}
+  .aurora i:nth-child(1){width:60vmax;height:60vmax;left:-20vmax;top:-25vmax;background:radial-gradient(circle,#2b2f8f,transparent 65%);animation:dr1 26s ease-in-out infinite alternate}
+  .aurora i:nth-child(2){width:50vmax;height:50vmax;right:-18vmax;top:10vmax;background:radial-gradient(circle,#0f4d5c,transparent 65%);animation:dr2 32s ease-in-out infinite alternate}
+  .aurora i:nth-child(3){width:44vmax;height:44vmax;left:10vmax;bottom:-22vmax;background:radial-gradient(circle,#4a2b7a,transparent 65%);animation:dr3 38s ease-in-out infinite alternate}
+  @keyframes dr1{to{transform:translate(9vmax,7vmax) scale(1.12)}}
+  @keyframes dr2{to{transform:translate(-8vmax,9vmax) scale(.94)}}
+  @keyframes dr3{to{transform:translate(7vmax,-8vmax) scale(1.08)}}
+  .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E")}
+
+  /* ---- layout ---- */
+  #app{position:relative;z-index:2;height:100dvh;display:flex;flex-direction:column;max-width:560px;margin:0 auto}
+  main{flex:1;overflow-y:auto;padding:calc(env(safe-area-inset-top) + 22px) 20px 130px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  main::-webkit-scrollbar{display:none}
+  .screen{display:none;animation:fade .35s ease}
+  .screen.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* ---- glass primitives ---- */
+  .glass{
+    background:var(--glass);
+    backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);
+    border:1px solid var(--stroke-soft);
+    border-top-color:var(--stroke);
+    border-radius:var(--radius);
+    box-shadow:0 12px 40px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+  }
+  .pill{border-radius:999px}
+
+  /* ---- header ---- */
+  .eyebrow{font-size:11px;letter-spacing:.22em;color:var(--txt3);text-transform:uppercase;margin-bottom:6px}
+  .h-date{font-size:26px;font-weight:700;letter-spacing:-.02em}
+  .h-sub{font-size:13px;color:var(--txt2);margin-top:2px}
+
+  /* ---- purpose strip (today) ---- */
+  .north{padding:18px 20px;margin:18px 0 14px;position:relative;overflow:hidden}
+  .north .p-label{font-size:10px;letter-spacing:.25em;color:var(--txt3);margin-bottom:8px}
+  .north .p-text{font-size:15px;line-height:1.65;font-weight:600}
+  .north .p-chain{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+  .chain-row{display:flex;align-items:baseline;gap:10px;font-size:12.5px;color:var(--txt2);line-height:1.5}
+  .chain-row b{flex:none;font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--accent);opacity:.85;width:44px}
+  .chain-row span{color:var(--txt2)}
+  .chain-row.empty span{color:var(--txt3);font-style:normal}
+
+  /* ---- date scroller ---- */
+  .days{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:none}
+  .days::-webkit-scrollbar{display:none}
+  .day{flex:none;width:52px;padding:10px 0 12px;text-align:center;border-radius:18px;border:1px solid transparent;color:var(--txt2);cursor:pointer;transition:.25s}
+  .day small{display:block;font-size:10px;letter-spacing:.08em;margin-bottom:4px;color:var(--txt3)}
+  .day b{font-size:17px;font-weight:600}
+  .day.sel{background:var(--glass-strong);border-color:var(--stroke);color:var(--txt);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+  .day.today b{color:var(--accent2)}
+
+  /* ---- tasks ---- */
+  .tasklist{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+  .task{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;transition:transform .15s ease, opacity .3s}
+  .task:active{transform:scale(.985)}
+  .tick{flex:none;width:24px;height:24px;border-radius:50%;border:1.5px solid rgba(255,255,255,.3);display:grid;place-items:center;transition:.25s}
+  .tick svg{width:12px;height:12px;opacity:0;transform:scale(.4);transition:.25s}
+  .task.done .tick{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent}
+  .task.done .tick svg{opacity:1;transform:scale(1)}
+  .t-body{flex:1;min-width:0}
+  .t-title{font-size:15px;font-weight:500;line-height:1.5;word-break:break-word;transition:.3s}
+  .task.done .t-title{color:var(--txt3);text-decoration:line-through;text-decoration-color:rgba(255,255,255,.25)}
+  .t-del{flex:none;color:var(--txt3);font-size:18px;padding:4px 6px;opacity:.5}
+  .emptystate{text-align:center;color:var(--txt3);font-size:13px;padding:44px 0 30px;line-height:2}
+
+  /* ---- progress ring ---- */
+  .todayhead{display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+  .ring{width:56px;height:56px;position:relative;flex:none}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .track{stroke:rgba(255,255,255,.1)}
+  .ring .bar{stroke:url(#gradRing);stroke-linecap:round;transition:stroke-dashoffset .6s cubic-bezier(.22,1,.36,1)}
+  .ring .pct{position:absolute;inset:0;display:grid;place-items:center;font-size:12px;font-weight:700}
+
+  /* ---- input bar ---- */
+  .inputbar{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 88px);z-index:6;max-width:560px;margin:0 auto;padding:0 20px;display:none}
+  .inputbar.show{display:block}
+  .inputwrap{display:flex;align-items:center;gap:10px;padding:8px 8px 8px 20px}
+  .inputwrap input{flex:1;background:none;border:none;outline:none;color:var(--txt);font-size:15px;font-family:inherit}
+  .inputwrap input::placeholder{color:var(--txt3)}
+  .icobtn{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;border:none;cursor:pointer;background:var(--glass-strong);color:var(--txt2);transition:.2s}
+  .icobtn.rec{background:#e5484d;color:#fff;animation:pulse 1.2s infinite}
+  @keyframes pulse{50%{opacity:.7}}
+  .icobtn.add{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0c18}
+
+  /* ---- blueprint (cascade) ---- */
+  .bp-section{margin-bottom:14px;padding:18px 20px}
+  .bp-label{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+  .bp-label b{font-size:10.5px;letter-spacing:.24em;color:var(--txt3);font-weight:700}
+  .bp-label span{font-size:11px;color:var(--txt3)}
+  .bp-text{font-size:14.5px;line-height:1.75;font-weight:500;white-space:pre-wrap;word-break:break-word;min-height:22px}
+  .bp-text.ghost{color:var(--txt3);font-weight:400}
+  .bp-purpose .bp-text{font-size:17px;font-weight:700;line-height:1.7}
+  .connector{width:1px;height:16px;margin:-4px auto 10px;background:linear-gradient(rgba(255,255,255,.25),transparent)}
+  .decades{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+  .decades::-webkit-scrollbar{display:none}
+  .dec{flex:none;width:150px;padding:14px 14px 16px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid var(--stroke-soft);cursor:pointer;transition:.2s}
+  .dec.cur{border-color:rgba(139,157,255,.45);background:rgba(139,157,255,.08)}
+  .dec b{font-size:12px;color:var(--txt2);display:block;margin-bottom:6px;letter-spacing:.06em}
+  .dec.cur b{color:var(--accent)}
+  .dec p{font-size:12.5px;line-height:1.6;color:var(--txt);min-height:40px;white-space:pre-wrap;word-break:break-word}
+  .dec p.ghost{color:var(--txt3)}
+  textarea.editor{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--stroke);border-radius:14px;color:var(--txt);font-size:14.5px;line-height:1.7;font-family:inherit;padding:12px 14px;outline:none;resize:none;min-height:76px}
+
+  /* ---- sync ---- */
+  .sync-card{padding:20px;margin-bottom:14px}
+  .sync-card h3{font-size:15px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+  .sync-card .n{width:20px;height:20px;border-radius:50%;background:var(--glass-strong);display:grid;place-items:center;font-size:11px;color:var(--accent);flex:none}
+  .sync-card p{font-size:12.5px;color:var(--txt2);line-height:1.8;margin-bottom:14px}
+  .btn{display:block;width:100%;padding:15px;border-radius:18px;border:1px solid var(--stroke);background:var(--glass-strong);color:var(--txt);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:.2s;backdrop-filter:blur(10px)}
+  .btn:active{transform:scale(.98)}
+  .btn.primary{background:linear-gradient(135deg,rgba(139,157,255,.9),rgba(110,231,216,.9));color:#0a0c18;border:none}
+  .btn.ghostb{background:none;border-color:var(--stroke-soft);color:var(--txt2)}
+  #pasteArea{width:100%;min-height:110px;margin-bottom:10px;background:rgba(0,0,0,.25);border:1px solid var(--stroke-soft);border-radius:16px;color:var(--txt);font-family:ui-monospace,monospace;font-size:12px;padding:14px;outline:none;resize:vertical}
+  #pasteArea::placeholder{color:var(--txt3)}
+
+  /* ---- tabbar ---- */
+  nav{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 16px);z-index:7;display:flex;justify-content:center;pointer-events:none}
+  .tabbar{pointer-events:auto;display:flex;gap:4px;padding:6px}
+  .tab{padding:12px 26px;border-radius:999px;border:none;background:none;color:var(--txt3);font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:.25s;display:flex;flex-direction:column;align-items:center;gap:3px}
+  .tab svg{width:20px;height:20px}
+  .tab.active{background:var(--glass-strong);color:var(--txt);box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+
+  /* ---- toast ---- */
+  #toast{position:fixed;top:calc(env(safe-area-inset-top) + 16px);left:50%;transform:translateX(-50%) translateY(-70px);z-index:20;padding:12px 22px;font-size:13px;font-weight:600;transition:.4s cubic-bezier(.22,1,.36,1);white-space:nowrap}
+  #toast.show{transform:translateX(-50%) translateY(0)}
+  .fine{font-size:10.5px;color:var(--txt3);text-align:center;padding:24px 0 8px;letter-spacing:.1em}
+</style>
+</head>
+<body>
+<div class="aurora"><i></i><i></i><i></i></div>
+<div class="grain"></div>
+<svg width="0" height="0"><defs><linearGradient id="gradRing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b9dff"/><stop offset="1" stop-color="#6ee7d8"/></linearGradient></defs></svg>
+
+<div id="app">
+<main id="main">
+
+  <!-- ============ TODAY ============ -->
+  <section class="screen active" id="scr-today">
+    <div class="todayhead">
+      <div>
+        <div class="eyebrow">Purpose</div>
+        <div class="h-date" id="todayDate"></div>
+        <div class="h-sub" id="todaySub"></div>
+      </div>
+      <div class="ring">
+        <svg width="56" height="56"><circle class="track" cx="28" cy="28" r="24" fill="none" stroke-width="4"/><circle class="bar" id="ringBar" cx="28" cy="28" r="24" fill="none" stroke-width="4" stroke-dasharray="150.8" stroke-dashoffset="150.8"/></svg>
+        <div class="pct" id="ringPct">0%</div>
+      </div>
+    </div>
+
+    <div class="glass north" id="northCard">
+      <div class="p-label">N O R T H&nbsp;&nbsp;S T A R</div>
+      <div class="p-text" id="npPurpose"></div>
+      <div class="p-chain" id="npChain"></div>
+    </div>
+
+    <div class="days" id="dayScroll"></div>
+    <div class="tasklist" id="taskList"></div>
+    <div class="fine">タップで完了 ・ 長押しで削除</div>
+  </section>
+
+  <!-- ============ BLUEPRINT ============ -->
+  <section class="screen" id="scr-bp">
+    <div class="eyebrow">Blueprint</div>
+    <div class="h-date">設計図</div>
+    <div class="h-sub" style="margin-bottom:18px">人生から今週まで、一本の線でつなぐ</div>
+    <div id="bpBody"></div>
+  </section>
+
+  <!-- ============ SYNC ============ -->
+  <section class="screen" id="scr-sync">
+    <div class="eyebrow">Link</div>
+    <div class="h-date">ChatGPT 連携</div>
+    <div class="h-sub" style="margin-bottom:18px">壁打ち → 反映まで、コピペ2回</div>
+
+    <div class="glass sync-card">
+      <h3><span class="n">1</span>現在地を渡して壁打ちする</h3>
+      <p>いまの全データ＋壁打ち用の指示をコピーします。ChatGPTに貼れば、目標の分解・見直しを一緒にやってくれて、最後に取り込み用データを返してくれます。</p>
+      <button class="btn primary" id="btnExport">壁打ちプロンプトをコピー</button>
+    </div>
+
+    <div class="glass sync-card">
+      <h3><span class="n">2</span>結果を取り込む</h3>
+      <p>ChatGPTが返した <b>PURPOSE_JSON</b> をここに貼るだけ。全体でも一部（タスク追加だけ等）でもOK。</p>
+      <textarea id="pasteArea" placeholder='{"tasks":[...]} または全体JSONを貼り付け'></textarea>
+      <button class="btn" id="btnImport">取り込む</button>
+    </div>
+
+    <div class="glass sync-card">
+      <h3><span class="n">＋</span>バックアップ</h3>
+      <p>データはこの端末のブラウザに保存されています。定期的に書き出しておくと安心です。</p>
+      <button class="btn ghostb" id="btnBackup">JSONを書き出す</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- input bar (today only) -->
+<div class="inputbar show" id="inputbar">
+  <div class="glass pill inputwrap">
+    <input id="taskInput" placeholder="タスクを追加" enterkeyhint="done">
+    <button class="icobtn" id="btnMic" title="音声入力"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+    <button class="icobtn add" id="btnAdd"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+  </div>
+</div>
+
+<nav><div class="glass pill tabbar">
+  <button class="tab active" data-scr="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>今日</button>
+  <button class="tab" data-scr="bp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v18M12 7l7-4M12 7L5 3M12 14l7-4M12 14l-7-4M12 21l7-4M12 21l-7-4"/></svg>設計図</button>
+  <button class="tab" data-scr="sync"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 12a4 4 0 0 1 4-4h6M14 4l4 4-4 4M16 12a4 4 0 0 1-4 4H6M10 20l-4-4 4-4"/></svg>連携</button>
+</div></nav>
+
+<div class="glass pill" id="toast"></div>
+</div>
+
+<script>
+/* ================= state ================= */
+const KEY='purpose.v1';
+const DECADE_LABELS=['20代','30代','40代','50代','60代','70代'];
+const emptyState=()=>({
+  purpose:'',
+  decades:DECADE_LABELS.map(l=>({label:l,goal:''})),
+  year:{},      // {'2026': goal}
+  quarter:{},   // {'2026-Q3': goal}
+  month:{},     // {'2026-08': goal}
+  week:{},      // {'2026-W36': goal}
+  tasks:[]      // {id,date:'YYYY-MM-DD',title,done}
+});
+let S=load();
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.decades)return Object.assign(emptyState(),d)}catch(e){}return emptyState()}
+function save(){localStorage.setItem(KEY,JSON.stringify(S))}
+
+/* ================= date utils ================= */
+const pad=n=>String(n).padStart(2,'0');
+const fmt=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+function isoWeek(d){const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const day=t.getUTCDay()||7;t.setUTCDate(t.getUTCDate()+4-day);const y0=new Date(Date.UTC(t.getUTCFullYear(),0,1));return[t.getUTCFullYear(),Math.ceil(((t-y0)/864e5+1)/7)]}
+const now=new Date();
+const keys={
+  year:String(now.getFullYear()),
+  quarter:`${now.getFullYear()}-Q${Math.floor(now.getMonth()/3)+1}`,
+  month:`${now.getFullYear()}-${pad(now.getMonth()+1)}`,
+  week:(()=>{const[y,w]=isoWeek(now);return`${y}-W${pad(w)}`})()
+};
+const curDecadeIdx=(()=>{ // assumes 20s now; adjust by birth year later if set
+  return 0;
+})();
+let selDate=fmt(now);
+
+/* ================= toast ================= */
+let toastT;
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2200)}
+
+/* ================= tabs ================= */
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('scr-'+b.dataset.scr).classList.add('active');
+  document.getElementById('inputbar').classList.toggle('show',b.dataset.scr==='today');
+  if(b.dataset.scr==='bp')renderBP();
+  document.getElementById('main').scrollTo({top:0});
+});
+
+/* ================= TODAY ================= */
+const WD=['日','月','火','水','木','金','土'];
+function renderToday(){
+  const d=new Date(selDate+'T00:00:00');
+  document.getElementById('todayDate').textContent=`${d.getMonth()+1}月${d.getDate()}日 ${WD[d.getDay()]}曜日`;
+  const wg=S.week[keys.week], mg=S.month[keys.month];
+  document.getElementById('todaySub').textContent=wg?`今週：${wg.split('\n')[0]}`:(mg?`今月：${mg.split('\n')[0]}`:'');
+  // north star
+  document.getElementById('npPurpose').textContent=S.purpose||'（設計図タブで、人生のパーパスを書こう）';
+  const chain=[
+    ['DECADE',S.decades[curDecadeIdx]?.goal],
+    ['YEAR',S.year[keys.year]],
+    ['MONTH',S.month[keys.month]],
+    ['WEEK',S.week[keys.week]]
+  ];
+  document.getElementById('npChain').innerHTML=chain.map(([k,v])=>
+    `<div class="chain-row${v?'':' empty'}"><b>${k}</b><span>${esc(v?v.split('\n')[0]:'—')}</span></div>`).join('');
+  renderDays();renderTasks();
+}
+function renderDays(){
+  const wrap=document.getElementById('dayScroll');wrap.innerHTML='';
+  for(let i=-3;i<=10;i++){
+    const d=new Date(now);d.setDate(d.getDate()+i);const ds=fmt(d);
+    const el=document.createElement('div');
+    el.className='day'+(ds===selDate?' sel':'')+(ds===fmt(now)?' today':'');
+    el.innerHTML=`<small>${WD[d.getDay()]}</small><b>${d.getDate()}</b>`;
+    el.onclick=()=>{selDate=ds;renderToday()};
+    wrap.appendChild(el);
+  }
+}
+function dayTasks(){return S.tasks.filter(t=>t.date===selDate)}
+function renderTasks(){
+  const list=document.getElementById('taskList');list.innerHTML='';
+  const ts=dayTasks();
+  if(!ts.length){list.innerHTML='<div class="emptystate">まだ何もありません。<br>下の入力欄か、ChatGPT連携から追加できます。</div>'}
+  ts.forEach(t=>{
+    const el=document.createElement('div');el.className='glass task'+(t.done?' done':'');
+    el.innerHTML=`<div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0c18" stroke-width="3.4" stroke-linecap="round"><path d="M4 12.5l5 5L20 6.5"/></svg></div><div class="t-body"><div class="t-title">${esc(t.title)}</div></div>`;
+    let press;
+    el.addEventListener('pointerdown',()=>{press=setTimeout(()=>{press=null;if(confirm('このタスクを削除する？')){S.tasks=S.tasks.filter(x=>x.id!==t.id);save();renderToday()}},550)});
+    el.addEventListener('pointerup',()=>{if(press){clearTimeout(press);t.done=!t.done;save();renderToday()}});
+    el.addEventListener('pointerleave',()=>clearTimeout(press));
+    list.appendChild(el);
+  });
+  const done=ts.filter(t=>t.done).length, pct=ts.length?Math.round(done/ts.length*100):0;
+  document.getElementById('ringPct').textContent=pct+'%';
+  document.getElementById('ringBar').style.strokeDashoffset=150.8*(1-pct/100);
+}
+function addTask(title){
+  title=title.trim();if(!title)return;
+  S.tasks.push({id:Date.now()+''+Math.floor(Math.random()*999),date:selDate,title,done:false});
+  save();renderToday();
+}
+document.getElementById('btnAdd').onclick=()=>{const i=document.getElementById('taskInput');addTask(i.value);i.value=''};
+document.getElementById('taskInput').addEventListener('keydown',e=>{if(e.key==='Enter'){addTask(e.target.value);e.target.value=''}});
+
+/* voice input */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const mic=document.getElementById('btnMic');
+if(!SR){mic.style.display='none'}
+else{
+  let rec=null;
+  mic.onclick=()=>{
+    if(rec){rec.stop();return}
+    rec=new SR();rec.lang='ja-JP';rec.interimResults=false;
+    mic.classList.add('rec');
+    rec.onresult=e=>{const txt=e.results[0][0].transcript;document.getElementById('taskInput').value=txt};
+    rec.onend=()=>{mic.classList.remove('rec');rec=null;const i=document.getElementById('taskInput');if(i.value){addTask(i.value);i.value=''}};
+    rec.onerror=()=>{mic.classList.remove('rec');rec=null;toast('音声入力できませんでした')};
+    rec.start();
+  };
+}
+
+/* ================= BLUEPRINT ================= */
+function bpSection(label,meta,value,onSave,cls){
+  const sec=document.createElement('div');sec.className='glass bp-section '+(cls||'');
+  sec.innerHTML=`<div class="bp-label"><b>${label}</b><span>${meta||''}</span></div>`;
+  const p=document.createElement('div');p.className='bp-text'+(value?'':' ghost');
+  p.textContent=value||'タップして書く';
+  sec.appendChild(p);
+  sec.onclick=()=>{
+    if(sec.querySelector('textarea'))return;
+    const ta=document.createElement('textarea');ta.className='editor';ta.value=value||'';
+    p.replaceWith(ta);ta.focus();
+    const commit=()=>{onSave(ta.value.trim());renderBP()};
+    ta.addEventListener('blur',commit);
+    ta.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.metaKey||e.ctrlKey))ta.blur()});
+  };
+  return sec;
+}
+function renderBP(){
+  const b=document.getElementById('bpBody');b.innerHTML='';
+  b.appendChild(bpSection('P U R P O S E','人生の目的',S.purpose,v=>{S.purpose=v;save()},'bp-purpose'));
+  b.appendChild(conn());
+  // decades
+  const dsec=document.createElement('div');dsec.className='glass bp-section';
+  dsec.innerHTML='<div class="bp-label"><b>D E C A D E S</b><span>年代ごとの到達点</span></div>';
+  const row=document.createElement('div');row.className='decades';
+  S.decades.forEach((d,i)=>{
+    const c=document.createElement('div');c.className='dec'+(i===curDecadeIdx?' cur':'');
+    c.innerHTML=`<b>${d.label}${i===curDecadeIdx?' ・いま':''}</b>`;
+    const p=document.createElement('p');p.className=d.goal?'':'ghost';p.textContent=d.goal||'未設定';c.appendChild(p);
+    c.onclick=e=>{e.stopPropagation();
+      if(c.querySelector('textarea'))return;
+      const ta=document.createElement('textarea');ta.className='editor';ta.value=d.goal||'';ta.style.minHeight='60px';
+      p.replaceWith(ta);ta.focus();
+      ta.addEventListener('blur',()=>{S.decades[i].goal=ta.value.trim();save();renderBP()});
+    };
+    row.appendChild(c);
+  });
+  dsec.appendChild(row);b.appendChild(dsec);b.appendChild(conn());
+  b.appendChild(bpSection('Y E A R',keys.year+'年',S.year[keys.year],v=>{S.year[keys.year]=v;save()}));
+  b.appendChild(conn());
+  b.appendChild(bpSection('Q U A R T E R',keys.quarter.replace('-',' '),S.quarter[keys.quarter],v=>{S.quarter[keys.quarter]=v;save()}));
+  b.appendChild(conn());
+  b.appendChild(bpSection('M O N T H',`${now.getMonth()+1}月`,S.month[keys.month],v=>{S.month[keys.month]=v;save()}));
+  b.appendChild(conn());
+  b.appendChild(bpSection('W E E K','今週',S.week[keys.week],v=>{S.week[keys.week]=v;save()}));
+  renderToday();
+}
+function conn(){const c=document.createElement('div');c.className='connector';return c}
+
+/* ================= SYNC ================= */
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+document.getElementById('btnExport').onclick=async()=>{
+  const prompt=`あなたは目標設計のコーチです。私は「Purpose」というアプリで、人生の目的→年代→年→四半期→月→週→今日のタスク、と目標を分解して管理しています。
+
+以下が現在の全データです（PURPOSE_JSON形式）。
+
+\`\`\`json
+${JSON.stringify(S,null,2)}
+\`\`\`
+
+やってほしいこと：
+1. まず現在地を読み、質問や指摘をしながら私と壁打ちしてください（一度に質問は2つまで）。
+2. 議論がまとまったら、最後に更新後の完全なデータを PURPOSE_JSON として1つのjsonコードブロックで出力してください。
+3. フォーマットは上と同一。tasksのdateは"YYYY-MM-DD"、idは既存を維持し新規は"new1"等でOK。勝手に既存タスクを消さないこと。
+4. 出力の一部だけ返す場合は {"tasks":[...]} のように該当キーだけでも取り込めます。
+
+今日は${fmt(now)}です。では、現在地の要約と最初の質問からお願いします。`;
+  try{await navigator.clipboard.writeText(prompt);toast('コピーしました。ChatGPTに貼ってください')}
+  catch(e){const ta=document.getElementById('pasteArea');ta.value=prompt;ta.select();toast('コピー欄に出しました。全選択してコピーしてください')}
+};
+document.getElementById('btnImport').onclick=()=>{
+  let raw=document.getElementById('pasteArea').value.trim();
+  if(!raw){toast('貼り付けてから押してください');return}
+  const m=raw.match(/```(?:json)?\s*([\s\S]*?)```/);if(m)raw=m[1];
+  let j;try{j=JSON.parse(raw)}catch(e){toast('JSONとして読めませんでした');return}
+  const before=JSON.stringify(S);
+  if(Array.isArray(j))j={tasks:j};
+  let added=0;
+  if(j.purpose!==undefined)S.purpose=String(j.purpose);
+  if(Array.isArray(j.decades))j.decades.forEach((d,i)=>{const t=S.decades.find(x=>x.label===d.label)||S.decades[i];if(t&&d.goal!==undefined)t.goal=String(d.goal)});
+  ['year','quarter','month','week'].forEach(k=>{if(j[k]&&typeof j[k]==='object')Object.assign(S[k],j[k])});
+  if(Array.isArray(j.tasks)){
+    j.tasks.forEach(t=>{
+      if(!t||!t.title)return;
+      const ex=t.id&&S.tasks.find(x=>x.id===String(t.id));
+      if(ex){Object.assign(ex,{title:String(t.title),date:t.date||ex.date,done:!!t.done})}
+      else{S.tasks.push({id:'g'+Date.now()+Math.floor(Math.random()*9999),date:t.date||fmt(now),title:String(t.title),done:!!t.done});added++}
+    });
+  }
+  if(JSON.stringify(S)===before){toast('変更はありませんでした');return}
+  save();renderBP();document.getElementById('pasteArea').value='';
+  toast(added?`取り込みました（タスク+${added}）`:'取り込みました');
+};
+document.getElementById('btnBackup').onclick=()=>{
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:'application/json'}));
+  a.download=`purpose_backup_${fmt(now)}.json`;a.click();
+};
+
+/* ================= boot ================= */
+renderBP();
+</script>
+</body>
+</html>
