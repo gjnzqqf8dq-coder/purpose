@@ -11,151 +11,132 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icon-512.png">
 <title>Purpose</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#ffffff;
-    --ink:#141414;
-    --g1:#6f6f6f;
-    --g2:#a3a3a3;
-    --g3:#d4d4d4;
-    --hair:#ececec;
-    --panel:#f7f7f5;
-    --sans:"Inter",-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
-    --serif:"Shippori Mincho","Hiragino Mincho ProN",serif;
+    --ink:#000000;
+    --gray:#8e8e93;          /* iOS systemGray */
+    --gray2:#c7c7cc;
+    --sep:rgba(60,60,67,.18);
+    --fill:#f2f2f7;          /* iOS systemGroupedBackground */
+    --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Hiragino Sans","Noto Sans JP",sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
   html,body{height:100%}
-  body{background:var(--bg);color:var(--ink);font-family:var(--sans);overflow:hidden;font-feature-settings:"palt";-webkit-font-smoothing:antialiased}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font);overflow:hidden;-webkit-font-smoothing:antialiased;font-feature-settings:"palt"}
 
   #app{position:relative;height:100dvh;display:flex;flex-direction:column;max-width:520px;margin:0 auto}
-  main{flex:1;overflow-y:auto;padding:calc(env(safe-area-inset-top) + 34px) 24px 160px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  main{flex:1;overflow-y:auto;padding:calc(env(safe-area-inset-top) + 24px) 20px 130px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   main::-webkit-scrollbar{display:none}
   .screen{display:none}
-  .screen.active{display:block}
-  .screen.active .rise{animation:rise .5s cubic-bezier(.22,1,.36,1) both}
-  .screen.active .rise:nth-child(2){animation-delay:.04s}
-  .screen.active .rise:nth-child(3){animation-delay:.08s}
-  .screen.active .rise:nth-child(4){animation-delay:.12s}
-  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .screen.active{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
 
-  /* ---------- type ---------- */
-  .kicker{font-size:10px;letter-spacing:.34em;color:var(--g2);text-transform:uppercase;font-weight:500}
-  .h1{font-size:40px;font-weight:300;letter-spacing:-.03em;line-height:1.1;margin-top:10px;font-variant-numeric:tabular-nums}
-  .h1 b{font-weight:500}
-  .head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:34px}
+  /* ============ iOS type scale ============ */
+  .caption{font-size:13px;color:var(--gray);font-weight:400;letter-spacing:.01em}
+  .large-title{font-size:34px;font-weight:700;letter-spacing:.01em;line-height:1.2;margin:2px 0 4px}
+  .navrow{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:22px}
+  .navbtn{border:none;background:none;font-family:inherit;font-size:17px;color:var(--ink);cursor:pointer;padding:6px 0 6px 16px;font-weight:400}
+  .navbtn.bold{font-weight:600}
 
-  /* ---------- ring ---------- */
-  .ring{width:44px;height:44px;position:relative;flex:none;margin-bottom:2px}
-  .ring svg{transform:rotate(-90deg)}
-  .ring .track{stroke:#ededed}
-  .ring .bar{stroke:var(--ink);stroke-linecap:round;transition:stroke-dashoffset .7s cubic-bezier(.22,1,.36,1)}
-  .ring .pct{position:absolute;inset:0;display:grid;place-items:center;font-size:10px;font-weight:500;color:var(--g1);font-variant-numeric:tabular-nums}
+  .sec-h{display:flex;align-items:center;justify-content:space-between;margin:26px 0 2px}
+  .sec-h h2{font-size:22px;font-weight:600;letter-spacing:.01em}
+  .sec-h .more{border:none;background:none;font-family:inherit;font-size:15px;color:var(--gray);cursor:pointer;display:flex;align-items:center;gap:2px;padding:4px 0}
+  .sec-h .more svg{width:12px;height:12px}
+  .sec-sub{font-size:13px;color:var(--gray);margin:14px 0 0;font-weight:400}
 
-  /* ---------- days ---------- */
-  .days{display:flex;gap:2px;overflow-x:auto;padding:0 0 8px;scrollbar-width:none;margin-bottom:10px}
-  .days::-webkit-scrollbar{display:none}
-  .day{flex:none;width:46px;padding:8px 0 10px;text-align:center;border-radius:14px;cursor:pointer;transition:.2s;position:relative}
-  .day small{display:block;font-size:8.5px;letter-spacing:.18em;margin-bottom:5px;color:var(--g3);font-weight:500}
-  .day b{font-size:15px;font-weight:400;color:var(--g1);font-variant-numeric:tabular-nums}
-  .day.today small{color:var(--g1)}
-  .day.today b{font-weight:600;color:var(--ink)}
-  .day.sel{background:var(--ink)}
-  .day.sel small{color:rgba(255,255,255,.55)}
-  .day.sel b{color:#fff}
+  /* ============ goal rows (alarm-style) ============ */
+  .g-row{display:flex;align-items:center;gap:14px;padding:14px 0 15px;border-bottom:.5px solid var(--sep);cursor:pointer}
+  .g-num{font-size:46px;font-weight:200;letter-spacing:-.01em;line-height:1.05;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .g-num small{font-size:22px;font-weight:300;color:var(--ink)}
+  .g-num.over{color:#b00}
+  .g-info{flex:1;min-width:0;padding-top:2px}
+  .g-name{font-size:15px;font-weight:400;line-height:1.45;word-break:break-word}
+  .g-date{font-size:13px;color:var(--gray);margin-top:1px;font-variant-numeric:tabular-nums}
+  .g-prog{flex:none;width:44px;text-align:right;font-size:13px;color:var(--gray);font-variant-numeric:tabular-nums}
 
-  /* ---------- task list ---------- */
-  .tasklist{margin-top:6px}
-  .task{display:flex;align-items:center;gap:16px;padding:19px 2px;cursor:pointer;border-bottom:1px solid var(--hair);transition:opacity .3s}
-  .task:first-child{border-top:1px solid var(--hair)}
-  .tick{flex:none;width:21px;height:21px;border-radius:50%;border:1.5px solid var(--g3);display:grid;place-items:center;transition:.25s}
-  .tick svg{width:10px;height:10px;opacity:0;transform:scale(.3);transition:.25s}
-  .task.done .tick{background:var(--ink);border-color:var(--ink)}
-  .task.done .tick svg{opacity:1;transform:scale(1)}
-  .t-body{flex:1;min-width:0}
-  .t-title{font-size:15px;font-weight:400;line-height:1.5;word-break:break-word;letter-spacing:.01em}
-  .task.done .t-title{color:var(--g2);text-decoration:line-through;text-decoration-color:var(--g3)}
-  .t-goal{font-size:10px;color:var(--g2);letter-spacing:.12em;margin-top:4px;font-weight:500}
-  .emptystate{text-align:center;color:var(--g2);font-size:12.5px;padding:60px 0 30px;line-height:2.2;letter-spacing:.06em}
+  /* ============ task rows ============ */
+  .t-row{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:.5px solid var(--sep);cursor:pointer}
+  .t-check{flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--gray2);display:grid;place-items:center;transition:.2s}
+  .t-check svg{width:11px;height:11px;opacity:0;transform:scale(.4);transition:.2s}
+  .t-row.done .t-check{background:var(--ink);border-color:var(--ink)}
+  .t-row.done .t-check svg{opacity:1;transform:scale(1)}
+  .t-main{flex:1;min-width:0}
+  .t-name{font-size:17px;font-weight:400;line-height:1.4;word-break:break-word}
+  .t-row.done .t-name{color:var(--gray);text-decoration:line-through;text-decoration-color:var(--gray2)}
+  .t-sub{font-size:13px;color:var(--gray);margin-top:2px}
+  .empty{color:var(--gray);font-size:15px;padding:28px 0;text-align:center}
 
-  /* ---------- goals ---------- */
-  .goal{padding:24px 2px 22px;border-bottom:1px solid var(--hair);cursor:pointer}
-  .goal:first-child{border-top:1px solid var(--hair)}
-  .g-top{display:flex;align-items:baseline;justify-content:space-between;gap:16px}
-  .g-title{font-family:var(--serif);font-size:19px;font-weight:600;line-height:1.6;letter-spacing:.02em;word-break:break-word}
-  .g-d{flex:none;text-align:right}
-  .g-d b{font-size:24px;font-weight:300;letter-spacing:-.02em;font-variant-numeric:tabular-nums;display:block;line-height:1}
-  .g-d span{font-size:9.5px;color:var(--g2);letter-spacing:.14em;display:block;margin-top:5px}
-  .g-d.over b{color:#c33}
-  .g-meta{display:flex;align-items:center;gap:14px;margin-top:14px}
-  .g-bar{flex:1;height:2px;background:var(--hair);border-radius:2px;overflow:hidden}
-  .g-bar i{display:block;height:100%;background:var(--ink);border-radius:2px;transition:width .6s cubic-bezier(.22,1,.36,1)}
-  .g-count{font-size:10.5px;color:var(--g2);font-variant-numeric:tabular-nums;letter-spacing:.06em}
-  /* goal detail */
-  .g-detail{display:none;padding-top:18px}
-  .goal.open .g-detail{display:block}
-  .g-note{font-size:13px;color:var(--g1);line-height:1.9;white-space:pre-wrap;word-break:break-word;margin-bottom:14px}
-  .g-note.ghost{color:var(--g3)}
-  .g-tasks{margin-bottom:6px}
-  .g-task{display:flex;align-items:center;gap:12px;padding:10px 0;font-size:13.5px}
-  .g-task .mini{flex:none;width:16px;height:16px;border-radius:50%;border:1.5px solid var(--g3);display:grid;place-items:center}
-  .g-task.done .mini{background:var(--ink);border-color:var(--ink)}
-  .g-task.done span{color:var(--g2);text-decoration:line-through}
-  .g-task i{font-style:normal;font-size:10px;color:var(--g2);margin-left:auto;font-variant-numeric:tabular-nums;letter-spacing:.06em;flex:none}
-  .g-actions{display:flex;gap:8px;margin-top:14px}
-  .chip{padding:9px 16px;border-radius:999px;border:1px solid var(--g3);background:none;font-size:11.5px;font-weight:500;font-family:inherit;color:var(--ink);cursor:pointer;letter-spacing:.04em}
-  .chip.danger{color:#c33;border-color:#e5c9c9}
-  .addgoal{width:100%;margin-top:22px;padding:17px;border-radius:999px;border:1px dashed var(--g3);background:none;color:var(--g1);font-size:13px;font-weight:500;font-family:inherit;cursor:pointer;letter-spacing:.06em}
-  /* goal form */
-  .gform{padding:22px 0;border-bottom:1px solid var(--hair);display:none}
+  /* ============ calendar ============ */
+  .cal-head{display:flex;align-items:center;justify-content:space-between;margin:8px 0 14px}
+  .cal-title{font-size:20px;font-weight:600;font-variant-numeric:tabular-nums}
+  .cal-nav{display:flex;gap:4px}
+  .cal-nav button{width:38px;height:38px;border:none;background:none;color:var(--ink);cursor:pointer;font-size:20px;border-radius:50%}
+  .cal-nav button:active{background:var(--fill)}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:4px;text-align:center}
+  .cal-wd{font-size:12px;color:var(--gray);font-weight:500;padding:6px 0 10px}
+  .cal-d{position:relative;height:48px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:5px;cursor:pointer;border-radius:12px}
+  .cal-d span{width:34px;height:34px;display:grid;place-items:center;font-size:19px;font-weight:300;border-radius:50%;font-variant-numeric:tabular-nums}
+  .cal-d.dim span{color:var(--gray2)}
+  .cal-d.today span{font-weight:600}
+  .cal-d.sel span{background:var(--ink);color:#fff;font-weight:500}
+  .cal-d .dot{width:4.5px;height:4.5px;border-radius:50%;background:var(--gray2);margin-top:1px}
+  .cal-d .dot.on{background:var(--ink)}
+  .cal-d .flag{position:absolute;top:2px;right:6px;width:5px;height:5px;border-radius:50%;background:#b00}
+  .cal-detail{margin-top:18px;border-top:.5px solid var(--sep)}
+  .cal-dl{padding:13px 0;border-bottom:.5px solid var(--sep);display:flex;align-items:center;gap:12px}
+  .cal-dl .f{flex:none;width:6px;height:6px;border-radius:50%;background:#b00}
+  .cal-dl span{font-size:15px}
+  .cal-dl small{color:var(--gray);font-size:13px;margin-left:auto;flex:none}
+
+  /* ============ goal detail / form ============ */
+  .g-detail{display:none;padding:4px 0 16px;border-bottom:.5px solid var(--sep)}
+  .g-row.open + .g-detail{display:block}
+  .g-note{font-size:15px;color:var(--gray);line-height:1.8;white-space:pre-wrap;word-break:break-word;padding:6px 0 12px}
+  .mini-t{display:flex;align-items:center;gap:12px;padding:9px 0;font-size:15px}
+  .mini-t .c{flex:none;width:17px;height:17px;border-radius:50%;border:1.5px solid var(--gray2);display:grid;place-items:center}
+  .mini-t.done .c{background:var(--ink);border-color:var(--ink)}
+  .mini-t.done span{color:var(--gray);text-decoration:line-through}
+  .mini-t i{font-style:normal;font-size:13px;color:var(--gray);margin-left:auto;font-variant-numeric:tabular-nums;flex:none}
+  .chips{display:flex;gap:8px;margin-top:12px}
+  .chip{padding:9px 16px;border-radius:999px;border:none;background:var(--fill);font-size:14px;font-weight:500;font-family:inherit;color:var(--ink);cursor:pointer}
+  .chip.danger{color:#b00}
+  .gform{padding:16px 0 22px;border-bottom:.5px solid var(--sep);display:none}
   .gform.show{display:block}
-  .gform label{display:block;font-size:10px;letter-spacing:.24em;color:var(--g2);margin:16px 0 8px;font-weight:500}
-  .gform input[type=text],.gform textarea{width:100%;border:none;border-bottom:1px solid var(--g3);background:none;font-family:inherit;font-size:16px;padding:6px 0 10px;outline:none;color:var(--ink)}
-  .gform textarea{font-size:16px;line-height:1.8;resize:none;min-height:40px}
-  .gform input[type=date]{border:none;border-bottom:1px solid var(--g3);background:none;font-family:inherit;font-size:16px;padding:6px 0 10px;outline:none;color:var(--ink)}
-  .gform .row{display:flex;gap:10px;margin-top:22px}
-  .btn{flex:1;padding:15px;border-radius:999px;border:none;font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:.2s;letter-spacing:.04em}
-  .btn:active{transform:scale(.98)}
+  .gform input,.gform textarea{width:100%;border:none;background:var(--fill);border-radius:12px;font-family:inherit;font-size:17px;padding:13px 14px;outline:none;color:var(--ink);margin-bottom:10px}
+  .gform textarea{font-size:16px;line-height:1.7;resize:none;min-height:64px}
+  .gform .row{display:flex;gap:8px;margin-top:4px}
+  .btn{flex:1;padding:14px;border-radius:999px;border:none;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer}
   .btn.primary{background:var(--ink);color:#fff}
-  .btn.ghost{background:none;color:var(--g1);border:1px solid var(--g3)}
+  .btn.plain{background:var(--fill);color:var(--ink)}
 
-  /* ---------- input bar ---------- */
-  .inputbar{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 92px);z-index:6;max-width:520px;margin:0 auto;padding:0 24px;display:none}
-  .inputbar.show{display:block}
-  .inputwrap{display:flex;align-items:center;gap:6px;padding:6px 6px 6px 20px;background:#fff;border:1px solid var(--hair);border-radius:999px;box-shadow:0 10px 34px -8px rgba(0,0,0,.12)}
-  .inputwrap input{flex:1;background:none;border:none;outline:none;color:var(--ink);font-size:16px;font-family:inherit;min-width:0}
-  .inputwrap input::placeholder{color:var(--g2)}
-  .icobtn{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;border:none;cursor:pointer;background:none;color:var(--g2);transition:.2s}
-  .icobtn.rec{background:#c33;color:#fff;animation:pulse 1.2s infinite}
-  @keyframes pulse{50%{opacity:.65}}
-  .icobtn.add{background:var(--ink);color:#fff}
-  .icobtn.add:active{transform:scale(.92)}
+  /* ============ settings (hidden) ============ */
+  .settings-toggle{border:none;background:none;color:var(--gray2);font-size:12px;font-family:inherit;cursor:pointer;display:block;margin:40px auto 0;letter-spacing:.08em}
+  .settings{display:none;margin-top:18px;padding:18px;background:var(--fill);border-radius:16px}
+  .settings.show{display:block}
+  .settings p{font-size:13px;color:var(--gray);line-height:1.8;margin-bottom:10px}
+  .settings input,.settings textarea{width:100%;border:none;background:#fff;border-radius:10px;font-family:ui-monospace,monospace;font-size:16px;padding:12px;outline:none;margin-bottom:8px;color:var(--ink)}
+  .settings textarea{min-height:80px;resize:vertical}
+  .settings .btn{width:100%;margin-bottom:8px;padding:12px;font-size:14px}
+  .stat{font-size:12px;color:var(--gray);margin-top:6px;line-height:1.7}
 
-  /* ---------- link tab ---------- */
-  .card{padding:24px 0;border-bottom:1px solid var(--hair)}
-  .card:first-of-type{border-top:1px solid var(--hair)}
-  .card h3{font-size:14px;font-weight:600;letter-spacing:.02em;margin-bottom:4px}
-  .card h3 i{font-style:normal;font-size:9.5px;letter-spacing:.28em;color:var(--g2);display:block;margin-bottom:8px;font-weight:500}
-  .card p{font-size:12.5px;color:var(--g1);line-height:1.95;margin:8px 0 16px}
-  .card p code{font-family:ui-monospace,SFMono-Regular,monospace;font-size:11px;background:var(--panel);padding:2px 6px;border-radius:6px}
-  #pasteArea,#tokenInput{width:100%;background:var(--panel);border:none;border-radius:14px;color:var(--ink);font-family:ui-monospace,SFMono-Regular,monospace;font-size:16px;line-height:1.7;padding:14px;outline:none}
-  #pasteArea{min-height:96px;resize:vertical;margin-bottom:10px}
-  #tokenInput{margin-bottom:10px}
-  #pasteArea::placeholder,#tokenInput::placeholder{color:var(--g2)}
-  .syncstat{font-size:11px;color:var(--g2);margin-top:12px;letter-spacing:.05em;line-height:1.8}
-  .syncstat b{color:var(--ink);font-weight:500}
+  /* ============ liquid glass tab bar ============ */
+  nav{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 14px);z-index:7;display:flex;justify-content:center;pointer-events:none}
+  .tabbar{pointer-events:auto;display:flex;gap:0;padding:5px;border-radius:999px;position:relative;
+    background:rgba(255,255,255,.55);
+    backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);
+    box-shadow:0 10px 34px rgba(0,0,0,.13), inset 0 0 0 .5px rgba(0,0,0,.06), inset 0 1.5px 1px rgba(255,255,255,.9)}
+  .tab{width:86px;padding:9px 0 8px;border-radius:999px;border:none;background:none;color:var(--gray);
+    font-size:10px;font-weight:500;font-family:inherit;letter-spacing:.02em;cursor:pointer;transition:.25s;
+    display:flex;flex-direction:column;align-items:center;gap:3px}
+  .tab svg{width:23px;height:23px}
+  .tab.active{color:var(--ink);background:rgba(255,255,255,.9);
+    box-shadow:0 3px 12px rgba(0,0,0,.10), inset 0 0 0 .5px rgba(0,0,0,.05), inset 0 1px 0 rgba(255,255,255,1)}
 
-  /* ---------- tabbar ---------- */
-  nav{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 18px);z-index:7;display:flex;justify-content:center;pointer-events:none}
-  .tabbar{pointer-events:auto;display:flex;gap:2px;padding:5px;background:rgba(255,255,255,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--hair);border-radius:999px;box-shadow:0 12px 40px -10px rgba(0,0,0,.14)}
-  .tab{width:82px;padding:12px 0 11px;border-radius:999px;border:none;background:none;color:var(--g2);font-size:9.5px;font-weight:600;font-family:inherit;letter-spacing:.16em;cursor:pointer;transition:.25s;display:flex;flex-direction:column;align-items:center;gap:4px}
-  .tab svg{width:18px;height:18px}
-  .tab.active{color:#fff;background:var(--ink)}
-
-  /* ---------- toast ---------- */
-  #toast{position:fixed;top:calc(env(safe-area-inset-top) + 18px);left:50%;transform:translateX(-50%) translateY(-80px);z-index:20;padding:12px 24px;font-size:12.5px;font-weight:500;transition:.45s cubic-bezier(.22,1,.36,1);white-space:nowrap;letter-spacing:.03em;background:var(--ink);color:#fff;border-radius:999px;box-shadow:0 10px 30px -6px rgba(0,0,0,.3)}
+  /* ============ toast ============ */
+  #toast{position:fixed;top:calc(env(safe-area-inset-top) + 16px);left:50%;transform:translateX(-50%) translateY(-80px);z-index:20;padding:12px 22px;font-size:14px;font-weight:500;transition:.4s cubic-bezier(.22,1,.36,1);white-space:nowrap;color:var(--ink);border-radius:999px;
+    background:rgba(255,255,255,.65);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
+    box-shadow:0 8px 28px rgba(0,0,0,.16), inset 0 0 0 .5px rgba(0,0,0,.06)}
   #toast.show{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
@@ -165,90 +146,77 @@
 
   <!-- ============ TODAY ============ -->
   <section class="screen active" id="scr-today">
-    <div class="head rise">
+    <div class="navrow">
       <div>
-        <div class="kicker" id="todayWd"></div>
-        <div class="h1" id="todayDate"></div>
-      </div>
-      <div class="ring">
-        <svg width="44" height="44"><circle class="track" cx="22" cy="22" r="19" fill="none" stroke-width="2"/><circle class="bar" id="ringBar" cx="22" cy="22" r="19" fill="none" stroke-width="2" stroke-dasharray="119.4" stroke-dashoffset="119.4"/></svg>
-        <div class="pct" id="ringPct">0</div>
+        <div class="caption" id="todayCap"></div>
+        <h1 class="large-title">今日</h1>
       </div>
     </div>
-    <div class="days rise" id="dayScroll"></div>
-    <div class="tasklist rise" id="taskList"></div>
+
+    <div class="sec-h"><h2>ゴール</h2>
+      <button class="more" id="toGoals">すべて<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+    <div id="todayGoals"></div>
+
+    <div class="sec-h"><h2>タスク</h2><span class="caption" id="taskCount"></span></div>
+    <div id="todayTasks"></div>
+  </section>
+
+  <!-- ============ CALENDAR ============ -->
+  <section class="screen" id="scr-cal">
+    <div class="navrow">
+      <div>
+        <div class="caption">スケジュール</div>
+        <h1 class="large-title">カレンダー</h1>
+      </div>
+    </div>
+    <div class="cal-head">
+      <div class="cal-title" id="calTitle"></div>
+      <div class="cal-nav"><button id="calPrev">‹</button><button id="calNext">›</button></div>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="cal-detail" id="calDetail"></div>
   </section>
 
   <!-- ============ GOALS ============ -->
   <section class="screen" id="scr-goals">
-    <div class="head rise">
+    <div class="navrow">
       <div>
-        <div class="kicker">Goals</div>
-        <div class="h1">ゴール</div>
+        <div class="caption">Goals</div>
+        <h1 class="large-title">ゴール</h1>
       </div>
+      <button class="navbtn bold" id="btnAddGoal">＋</button>
     </div>
     <div class="gform" id="gform">
-      <label>ゴール</label>
-      <input type="text" id="gfTitle" placeholder="例：電通に受かる">
-      <label>期限</label>
+      <input type="text" id="gfTitle" placeholder="ゴール（例：電通に受かる）">
       <input type="date" id="gfDate">
-      <label>メモ（任意）</label>
-      <textarea id="gfNote" placeholder="なぜやるか、条件、作戦など"></textarea>
+      <textarea id="gfNote" placeholder="メモ（任意）"></textarea>
       <div class="row">
-        <button class="btn ghost" id="gfCancel">やめる</button>
-        <button class="btn primary" id="gfSave">追加する</button>
+        <button class="btn plain" id="gfCancel">やめる</button>
+        <button class="btn primary" id="gfSave">保存</button>
       </div>
     </div>
-    <div class="rise" id="goalList"></div>
-    <button class="addgoal rise" id="btnAddGoal">＋ ゴールを追加</button>
-  </section>
+    <div id="goalList"></div>
 
-  <!-- ============ LINK ============ -->
-  <section class="screen" id="scr-sync">
-    <div class="head rise">
-      <div>
-        <div class="kicker">Link</div>
-        <div class="h1">連携</div>
-      </div>
-    </div>
-
-    <div class="card rise">
-      <h3><i>CHATGPT — 常時連携</i>言うだけで反映させる</h3>
-      <p>正データはGitHubの <code>purpose/data.json</code>。ChatGPT（GitHubコネクタ／Codex）に「data.jsonの◯◯ゴールにタスク追加して」と言えば、<b>そのまま全端末に自動反映</b>されます（読み取りは設定不要）。このアプリからの変更を書き戻すには、下にトークンを一度だけ入れてください。</p>
-      <input type="password" id="tokenInput" placeholder="GitHub Fine-grained token（Contents: Read/Write）">
-      <button class="btn primary" style="width:100%" id="btnSyncNow">保存して今すぐ同期</button>
-      <div class="syncstat" id="syncStat">未接続 — この端末内のみで動作中</div>
-    </div>
-
-    <div class="card rise">
-      <h3><i>CHATGPT — 壁打ち</i>分解を手伝ってもらう</h3>
-      <p>全データ＋指示をコピーしてChatGPTへ。壁打ち後、返ってきたJSONを下に貼れば反映。連携済みならChatGPTに直接コミットさせてもOK。</p>
-      <button class="btn ghost" style="width:100%;margin-bottom:14px" id="btnExport">壁打ちプロンプトをコピー</button>
-      <textarea id="pasteArea" placeholder='返ってきたJSONを貼る（全体でも {"tasks":[...]} だけでも）'></textarea>
-      <button class="btn ghost" style="width:100%" id="btnImport">取り込む</button>
-    </div>
-
-    <div class="card rise">
-      <h3><i>BACKUP</i>書き出し</h3>
-      <p>いまの全データをファイルに書き出します。</p>
-      <button class="btn ghost" style="width:100%" id="btnBackup">JSONを書き出す</button>
+    <button class="settings-toggle" id="setToggle">設定</button>
+    <div class="settings" id="settings">
+      <p>ChatGPTには「GitHubの <b>purpose/data.json</b> を編集して」と言えば全端末に自動反映。このアプリからの変更を書き戻すにはトークンを一度だけ保存。</p>
+      <input type="password" id="tokenInput" placeholder="GitHub token（Contents: Read/Write）">
+      <button class="btn primary" id="btnSyncNow">保存して同期</button>
+      <button class="btn plain" id="btnExport">壁打ちプロンプトをコピー</button>
+      <textarea id="pasteArea" placeholder="ChatGPTのJSONを貼って取り込み"></textarea>
+      <button class="btn plain" id="btnImport">取り込む</button>
+      <button class="btn plain" id="btnBackup">バックアップ書き出し</button>
+      <div class="stat" id="syncStat"></div>
     </div>
   </section>
 
 </main>
 
-<div class="inputbar show" id="inputbar">
-  <div class="inputwrap">
-    <input id="taskInput" placeholder="タスクを追加" enterkeyhint="done">
-    <button class="icobtn" id="btnMic" title="音声入力"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
-    <button class="icobtn add" id="btnAdd"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
-  </div>
-</div>
-
 <nav><div class="tabbar">
-  <button class="tab active" data-scr="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v4.5l3 2"/></svg>TODAY</button>
-  <button class="tab" data-scr="goals"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>GOALS</button>
-  <button class="tab" data-scr="sync"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M8 12a4 4 0 0 1 4-4h6M14 4l4 4-4 4M16 12a4 4 0 0 1-4 4H6M10 20l-4-4 4-4"/></svg>LINK</button>
+  <button class="tab active" data-scr="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.6v4.4l3.1 1.9"/></svg>今日</button>
+  <button class="tab" data-scr="cal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3.5"/><path d="M3.5 9.5h17M8 2.8v3.4M16 2.8v3.4"/></svg>カレンダー</button>
+  <button class="tab" data-scr="goals"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="4.6"/><circle cx="12" cy="12" r="1.1" fill="currentColor"/></svg>ゴール</button>
 </div></nav>
 
 <div id="toast"></div>
@@ -259,7 +227,7 @@
 const KEY='purpose.v2';
 const REPO='gjnzqqf8dq-coder/purpose', PATH='data.json', BRANCH='main';
 const emptyState=()=>({goals:[],tasks:[],del:{}});
-let S=load(), sha=null, pushT=null;
+let S=load(), sha=null, pushT=null, lastPull=0;
 function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.goals)return Object.assign(emptyState(),d)}catch(e){}return emptyState()}
 function persist(){localStorage.setItem(KEY,JSON.stringify(S))}
 function save(){persist();schedulePush();render()}
@@ -268,116 +236,152 @@ const uid=p=>(p||'x')+Date.now().toString(36)+Math.floor(Math.random()*1e4).toSt
 /* ================= dates ================= */
 const pad=n=>String(n).padStart(2,'0');
 const fmt=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-const now=new Date();
-let selDate=fmt(now);
-const WD=['SUN','MON','TUE','WED','THU','FRI','SAT'];
-function dleft(dl){const a=new Date(selDateToday()+'T00:00:00'),b=new Date(dl+'T00:00:00');return Math.round((b-a)/864e5)}
-function selDateToday(){return fmt(new Date())}
+const now=new Date(), TODAY=fmt(now);
+const WDJ=['日','月','火','水','木','金','土'];
+function dleft(dl){const a=new Date(TODAY+'T00:00:00'),b=new Date(dl+'T00:00:00');return Math.round((b-a)/864e5)}
+let calY=now.getFullYear(), calM=now.getMonth(), calSel=TODAY;
 
-/* ================= toast ================= */
+/* ================= util ================= */
 let toastT;
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2200)}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 
 /* ================= tabs ================= */
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));
+function goTab(name){
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.scr===name));
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('scr-'+b.dataset.scr).classList.add('active');
-  document.getElementById('inputbar').classList.toggle('show',b.dataset.scr==='today');
+  document.getElementById('scr-'+name).classList.add('active');
   render();document.getElementById('main').scrollTo({top:0});
-});
+}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>goTab(b.dataset.scr));
+document.getElementById('toGoals').onclick=()=>goTab('goals');
 
 /* ================= render ================= */
 let openGoal=null;
-function render(){renderToday();renderGoals();renderSyncStat()}
+function render(){renderToday();renderCal();renderGoals()}
+
+function goalRow(g,compact){
+  const dl=g.deadline?dleft(g.deadline):null;
+  const linked=S.tasks.filter(t=>t.goalId===g.id), done=linked.filter(t=>t.done).length;
+  const num=dl===null?'<small>—</small>':(dl<0?`<small>+</small>${-dl}`:`<small>D-</small>${dl}`);
+  return `<div class="g-row${openGoal===g.id&&!compact?' open':''}" data-gid="${g.id}">
+    <div class="g-num${dl!==null&&dl<0?' over':''}">${num}</div>
+    <div class="g-info"><div class="g-name">${esc(g.title)}</div>
+      <div class="g-date">${g.deadline?g.deadline.replace(/-/g,'/'):'期限なし'}</div></div>
+    <div class="g-prog">${linked.length?`${done}/${linked.length}`:''}</div>
+  </div>`;
+}
+function sortedGoals(){return [...S.goals].sort((a,b)=>(a.deadline||'9999')<(b.deadline||'9999')?-1:1)}
 
 function renderToday(){
-  const d=new Date(selDate+'T00:00:00');
-  document.getElementById('todayWd').textContent=`${WD[d.getDay()]} — ${d.getFullYear()}`;
-  document.getElementById('todayDate').innerHTML=`${d.getMonth()+1}<b>月</b> ${d.getDate()}<b>日</b>`;
-  // days
-  const wrap=document.getElementById('dayScroll');wrap.innerHTML='';
-  for(let i=-3;i<=10;i++){
-    const dd=new Date(now);dd.setDate(dd.getDate()+i);const ds=fmt(dd);
-    const el=document.createElement('div');
-    el.className='day'+(ds===selDate?' sel':'')+(ds===fmt(now)?' today':'');
-    el.innerHTML=`<small>${WD[dd.getDay()]}</small><b>${dd.getDate()}</b>`;
-    el.onclick=()=>{selDate=ds;renderToday()};
-    wrap.appendChild(el);
-  }
+  document.getElementById('todayCap').textContent=`${now.getMonth()+1}月${now.getDate()}日 ${WDJ[now.getDay()]}曜日`;
+  const gs=sortedGoals();
+  const short=gs.filter(g=>g.deadline&&dleft(g.deadline)<=90);
+  const long=gs.filter(g=>!g.deadline||dleft(g.deadline)>90);
+  let html='';
+  if(short.length)html+=`<div class="sec-sub">短期</div>`+short.map(g=>goalRow(g,true)).join('');
+  if(long.length)html+=`<div class="sec-sub">長期</div>`+long.map(g=>goalRow(g,true)).join('');
+  if(!gs.length)html='<div class="empty">ゴールはまだない</div>';
+  const wrap=document.getElementById('todayGoals');wrap.innerHTML=html;
+  wrap.querySelectorAll('.g-row').forEach(r=>r.onclick=()=>{openGoal=r.dataset.gid;goTab('goals')});
   // tasks
-  const list=document.getElementById('taskList');list.innerHTML='';
-  const ts=S.tasks.filter(t=>t.date===selDate);
-  if(!ts.length)list.innerHTML='<div class="emptystate">まだ何もない。<br>下から書くか、ChatGPTに言うか。</div>';
-  ts.forEach(t=>{
-    const g=S.goals.find(x=>x.id===t.goalId);
-    const el=document.createElement('div');el.className='task'+(t.done?' done':'');
-    el.innerHTML=`<div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"><path d="M4 12.5l5 5L20 6.5"/></svg></div>
-      <div class="t-body"><div class="t-title">${esc(t.title)}</div>${g?`<div class="t-goal">${esc(g.title)}${g.deadline?` ・ D-${Math.max(dleft(g.deadline),0)}`:''}</div>`:''}</div>`;
+  const ts=S.tasks.filter(t=>t.date===TODAY);
+  const list=document.getElementById('todayTasks');
+  list.innerHTML=ts.length?ts.map(t=>taskRow(t)).join(''):'<div class="empty">今日のタスクはない</div>';
+  bindTasks(list);
+  const done=ts.filter(t=>t.done).length;
+  document.getElementById('taskCount').textContent=ts.length?`${done} / ${ts.length}`:'';
+}
+function taskRow(t){
+  const g=S.goals.find(x=>x.id===t.goalId);
+  return `<div class="t-row${t.done?' done':''}" data-tid="${t.id}">
+    <div class="t-check"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"><path d="M4 12.5l5 5L20 6.5"/></svg></div>
+    <div class="t-main"><div class="t-name">${esc(t.title)}</div>${g?`<div class="t-sub">${esc(g.title)}</div>`:''}</div>
+  </div>`;
+}
+function bindTasks(root){
+  root.querySelectorAll('.t-row').forEach(el=>{
+    const t=S.tasks.find(x=>x.id===el.dataset.tid);if(!t)return;
     let press;
     el.addEventListener('pointerdown',()=>{press=setTimeout(()=>{press=null;if(confirm('このタスクを削除する？')){S.del[t.id]=Date.now();S.tasks=S.tasks.filter(x=>x.id!==t.id);save()}},550)});
     el.addEventListener('pointerup',()=>{if(press){clearTimeout(press);t.done=!t.done;t.u=Date.now();save()}});
     el.addEventListener('pointerleave',()=>clearTimeout(press));
-    list.appendChild(el);
   });
-  const done=ts.filter(t=>t.done).length,pct=ts.length?Math.round(done/ts.length*100):0;
-  document.getElementById('ringPct').textContent=pct;
-  document.getElementById('ringBar').style.strokeDashoffset=119.4*(1-pct/100);
 }
 
+/* ================= calendar ================= */
+document.getElementById('calPrev').onclick=()=>{calM--;if(calM<0){calM=11;calY--}renderCal()};
+document.getElementById('calNext').onclick=()=>{calM++;if(calM>11){calM=0;calY++}renderCal()};
+function renderCal(){
+  document.getElementById('calTitle').textContent=`${calY}年${calM+1}月`;
+  const grid=document.getElementById('calGrid');
+  let html=WDJ.map(w=>`<div class="cal-wd">${w}</div>`).join('');
+  const first=new Date(calY,calM,1), start=first.getDay(), days=new Date(calY,calM+1,0).getDate();
+  const prevDays=new Date(calY,calM,0).getDate();
+  const cells=[];
+  for(let i=start-1;i>=0;i--)cells.push({d:prevDays-i,dim:true,date:fmt(new Date(calY,calM-1,prevDays-i))});
+  for(let d=1;d<=days;d++)cells.push({d,dim:false,date:fmt(new Date(calY,calM,d))});
+  while(cells.length%7)cells.push({d:cells.length%7,dim:true,date:fmt(new Date(calY,calM+1,cells.length%7))});
+  const taskDates=new Set(S.tasks.map(t=>t.date));
+  const openDates=new Set(S.tasks.filter(t=>!t.done).map(t=>t.date));
+  const dlDates=new Set(S.goals.filter(g=>g.deadline).map(g=>g.deadline));
+  html+=cells.map(c=>`<div class="cal-d${c.dim?' dim':''}${c.date===TODAY?' today':''}${c.date===calSel?' sel':''}" data-d="${c.date}">
+    <span>${c.d}</span>${taskDates.has(c.date)?`<div class="dot${openDates.has(c.date)?' on':''}"></div>`:''}${dlDates.has(c.date)?'<div class="flag"></div>':''}
+  </div>`).join('');
+  grid.innerHTML=html;
+  grid.querySelectorAll('.cal-d').forEach(el=>el.onclick=()=>{calSel=el.dataset.d;renderCal()});
+  // detail
+  const det=document.getElementById('calDetail');
+  const d=new Date(calSel+'T00:00:00');
+  const dls=S.goals.filter(g=>g.deadline===calSel);
+  const ts=S.tasks.filter(t=>t.date===calSel);
+  det.innerHTML=`<div class="sec-sub">${d.getMonth()+1}月${d.getDate()}日 ${WDJ[d.getDay()]}曜日</div>`
+    +dls.map(g=>`<div class="cal-dl"><div class="f"></div><span>${esc(g.title)}</span><small>期限</small></div>`).join('')
+    +(ts.length?ts.map(t=>taskRow(t)).join(''):(dls.length?'':'<div class="empty">予定はない</div>'));
+  bindTasks(det);
+}
+
+/* ================= goals screen ================= */
 function renderGoals(){
-  const list=document.getElementById('goalList');list.innerHTML='';
-  const gs=[...S.goals].sort((a,b)=>(a.deadline||'9999')<(b.deadline||'9999')?-1:1);
-  if(!gs.length)list.innerHTML='<div class="emptystate">ゴールがまだない。<br>「1年後、どうなっていたいか」から。</div>';
+  const list=document.getElementById('goalList');
+  const gs=sortedGoals();
+  list.innerHTML=gs.length?gs.map(g=>goalRow(g)+goalDetail(g)).join(''):'<div class="empty">＋ からゴールを追加</div>';
+  list.querySelectorAll('.g-row').forEach(r=>r.onclick=()=>{openGoal=openGoal===r.dataset.gid?null:r.dataset.gid;renderGoals()});
   gs.forEach(g=>{
-    const linked=S.tasks.filter(t=>t.goalId===g.id);
-    const done=linked.filter(t=>t.done).length;
-    const dl=g.deadline?dleft(g.deadline):null;
-    const el=document.createElement('div');el.className='goal'+(openGoal===g.id?' open':'');
-    el.innerHTML=`
-      <div class="g-top">
-        <div class="g-title">${esc(g.title)}</div>
-        <div class="g-d${dl!==null&&dl<0?' over':''}">
-          ${dl!==null?`<b>${dl<0?'+'+(-dl):'D-'+dl}</b><span>${g.deadline.replace(/-/g,'.')}</span>`:'<b>—</b><span>期限なし</span>'}
-        </div>
-      </div>
-      <div class="g-meta">
-        <div class="g-bar"><i style="width:${linked.length?done/linked.length*100:0}%"></i></div>
-        <div class="g-count">${done}/${linked.length}</div>
-      </div>
-      <div class="g-detail">
-        <div class="g-note${g.note?'':' ghost'}">${esc(g.note||'メモなし — タップで編集')}</div>
-        <div class="g-tasks">${linked.slice().sort((a,b)=>a.date<b.date?-1:1).map(t=>`
-          <div class="g-task${t.done?' done':''}" data-tid="${t.id}"><div class="mini">${t.done?'<svg viewBox="0 0 24 24" width="8" height="8" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"><path d="M4 12.5l5 5L20 6.5"/></svg>':''}</div><span>${esc(t.title)}</span><i>${t.date.slice(5).replace('-','/')}</i></div>`).join('')}</div>
-        <div class="g-actions">
-          <button class="chip" data-act="task">今日にタスク追加</button>
-          <button class="chip" data-act="edit">編集</button>
-          <button class="chip danger" data-act="del">削除</button>
-        </div>
-      </div>`;
-    el.querySelector('.g-top').onclick=()=>{openGoal=openGoal===g.id?null:g.id;renderGoals()};
-    el.querySelector('.g-meta').onclick=()=>{openGoal=openGoal===g.id?null:g.id;renderGoals()};
-    el.querySelectorAll('.g-task').forEach(row=>row.onclick=e=>{
-      const t=S.tasks.find(x=>x.id===row.dataset.tid);if(t){t.done=!t.done;t.u=Date.now();save();openGoal=g.id;renderGoals()}
+    const det=list.querySelector(`.g-detail[data-gid="${g.id}"]`);if(!det)return;
+    det.querySelectorAll('.mini-t').forEach(row=>row.onclick=()=>{
+      const t=S.tasks.find(x=>x.id===row.dataset.tid);if(t){t.done=!t.done;t.u=Date.now();save()}
     });
-    el.querySelector('[data-act=task]').onclick=()=>{
-      const title=prompt('タスク名');if(title&&title.trim()){S.tasks.push({id:uid('t'),title:title.trim(),date:fmt(new Date()),done:false,goalId:g.id,u:Date.now()});save();openGoal=g.id;renderGoals();toast('今日に追加した')}
+    det.querySelector('[data-act=task]').onclick=()=>{
+      const title=prompt('タスク名（今日に入る）');
+      if(title&&title.trim()){S.tasks.push({id:uid('t'),title:title.trim(),date:TODAY,done:false,goalId:g.id,u:Date.now()});save();toast('今日に追加した')}
     };
-    el.querySelector('[data-act=edit]').onclick=()=>{
+    det.querySelector('[data-act=edit]').onclick=()=>{
       const f=document.getElementById('gform');f.classList.add('show');f.dataset.edit=g.id;
       document.getElementById('gfTitle').value=g.title;document.getElementById('gfDate').value=g.deadline||'';document.getElementById('gfNote').value=g.note||'';
       document.getElementById('main').scrollTo({top:0,behavior:'smooth'});
     };
-    el.querySelector('[data-act=del]').onclick=()=>{
-      if(confirm(`「${g.title}」を削除する？（紐づくタスクは残る）`)){S.del[g.id]=Date.now();S.goals=S.goals.filter(x=>x.id!==g.id);S.tasks.forEach(t=>{if(t.goalId===g.id){t.goalId=null;t.u=Date.now()}});save()}
+    det.querySelector('[data-act=del]').onclick=()=>{
+      if(confirm(`「${g.title}」を削除する？`)){S.del[g.id]=Date.now();S.goals=S.goals.filter(x=>x.id!==g.id);S.tasks.forEach(t=>{if(t.goalId===g.id){t.goalId=null;t.u=Date.now()}});save()}
     };
-    list.appendChild(el);
   });
 }
+function goalDetail(g){
+  const linked=S.tasks.filter(t=>t.goalId===g.id).sort((a,b)=>a.date<b.date?-1:1);
+  return `<div class="g-detail" data-gid="${g.id}">
+    ${g.note?`<div class="g-note">${esc(g.note)}</div>`:''}
+    ${linked.map(t=>`<div class="mini-t${t.done?' done':''}" data-tid="${t.id}"><div class="c">${t.done?'<svg viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"><path d="M4 12.5l5 5L20 6.5"/></svg>':''}</div><span>${esc(t.title)}</span><i>${t.date.slice(5).replace('-','/')}</i></div>`).join('')}
+    <div class="chips">
+      <button class="chip" data-act="task">タスク追加</button>
+      <button class="chip" data-act="edit">編集</button>
+      <button class="chip danger" data-act="del">削除</button>
+    </div>
+  </div>`;
+}
 document.getElementById('btnAddGoal').onclick=()=>{
-  const f=document.getElementById('gform');f.dataset.edit='';['gfTitle','gfNote'].forEach(i=>document.getElementById(i).value='');
-  document.getElementById('gfDate').value='';f.classList.add('show');document.getElementById('gfTitle').focus();
+  const f=document.getElementById('gform');f.dataset.edit='';
+  ['gfTitle','gfNote'].forEach(i=>document.getElementById(i).value='');document.getElementById('gfDate').value='';
+  f.classList.toggle('show');if(f.classList.contains('show'))document.getElementById('gfTitle').focus();
 };
 document.getElementById('gfCancel').onclick=()=>document.getElementById('gform').classList.remove('show');
 document.getElementById('gfSave').onclick=()=>{
@@ -386,32 +390,11 @@ document.getElementById('gfSave').onclick=()=>{
   if(!title){toast('ゴール名を入れて');return}
   const deadline=document.getElementById('gfDate').value||null;
   const note=document.getElementById('gfNote').value.trim();
-  if(f.dataset.edit){const g=S.goals.find(x=>x.id===f.dataset.edit);if(g){Object.assign(g,{title,deadline,note,u:Date.now()})}}
+  if(f.dataset.edit){const g=S.goals.find(x=>x.id===f.dataset.edit);if(g)Object.assign(g,{title,deadline,note,u:Date.now()})}
   else S.goals.push({id:uid('g'),title,deadline,note,u:Date.now()});
   f.classList.remove('show');save();
 };
-
-/* ================= tasks (today input) ================= */
-function addTask(title){
-  title=title.trim();if(!title)return;
-  S.tasks.push({id:uid('t'),date:selDate,title,done:false,goalId:null,u:Date.now()});
-  save();
-}
-document.getElementById('btnAdd').onclick=()=>{const i=document.getElementById('taskInput');addTask(i.value);i.value=''};
-document.getElementById('taskInput').addEventListener('keydown',e=>{if(e.key==='Enter'){addTask(e.target.value);e.target.value=''}});
-const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-const mic=document.getElementById('btnMic');
-if(!SR){mic.style.display='none'}
-else{let rec=null;
-  mic.onclick=()=>{
-    if(rec){rec.stop();return}
-    rec=new SR();rec.lang='ja-JP';rec.interimResults=false;mic.classList.add('rec');
-    rec.onresult=e=>{document.getElementById('taskInput').value=e.results[0][0].transcript};
-    rec.onend=()=>{mic.classList.remove('rec');rec=null;const i=document.getElementById('taskInput');if(i.value){addTask(i.value);i.value=''}};
-    rec.onerror=()=>{mic.classList.remove('rec');rec=null;toast('音声入力できなかった')};
-    rec.start();
-  };
-}
+document.getElementById('setToggle').onclick=()=>document.getElementById('settings').classList.toggle('show');
 
 /* ================= merge ================= */
 function mergeState(a,b){
@@ -439,7 +422,7 @@ async function gh(path,opt={}){
   if(!r.ok&&r.status!==404)throw new Error('GitHub '+r.status);
   return r.status===404?null:r.json();
 }
-async function pull(){ // 読み取りはトークン不要（公開リポ）— ChatGPTの編集は誰の端末でも自動反映
+async function pull(){
   const j=await gh(`contents/${PATH}?ref=${BRANCH}&t=${Date.now()}`);
   if(!j)return false;
   sha=j.sha;
@@ -448,14 +431,13 @@ async function pull(){ // 読み取りはトークン不要（公開リポ）—
   lastPull=Date.now();
   return true;
 }
-let lastPull=0;
 async function push(){
   const body={message:'update from Purpose app',content:b64e(JSON.stringify(S,null,2)),branch:BRANCH};
   if(sha)body.sha=sha;
   try{
     const j=await gh(`contents/${PATH}`,{method:'PUT',body:JSON.stringify(body)});
     if(j&&j.content){sha=j.content.sha;setStat('同期済み '+new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'}))}
-  }catch(e){ // sha conflict → pull(merge) then retry once
+  }catch(e){
     try{await pull();body.sha=sha;body.content=b64e(JSON.stringify(S,null,2));
       const j2=await gh(`contents/${PATH}`,{method:'PUT',body:JSON.stringify(body)});
       if(j2&&j2.content){sha=j2.content.sha;setStat('同期済み（マージ）')}
@@ -463,8 +445,7 @@ async function push(){
   }
 }
 function schedulePush(){if(!tok())return;clearTimeout(pushT);pushT=setTimeout(push,3500)}
-function setStat(m){document.getElementById('syncStat').innerHTML=m?`<b>${esc(m)}</b>`:''}
-function renderSyncStat(){if(!tok())setStat('未接続 — この端末内のみで動作中')}
+function setStat(m){document.getElementById('syncStat').textContent=m||''}
 document.getElementById('btnSyncNow').onclick=async()=>{
   const v=document.getElementById('tokenInput').value.trim();
   if(v)localStorage.setItem('purpose.token',v);
@@ -475,7 +456,7 @@ document.getElementById('btnSyncNow').onclick=async()=>{
   catch(e){setStat('接続できない — トークンを確認');toast('同期に失敗')}
 };
 
-/* ================= export / import ================= */
+/* ================= export / import / backup ================= */
 document.getElementById('btnExport').onclick=async()=>{
   const p=`あなたは目標達成のコーチです。私は「Purpose」というアプリで複数のゴール（期限つき）と日々のタスクを管理しています。
 
@@ -486,14 +467,14 @@ ${JSON.stringify(S,null,2)}
 
 スキーマ：
 - goals: {id, title, deadline:"YYYY-MM-DD"|null, note, u:更新epoch_ms}
-- tasks: {id, title, date:"YYYY-MM-DD", done, goalId:ゴールのid|null, u}
+- tasks: {id, title, date:"YYYY-MM-DD", done, goalId|null, u}
 - 新規idは"g_xxx"/"t_xxx"等ユニークに。uは必ず現在時刻のepoch msに。既存を消さない。
 
 やってほしいこと：
-1. 現在地を読んで壁打ち（質問は一度に2つまで）。ゴールの分解＝期限から逆算して日付つきタスクに落とすのが目的。
+1. 現在地を読んで壁打ち（質問は一度に2つまで）。ゴール分解＝期限から逆算して日付つきタスクへ。
 2. まとまったら、変更・追加分だけを {"goals":[...],"tasks":[...]} のjsonコードブロックで出力。
 
-今日は${fmt(now)}。では現在地の要約と最初の質問から。`;
+今日は${TODAY}。では現在地の要約と最初の質問から。`;
   try{await navigator.clipboard.writeText(p);toast('コピーした。ChatGPTへ')}
   catch(e){document.getElementById('pasteArea').value=p;toast('下の欄からコピーして')}
 };
@@ -505,7 +486,7 @@ document.getElementById('btnImport').onclick=()=>{
   if(Array.isArray(j))j={tasks:j};
   const inc=emptyState();
   inc.goals=(j.goals||[]).map(g=>({id:g.id||uid('g'),title:String(g.title||''),deadline:g.deadline||null,note:g.note||'',u:g.u||Date.now()})).filter(g=>g.title);
-  inc.tasks=(j.tasks||[]).map(t=>({id:t.id||uid('t'),title:String(t.title||''),date:t.date||fmt(now),done:!!t.done,goalId:t.goalId||null,u:t.u||Date.now()})).filter(t=>t.title);
+  inc.tasks=(j.tasks||[]).map(t=>({id:t.id||uid('t'),title:String(t.title||''),date:t.date||TODAY,done:!!t.done,goalId:t.goalId||null,u:t.u||Date.now()})).filter(t=>t.title);
   const before=JSON.stringify(S);
   S=mergeState(S,inc);
   if(JSON.stringify(S)===before){toast('変更なし');return}
@@ -514,20 +495,13 @@ document.getElementById('btnImport').onclick=()=>{
 document.getElementById('btnBackup').onclick=()=>{
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:'application/json'}));
-  a.download=`purpose_backup_${fmt(now)}.json`;a.click();
+  a.download=`purpose_backup_${TODAY}.json`;a.click();
 };
 
 /* ================= boot ================= */
 render();
-function boot(){
-  setStat('読み込み中…');
-  pull().then(ok=>{
-    if(tok())setStat(ok?'同期済み（読み書き）':'リモート未作成 — 保存で作られる');
-    else setStat(ok?'閲覧同期中（ChatGPTの編集は自動反映）— 書き込みはトークンが必要':'未接続 — この端末内のみで動作中');
-  }).catch(()=>setStat(tok()?'接続できない — トークンを確認':'オフライン — この端末内のみで動作中'));
-}
-boot();
-document.addEventListener('visibilitychange',()=>{ // アプリに戻ってきたら最新を取りにいく
+pull().then(ok=>{if(tok())setStat(ok?'同期済み（読み書き）':'リモート未作成')}).catch(()=>{});
+document.addEventListener('visibilitychange',()=>{
   if(document.visibilityState==='visible'&&Date.now()-lastPull>60000)pull().catch(()=>{});
 });
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
