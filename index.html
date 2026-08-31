@@ -6,6 +6,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-title" content="Purpose">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-512.png">
 <title>Purpose</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +26,7 @@
     --sans:"Inter",-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
     --serif:"Shippori Mincho","Hiragino Mincho ProN",serif;
   }
-  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
   html,body{height:100%}
   body{background:var(--bg);color:var(--ink);font-family:var(--sans);overflow:hidden;font-feature-settings:"palt";-webkit-font-smoothing:antialiased}
 
@@ -109,8 +113,8 @@
   .gform.show{display:block}
   .gform label{display:block;font-size:10px;letter-spacing:.24em;color:var(--g2);margin:16px 0 8px;font-weight:500}
   .gform input[type=text],.gform textarea{width:100%;border:none;border-bottom:1px solid var(--g3);background:none;font-family:inherit;font-size:16px;padding:6px 0 10px;outline:none;color:var(--ink)}
-  .gform textarea{font-size:13.5px;line-height:1.8;resize:none;min-height:40px}
-  .gform input[type=date]{border:none;border-bottom:1px solid var(--g3);background:none;font-family:inherit;font-size:15px;padding:6px 0 10px;outline:none;color:var(--ink)}
+  .gform textarea{font-size:16px;line-height:1.8;resize:none;min-height:40px}
+  .gform input[type=date]{border:none;border-bottom:1px solid var(--g3);background:none;font-family:inherit;font-size:16px;padding:6px 0 10px;outline:none;color:var(--ink)}
   .gform .row{display:flex;gap:10px;margin-top:22px}
   .btn{flex:1;padding:15px;border-radius:999px;border:none;font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:.2s;letter-spacing:.04em}
   .btn:active{transform:scale(.98)}
@@ -121,7 +125,7 @@
   .inputbar{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 92px);z-index:6;max-width:520px;margin:0 auto;padding:0 24px;display:none}
   .inputbar.show{display:block}
   .inputwrap{display:flex;align-items:center;gap:6px;padding:6px 6px 6px 20px;background:#fff;border:1px solid var(--hair);border-radius:999px;box-shadow:0 10px 34px -8px rgba(0,0,0,.12)}
-  .inputwrap input{flex:1;background:none;border:none;outline:none;color:var(--ink);font-size:15px;font-family:inherit;min-width:0}
+  .inputwrap input{flex:1;background:none;border:none;outline:none;color:var(--ink);font-size:16px;font-family:inherit;min-width:0}
   .inputwrap input::placeholder{color:var(--g2)}
   .icobtn{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;border:none;cursor:pointer;background:none;color:var(--g2);transition:.2s}
   .icobtn.rec{background:#c33;color:#fff;animation:pulse 1.2s infinite}
@@ -136,9 +140,9 @@
   .card h3 i{font-style:normal;font-size:9.5px;letter-spacing:.28em;color:var(--g2);display:block;margin-bottom:8px;font-weight:500}
   .card p{font-size:12.5px;color:var(--g1);line-height:1.95;margin:8px 0 16px}
   .card p code{font-family:ui-monospace,SFMono-Regular,monospace;font-size:11px;background:var(--panel);padding:2px 6px;border-radius:6px}
-  #pasteArea,#tokenInput{width:100%;background:var(--panel);border:none;border-radius:14px;color:var(--ink);font-family:ui-monospace,SFMono-Regular,monospace;font-size:11.5px;line-height:1.7;padding:14px;outline:none}
+  #pasteArea,#tokenInput{width:100%;background:var(--panel);border:none;border-radius:14px;color:var(--ink);font-family:ui-monospace,SFMono-Regular,monospace;font-size:16px;line-height:1.7;padding:14px;outline:none}
   #pasteArea{min-height:96px;resize:vertical;margin-bottom:10px}
-  #tokenInput{margin-bottom:10px;font-size:12px}
+  #tokenInput{margin-bottom:10px}
   #pasteArea::placeholder,#tokenInput::placeholder{color:var(--g2)}
   .syncstat{font-size:11px;color:var(--g2);margin-top:12px;letter-spacing:.05em;line-height:1.8}
   .syncstat b{color:var(--ink);font-weight:500}
@@ -210,7 +214,7 @@
 
     <div class="card rise">
       <h3><i>CHATGPT — 常時連携</i>言うだけで反映させる</h3>
-      <p>このアプリの正データはGitHubの <code>purpose/data.json</code>。ChatGPT（GitHubコネクタ／Codex）に「data.jsonの◯◯ゴールにタスク追加して」と言えば、次の同期で画面に反映されます。下にトークンを入れると、このアプリも同じファイルへ自動保存・自動読込します。</p>
+      <p>正データはGitHubの <code>purpose/data.json</code>。ChatGPT（GitHubコネクタ／Codex）に「data.jsonの◯◯ゴールにタスク追加して」と言えば、<b>そのまま全端末に自動反映</b>されます（読み取りは設定不要）。このアプリからの変更を書き戻すには、下にトークンを一度だけ入れてください。</p>
       <input type="password" id="tokenInput" placeholder="GitHub Fine-grained token（Contents: Read/Write）">
       <button class="btn primary" style="width:100%" id="btnSyncNow">保存して今すぐ同期</button>
       <div class="syncstat" id="syncStat">未接続 — この端末内のみで動作中</div>
@@ -429,18 +433,22 @@ const tok=()=>localStorage.getItem('purpose.token')||'';
 const b64e=s=>btoa(String.fromCharCode(...new TextEncoder().encode(s)));
 const b64d=s=>new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\n/g,'')),c=>c.charCodeAt(0)));
 async function gh(path,opt={}){
-  const r=await fetch(`https://api.github.com/repos/${REPO}/${path}`,{...opt,headers:{'Authorization':'Bearer '+tok(),'Accept':'application/vnd.github+json',...(opt.headers||{})}});
+  const h={'Accept':'application/vnd.github+json',...(opt.headers||{})};
+  if(tok())h['Authorization']='Bearer '+tok();
+  const r=await fetch(`https://api.github.com/repos/${REPO}/${path}`,{...opt,headers:h});
   if(!r.ok&&r.status!==404)throw new Error('GitHub '+r.status);
   return r.status===404?null:r.json();
 }
-async function pull(){
+async function pull(){ // 読み取りはトークン不要（公開リポ）— ChatGPTの編集は誰の端末でも自動反映
   const j=await gh(`contents/${PATH}?ref=${BRANCH}&t=${Date.now()}`);
   if(!j)return false;
   sha=j.sha;
   let remote;try{remote=JSON.parse(b64d(j.content))}catch(e){return false}
   S=mergeState(S,Object.assign(emptyState(),remote));persist();render();
+  lastPull=Date.now();
   return true;
 }
+let lastPull=0;
 async function push(){
   const body={message:'update from Purpose app',content:b64e(JSON.stringify(S,null,2)),branch:BRANCH};
   if(sha)body.sha=sha;
@@ -511,7 +519,18 @@ document.getElementById('btnBackup').onclick=()=>{
 
 /* ================= boot ================= */
 render();
-if(tok()){setStat('同期中…');pull().then(ok=>{setStat(ok?'同期済み':'リモート未作成 — 保存で作られる')}).catch(()=>setStat('接続できない — トークンを確認'))}
+function boot(){
+  setStat('読み込み中…');
+  pull().then(ok=>{
+    if(tok())setStat(ok?'同期済み（読み書き）':'リモート未作成 — 保存で作られる');
+    else setStat(ok?'閲覧同期中（ChatGPTの編集は自動反映）— 書き込みはトークンが必要':'未接続 — この端末内のみで動作中');
+  }).catch(()=>setStat(tok()?'接続できない — トークンを確認':'オフライン — この端末内のみで動作中'));
+}
+boot();
+document.addEventListener('visibilitychange',()=>{ // アプリに戻ってきたら最新を取りにいく
+  if(document.visibilityState==='visible'&&Date.now()-lastPull>60000)pull().catch(()=>{});
+});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
 </html>

@@ -1,5 +1,12 @@
 {
-  "goals": [],
-  "tasks": [],
+  "goals": [
+    {"id":"g_dentsu_final","title":"電通に受かる","deadline":"2027-06-30","note":"アート職照準。PF12作品＋人の動かし方まで","u":1788172941692},
+    {"id":"g_dentsu_1ji","title":"一次選考を通過する","deadline":"2026-09-21","note":"","u":1788172941692},
+    {"id":"g_hyrox","title":"HYROXを完走する","deadline":"2026-11-30","note":"週3回52分メニュー継続","u":1788172941692}
+  ],
+  "tasks": [
+    {"id":"t_demo1","title":"ES設問の下書きを1本書く","date":"2026-08-31","done":false,"goalId":"g_dentsu_1ji","u":1788172941692},
+    {"id":"t_demo2","title":"筋トレ 52分","date":"2026-08-31","done":false,"goalId":"g_hyrox","u":1788172941692}
+  ],
   "del": {}
 }
