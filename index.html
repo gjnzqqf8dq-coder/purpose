@@ -4,198 +4,158 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#07070f">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#ffffff">
 <title>Purpose</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600&family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#07070f;
-    --txt:rgba(255,255,255,.94);
-    --txt2:rgba(255,255,255,.60);
-    --txt3:rgba(255,255,255,.34);
-    --txt4:rgba(255,255,255,.20);
-    --line:rgba(255,255,255,.10);
+    --bg:#ffffff;
+    --ink:#141414;
+    --g1:#6f6f6f;
+    --g2:#a3a3a3;
+    --g3:#d4d4d4;
+    --hair:#ececec;
+    --panel:#f7f7f5;
     --sans:"Inter",-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
     --serif:"Shippori Mincho","Hiragino Mincho ProN",serif;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{height:100%}
-  body{background:var(--bg);color:var(--txt);font-family:var(--sans);overflow:hidden;font-feature-settings:"palt"}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);overflow:hidden;font-feature-settings:"palt";-webkit-font-smoothing:antialiased}
 
-  /* ================= backdrop ================= */
-  #bg{position:fixed;inset:0;z-index:0;background:
-    radial-gradient(120% 90% at 85% -10%, #1b1e4d 0%, transparent 55%),
-    radial-gradient(90% 70% at -10% 25%, #0e2e46 0%, transparent 55%),
-    radial-gradient(100% 80% at 70% 110%, #2a1244 0%, transparent 60%),
-    #07070f}
-  #bg::before{content:"";position:absolute;inset:-30%;
-    background:
-      radial-gradient(38% 30% at 62% 22%, rgba(122,138,255,.32), transparent 70%),
-      radial-gradient(30% 26% at 24% 62%, rgba(56,178,189,.20), transparent 70%),
-      radial-gradient(34% 30% at 78% 76%, rgba(147,88,247,.20), transparent 70%);
-    filter:blur(50px);animation:drift 40s ease-in-out infinite alternate}
-  @keyframes drift{to{transform:translate(-3%,4%) rotate(6deg) scale(1.06)}}
-  #bg::after{content:"";position:absolute;inset:0;background:
-    linear-gradient(rgba(7,7,15,.25), transparent 30%, transparent 70%, rgba(7,7,15,.55));}
-  .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.07;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
-
-  /* ================= glass ================= */
-  .glass{position:relative;border-radius:28px;
-    background:linear-gradient(150deg, rgba(255,255,255,.10), rgba(255,255,255,.035) 45%, rgba(255,255,255,.06));
-    backdrop-filter:blur(28px) saturate(170%);-webkit-backdrop-filter:blur(28px) saturate(170%);
-    box-shadow:0 20px 50px -12px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.08), inset 0 1px 0 rgba(255,255,255,.16)}
-  .glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-    background:linear-gradient(115deg, rgba(255,255,255,.14) 0%, transparent 18%);opacity:.8}
-  .pill{border-radius:999px}
-
-  /* ================= layout ================= */
-  #app{position:relative;z-index:2;height:100dvh;display:flex;flex-direction:column;max-width:520px;margin:0 auto}
-  main{flex:1;overflow-y:auto;padding:calc(env(safe-area-inset-top) + 30px) 22px 150px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  #app{position:relative;height:100dvh;display:flex;flex-direction:column;max-width:520px;margin:0 auto}
+  main{flex:1;overflow-y:auto;padding:calc(env(safe-area-inset-top) + 34px) 24px 160px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   main::-webkit-scrollbar{display:none}
   .screen{display:none}
   .screen.active{display:block}
-  .screen.active .rise{animation:rise .6s cubic-bezier(.22,1,.36,1) both}
-  .screen.active .rise:nth-child(2){animation-delay:.05s}
-  .screen.active .rise:nth-child(3){animation-delay:.1s}
-  .screen.active .rise:nth-child(4){animation-delay:.15s}
-  .screen.active .rise:nth-child(5){animation-delay:.2s}
-  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .screen.active .rise{animation:rise .5s cubic-bezier(.22,1,.36,1) both}
+  .screen.active .rise:nth-child(2){animation-delay:.04s}
+  .screen.active .rise:nth-child(3){animation-delay:.08s}
+  .screen.active .rise:nth-child(4){animation-delay:.12s}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
-  /* ================= today header ================= */
-  .head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:26px}
-  .h-big{font-size:46px;font-weight:200;letter-spacing:-.035em;line-height:1.05;font-variant-numeric:tabular-nums}
-  .h-big b{font-weight:500}
-  .h-wd{font-size:12px;color:var(--txt2);letter-spacing:.35em;margin:0 0 10px 2px;text-transform:uppercase}
-  .ring{width:46px;height:46px;position:relative;flex:none;margin-bottom:4px}
+  /* ---------- type ---------- */
+  .kicker{font-size:10px;letter-spacing:.34em;color:var(--g2);text-transform:uppercase;font-weight:500}
+  .h1{font-size:40px;font-weight:300;letter-spacing:-.03em;line-height:1.1;margin-top:10px;font-variant-numeric:tabular-nums}
+  .h1 b{font-weight:500}
+  .head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:34px}
+
+  /* ---------- ring ---------- */
+  .ring{width:44px;height:44px;position:relative;flex:none;margin-bottom:2px}
   .ring svg{transform:rotate(-90deg)}
-  .ring .track{stroke:rgba(255,255,255,.10)}
-  .ring .bar{stroke:#fff;stroke-linecap:round;transition:stroke-dashoffset .7s cubic-bezier(.22,1,.36,1)}
-  .ring .pct{position:absolute;inset:0;display:grid;place-items:center;font-size:10px;font-weight:600;letter-spacing:.02em;color:var(--txt2)}
+  .ring .track{stroke:#ededed}
+  .ring .bar{stroke:var(--ink);stroke-linecap:round;transition:stroke-dashoffset .7s cubic-bezier(.22,1,.36,1)}
+  .ring .pct{position:absolute;inset:0;display:grid;place-items:center;font-size:10px;font-weight:500;color:var(--g1);font-variant-numeric:tabular-nums}
 
-  /* ================= north star ================= */
-  .north{padding:26px 26px 22px;margin-bottom:22px;overflow:hidden}
-  .north .quote{font-family:var(--serif);font-weight:600;font-size:19px;line-height:1.9;letter-spacing:.02em}
-  .north .quote.ghost{color:var(--txt3);font-size:15px;font-weight:500}
-  .thread{margin-top:20px;position:relative;padding-left:17px}
-  .thread::before{content:"";position:absolute;left:3.5px;top:6px;bottom:6px;width:1px;
-    background:linear-gradient(rgba(255,255,255,.4), rgba(255,255,255,.06))}
-  .th-row{position:relative;display:flex;gap:12px;align-items:baseline;padding:5px 0;font-size:12.5px;line-height:1.6}
-  .th-row::before{content:"";position:absolute;left:-17px;top:11px;width:8px;height:8px;border-radius:50%;
-    background:rgba(255,255,255,.16);box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
-  .th-row.on::before{background:#fff;box-shadow:0 0 10px rgba(255,255,255,.7)}
-  .th-row b{flex:none;width:52px;font-size:9.5px;font-weight:600;letter-spacing:.22em;color:var(--txt3)}
-  .th-row span{color:var(--txt2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .th-row.on span{color:var(--txt)}
-  .th-row.empty span{color:var(--txt4)}
-
-  /* ================= days ================= */
-  .days{display:flex;gap:2px;overflow-x:auto;padding:2px 2px 18px;scrollbar-width:none}
+  /* ---------- days ---------- */
+  .days{display:flex;gap:2px;overflow-x:auto;padding:0 0 8px;scrollbar-width:none;margin-bottom:10px}
   .days::-webkit-scrollbar{display:none}
-  .day{flex:none;width:46px;padding:9px 0 11px;text-align:center;border-radius:16px;cursor:pointer;transition:.25s;position:relative}
-  .day small{display:block;font-size:9px;letter-spacing:.15em;margin-bottom:5px;color:var(--txt4)}
-  .day b{font-size:15px;font-weight:400;color:var(--txt2);font-variant-numeric:tabular-nums}
-  .day.today b{color:#fff;font-weight:600}
-  .day.today::after{content:"";position:absolute;left:50%;bottom:4px;width:3px;height:3px;border-radius:50%;background:#fff;transform:translateX(-50%)}
-  .day.sel{background:linear-gradient(150deg,rgba(255,255,255,.14),rgba(255,255,255,.05));
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.12), inset 0 1px 0 rgba(255,255,255,.2)}
+  .day{flex:none;width:46px;padding:8px 0 10px;text-align:center;border-radius:14px;cursor:pointer;transition:.2s;position:relative}
+  .day small{display:block;font-size:8.5px;letter-spacing:.18em;margin-bottom:5px;color:var(--g3);font-weight:500}
+  .day b{font-size:15px;font-weight:400;color:var(--g1);font-variant-numeric:tabular-nums}
+  .day.today small{color:var(--g1)}
+  .day.today b{font-weight:600;color:var(--ink)}
+  .day.sel{background:var(--ink)}
+  .day.sel small{color:rgba(255,255,255,.55)}
   .day.sel b{color:#fff}
 
-  /* ================= tasks ================= */
-  .tasklist{display:flex;flex-direction:column;gap:10px}
-  .task{display:flex;align-items:center;gap:16px;padding:17px 20px;cursor:pointer;border-radius:22px;
-    transition:transform .15s ease, opacity .35s}
-  .task:active{transform:scale(.98)}
-  .tick{flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid rgba(255,255,255,.35);display:grid;place-items:center;transition:.3s}
-  .tick svg{width:11px;height:11px;opacity:0;transform:scale(.3);transition:.3s}
-  .task.done{opacity:.45}
-  .task.done .tick{background:#fff;border-color:#fff}
+  /* ---------- task list ---------- */
+  .tasklist{margin-top:6px}
+  .task{display:flex;align-items:center;gap:16px;padding:19px 2px;cursor:pointer;border-bottom:1px solid var(--hair);transition:opacity .3s}
+  .task:first-child{border-top:1px solid var(--hair)}
+  .tick{flex:none;width:21px;height:21px;border-radius:50%;border:1.5px solid var(--g3);display:grid;place-items:center;transition:.25s}
+  .tick svg{width:10px;height:10px;opacity:0;transform:scale(.3);transition:.25s}
+  .task.done .tick{background:var(--ink);border-color:var(--ink)}
   .task.done .tick svg{opacity:1;transform:scale(1)}
-  .t-title{font-size:15px;font-weight:400;line-height:1.55;word-break:break-word;letter-spacing:.01em;transition:.3s}
-  .task.done .t-title{text-decoration:line-through;text-decoration-color:rgba(255,255,255,.4)}
-  .emptystate{text-align:center;color:var(--txt3);font-size:12.5px;padding:52px 0 30px;line-height:2.2;letter-spacing:.05em}
+  .t-body{flex:1;min-width:0}
+  .t-title{font-size:15px;font-weight:400;line-height:1.5;word-break:break-word;letter-spacing:.01em}
+  .task.done .t-title{color:var(--g2);text-decoration:line-through;text-decoration-color:var(--g3)}
+  .t-goal{font-size:10px;color:var(--g2);letter-spacing:.12em;margin-top:4px;font-weight:500}
+  .emptystate{text-align:center;color:var(--g2);font-size:12.5px;padding:60px 0 30px;line-height:2.2;letter-spacing:.06em}
 
-  /* ================= input bar ================= */
-  .inputbar{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 92px);z-index:6;max-width:520px;margin:0 auto;padding:0 22px;display:none}
+  /* ---------- goals ---------- */
+  .goal{padding:24px 2px 22px;border-bottom:1px solid var(--hair);cursor:pointer}
+  .goal:first-child{border-top:1px solid var(--hair)}
+  .g-top{display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+  .g-title{font-family:var(--serif);font-size:19px;font-weight:600;line-height:1.6;letter-spacing:.02em;word-break:break-word}
+  .g-d{flex:none;text-align:right}
+  .g-d b{font-size:24px;font-weight:300;letter-spacing:-.02em;font-variant-numeric:tabular-nums;display:block;line-height:1}
+  .g-d span{font-size:9.5px;color:var(--g2);letter-spacing:.14em;display:block;margin-top:5px}
+  .g-d.over b{color:#c33}
+  .g-meta{display:flex;align-items:center;gap:14px;margin-top:14px}
+  .g-bar{flex:1;height:2px;background:var(--hair);border-radius:2px;overflow:hidden}
+  .g-bar i{display:block;height:100%;background:var(--ink);border-radius:2px;transition:width .6s cubic-bezier(.22,1,.36,1)}
+  .g-count{font-size:10.5px;color:var(--g2);font-variant-numeric:tabular-nums;letter-spacing:.06em}
+  /* goal detail */
+  .g-detail{display:none;padding-top:18px}
+  .goal.open .g-detail{display:block}
+  .g-note{font-size:13px;color:var(--g1);line-height:1.9;white-space:pre-wrap;word-break:break-word;margin-bottom:14px}
+  .g-note.ghost{color:var(--g3)}
+  .g-tasks{margin-bottom:6px}
+  .g-task{display:flex;align-items:center;gap:12px;padding:10px 0;font-size:13.5px}
+  .g-task .mini{flex:none;width:16px;height:16px;border-radius:50%;border:1.5px solid var(--g3);display:grid;place-items:center}
+  .g-task.done .mini{background:var(--ink);border-color:var(--ink)}
+  .g-task.done span{color:var(--g2);text-decoration:line-through}
+  .g-task i{font-style:normal;font-size:10px;color:var(--g2);margin-left:auto;font-variant-numeric:tabular-nums;letter-spacing:.06em;flex:none}
+  .g-actions{display:flex;gap:8px;margin-top:14px}
+  .chip{padding:9px 16px;border-radius:999px;border:1px solid var(--g3);background:none;font-size:11.5px;font-weight:500;font-family:inherit;color:var(--ink);cursor:pointer;letter-spacing:.04em}
+  .chip.danger{color:#c33;border-color:#e5c9c9}
+  .addgoal{width:100%;margin-top:22px;padding:17px;border-radius:999px;border:1px dashed var(--g3);background:none;color:var(--g1);font-size:13px;font-weight:500;font-family:inherit;cursor:pointer;letter-spacing:.06em}
+  /* goal form */
+  .gform{padding:22px 0;border-bottom:1px solid var(--hair);display:none}
+  .gform.show{display:block}
+  .gform label{display:block;font-size:10px;letter-spacing:.24em;color:var(--g2);margin:16px 0 8px;font-weight:500}
+  .gform input[type=text],.gform textarea{width:100%;border:none;border-bottom:1px solid var(--g3);background:none;font-family:inherit;font-size:16px;padding:6px 0 10px;outline:none;color:var(--ink)}
+  .gform textarea{font-size:13.5px;line-height:1.8;resize:none;min-height:40px}
+  .gform input[type=date]{border:none;border-bottom:1px solid var(--g3);background:none;font-family:inherit;font-size:15px;padding:6px 0 10px;outline:none;color:var(--ink)}
+  .gform .row{display:flex;gap:10px;margin-top:22px}
+  .btn{flex:1;padding:15px;border-radius:999px;border:none;font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:.2s;letter-spacing:.04em}
+  .btn:active{transform:scale(.98)}
+  .btn.primary{background:var(--ink);color:#fff}
+  .btn.ghost{background:none;color:var(--g1);border:1px solid var(--g3)}
+
+  /* ---------- input bar ---------- */
+  .inputbar{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 92px);z-index:6;max-width:520px;margin:0 auto;padding:0 24px;display:none}
   .inputbar.show{display:block}
-  .inputwrap{display:flex;align-items:center;gap:8px;padding:7px 7px 7px 22px}
-  .inputwrap input{flex:1;background:none;border:none;outline:none;color:var(--txt);font-size:15px;font-family:inherit;min-width:0}
-  .inputwrap input::placeholder{color:var(--txt3)}
-  .icobtn{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;border:none;cursor:pointer;background:none;color:var(--txt3);transition:.2s}
-  .icobtn.rec{background:#e5484d;color:#fff;animation:pulse 1.2s infinite}
+  .inputwrap{display:flex;align-items:center;gap:6px;padding:6px 6px 6px 20px;background:#fff;border:1px solid var(--hair);border-radius:999px;box-shadow:0 10px 34px -8px rgba(0,0,0,.12)}
+  .inputwrap input{flex:1;background:none;border:none;outline:none;color:var(--ink);font-size:15px;font-family:inherit;min-width:0}
+  .inputwrap input::placeholder{color:var(--g2)}
+  .icobtn{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;border:none;cursor:pointer;background:none;color:var(--g2);transition:.2s}
+  .icobtn.rec{background:#c33;color:#fff;animation:pulse 1.2s infinite}
   @keyframes pulse{50%{opacity:.65}}
-  .icobtn.add{background:#fff;color:#0a0a14;box-shadow:0 6px 20px -4px rgba(255,255,255,.35)}
+  .icobtn.add{background:var(--ink);color:#fff}
   .icobtn.add:active{transform:scale(.92)}
 
-  /* ================= blueprint ================= */
-  .bp-head{margin-bottom:30px}
-  .bp-head .h-wd{margin-bottom:8px}
-  .bp-title{font-size:34px;font-weight:200;letter-spacing:-.02em}
-  .rail{position:relative;padding-left:26px}
-  .rail::before{content:"";position:absolute;left:5px;top:14px;bottom:14px;width:1px;
-    background:linear-gradient(rgba(255,255,255,.35), rgba(255,255,255,.04))}
-  .lv{position:relative;margin-bottom:26px}
-  .lv::before{content:"";position:absolute;left:-26px;top:8px;width:11px;height:11px;border-radius:50%;
-    background:#0b0b16;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.4)}
-  .lv.filled::before{background:#fff;box-shadow:0 0 14px rgba(255,255,255,.55)}
-  .lv-tag{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
-  .lv-tag b{font-size:10px;font-weight:600;letter-spacing:.3em;color:var(--txt3)}
-  .lv-tag span{font-size:10.5px;color:var(--txt4);letter-spacing:.05em}
-  .lv-text{font-size:15px;line-height:1.9;font-weight:400;white-space:pre-wrap;word-break:break-word;min-height:24px;cursor:pointer;letter-spacing:.01em}
-  .lv-text.ghost{color:var(--txt4)}
-  .lv.purpose .lv-text{font-family:var(--serif);font-size:20px;font-weight:600;line-height:1.95}
-  .lv.purpose .lv-text.ghost{font-family:var(--sans);font-size:15px;font-weight:400}
-  .decades{display:flex;gap:10px;overflow-x:auto;padding:2px 0 6px;scrollbar-width:none}
-  .decades::-webkit-scrollbar{display:none}
-  .dec{flex:none;width:148px;padding:15px 15px 17px;border-radius:20px;cursor:pointer;transition:.2s;
-    background:linear-gradient(150deg,rgba(255,255,255,.07),rgba(255,255,255,.02));
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.06), inset 0 1px 0 rgba(255,255,255,.1)}
-  .dec.cur{background:linear-gradient(150deg,rgba(255,255,255,.13),rgba(255,255,255,.05));
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.16), inset 0 1px 0 rgba(255,255,255,.22)}
-  .dec b{font-size:10px;color:var(--txt3);display:block;margin-bottom:8px;letter-spacing:.2em;font-weight:600}
-  .dec.cur b{color:var(--txt)}
-  .dec p{font-size:12.5px;line-height:1.75;color:var(--txt2);min-height:44px;white-space:pre-wrap;word-break:break-word}
-  .dec.cur p{color:var(--txt)}
-  .dec p.ghost{color:var(--txt4)}
-  textarea.editor{width:100%;background:rgba(255,255,255,.05);border:none;outline:none;
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.2);border-radius:14px;color:var(--txt);
-    font-size:15px;line-height:1.8;font-family:inherit;padding:12px 14px;resize:none;min-height:80px}
+  /* ---------- link tab ---------- */
+  .card{padding:24px 0;border-bottom:1px solid var(--hair)}
+  .card:first-of-type{border-top:1px solid var(--hair)}
+  .card h3{font-size:14px;font-weight:600;letter-spacing:.02em;margin-bottom:4px}
+  .card h3 i{font-style:normal;font-size:9.5px;letter-spacing:.28em;color:var(--g2);display:block;margin-bottom:8px;font-weight:500}
+  .card p{font-size:12.5px;color:var(--g1);line-height:1.95;margin:8px 0 16px}
+  .card p code{font-family:ui-monospace,SFMono-Regular,monospace;font-size:11px;background:var(--panel);padding:2px 6px;border-radius:6px}
+  #pasteArea,#tokenInput{width:100%;background:var(--panel);border:none;border-radius:14px;color:var(--ink);font-family:ui-monospace,SFMono-Regular,monospace;font-size:11.5px;line-height:1.7;padding:14px;outline:none}
+  #pasteArea{min-height:96px;resize:vertical;margin-bottom:10px}
+  #tokenInput{margin-bottom:10px;font-size:12px}
+  #pasteArea::placeholder,#tokenInput::placeholder{color:var(--g2)}
+  .syncstat{font-size:11px;color:var(--g2);margin-top:12px;letter-spacing:.05em;line-height:1.8}
+  .syncstat b{color:var(--ink);font-weight:500}
 
-  /* ================= sync ================= */
-  .sync-card{padding:24px;margin-bottom:16px;border-radius:26px}
-  .sync-card h3{font-size:14.5px;font-weight:600;margin-bottom:8px;letter-spacing:.02em}
-  .sync-card h3 i{font-style:normal;font-size:10px;letter-spacing:.25em;color:var(--txt3);display:block;margin-bottom:6px}
-  .sync-card p{font-size:12.5px;color:var(--txt2);line-height:1.9;margin-bottom:16px}
-  .btn{display:block;width:100%;padding:15px;border-radius:999px;border:none;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:.2s;letter-spacing:.02em}
-  .btn:active{transform:scale(.98)}
-  .btn.primary{background:#fff;color:#0a0a14;box-shadow:0 8px 24px -6px rgba(255,255,255,.3)}
-  .btn.ghostb{background:none;color:var(--txt2);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
-  #pasteArea{width:100%;min-height:104px;margin-bottom:12px;background:rgba(0,0,0,.3);border:none;
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);border-radius:18px;color:var(--txt);
-    font-family:ui-monospace,SFMono-Regular,monospace;font-size:11.5px;line-height:1.7;padding:15px;outline:none;resize:vertical}
-  #pasteArea::placeholder{color:var(--txt4)}
-
-  /* ================= tabbar ================= */
+  /* ---------- tabbar ---------- */
   nav{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 18px);z-index:7;display:flex;justify-content:center;pointer-events:none}
-  .tabbar{pointer-events:auto;display:flex;gap:2px;padding:5px}
-  .tab{width:76px;padding:11px 0 10px;border-radius:999px;border:none;background:none;color:var(--txt3);
-    font-size:9.5px;font-weight:600;font-family:inherit;letter-spacing:.14em;cursor:pointer;transition:.3s;
-    display:flex;flex-direction:column;align-items:center;gap:4px}
-  .tab svg{width:19px;height:19px;transition:.3s}
-  .tab.active{color:#fff;background:linear-gradient(150deg,rgba(255,255,255,.16),rgba(255,255,255,.06));
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.1), inset 0 1px 0 rgba(255,255,255,.22)}
+  .tabbar{pointer-events:auto;display:flex;gap:2px;padding:5px;background:rgba(255,255,255,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--hair);border-radius:999px;box-shadow:0 12px 40px -10px rgba(0,0,0,.14)}
+  .tab{width:82px;padding:12px 0 11px;border-radius:999px;border:none;background:none;color:var(--g2);font-size:9.5px;font-weight:600;font-family:inherit;letter-spacing:.16em;cursor:pointer;transition:.25s;display:flex;flex-direction:column;align-items:center;gap:4px}
+  .tab svg{width:18px;height:18px}
+  .tab.active{color:#fff;background:var(--ink)}
 
-  /* ================= toast ================= */
-  #toast{position:fixed;top:calc(env(safe-area-inset-top) + 18px);left:50%;transform:translateX(-50%) translateY(-80px);z-index:20;padding:13px 24px;font-size:13px;font-weight:500;transition:.45s cubic-bezier(.22,1,.36,1);white-space:nowrap;letter-spacing:.02em}
+  /* ---------- toast ---------- */
+  #toast{position:fixed;top:calc(env(safe-area-inset-top) + 18px);left:50%;transform:translateX(-50%) translateY(-80px);z-index:20;padding:12px 24px;font-size:12.5px;font-weight:500;transition:.45s cubic-bezier(.22,1,.36,1);white-space:nowrap;letter-spacing:.03em;background:var(--ink);color:#fff;border-radius:999px;box-shadow:0 10px 30px -6px rgba(0,0,0,.3)}
   #toast.show{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
-<div id="bg"></div>
-<div class="grain"></div>
-
 <div id="app">
 <main id="main">
 
@@ -203,110 +163,117 @@
   <section class="screen active" id="scr-today">
     <div class="head rise">
       <div>
-        <div class="h-wd" id="todayWd"></div>
-        <div class="h-big" id="todayDate"></div>
+        <div class="kicker" id="todayWd"></div>
+        <div class="h1" id="todayDate"></div>
       </div>
       <div class="ring">
-        <svg width="46" height="46"><circle class="track" cx="23" cy="23" r="20" fill="none" stroke-width="2.5"/><circle class="bar" id="ringBar" cx="23" cy="23" r="20" fill="none" stroke-width="2.5" stroke-dasharray="125.7" stroke-dashoffset="125.7"/></svg>
+        <svg width="44" height="44"><circle class="track" cx="22" cy="22" r="19" fill="none" stroke-width="2"/><circle class="bar" id="ringBar" cx="22" cy="22" r="19" fill="none" stroke-width="2" stroke-dasharray="119.4" stroke-dashoffset="119.4"/></svg>
         <div class="pct" id="ringPct">0</div>
       </div>
     </div>
-
-    <div class="glass north rise" id="northCard">
-      <div class="quote" id="npPurpose"></div>
-      <div class="thread" id="npChain"></div>
-    </div>
-
     <div class="days rise" id="dayScroll"></div>
     <div class="tasklist rise" id="taskList"></div>
   </section>
 
-  <!-- ============ BLUEPRINT ============ -->
-  <section class="screen" id="scr-bp">
-    <div class="bp-head rise">
-      <div class="h-wd">Blueprint</div>
-      <div class="bp-title">設計図</div>
+  <!-- ============ GOALS ============ -->
+  <section class="screen" id="scr-goals">
+    <div class="head rise">
+      <div>
+        <div class="kicker">Goals</div>
+        <div class="h1">ゴール</div>
+      </div>
     </div>
-    <div class="rail rise" id="bpBody"></div>
+    <div class="gform" id="gform">
+      <label>ゴール</label>
+      <input type="text" id="gfTitle" placeholder="例：電通に受かる">
+      <label>期限</label>
+      <input type="date" id="gfDate">
+      <label>メモ（任意）</label>
+      <textarea id="gfNote" placeholder="なぜやるか、条件、作戦など"></textarea>
+      <div class="row">
+        <button class="btn ghost" id="gfCancel">やめる</button>
+        <button class="btn primary" id="gfSave">追加する</button>
+      </div>
+    </div>
+    <div class="rise" id="goalList"></div>
+    <button class="addgoal rise" id="btnAddGoal">＋ ゴールを追加</button>
   </section>
 
-  <!-- ============ SYNC ============ -->
+  <!-- ============ LINK ============ -->
   <section class="screen" id="scr-sync">
-    <div class="bp-head rise">
-      <div class="h-wd">Link</div>
-      <div class="bp-title">ChatGPT 連携</div>
+    <div class="head rise">
+      <div>
+        <div class="kicker">Link</div>
+        <div class="h1">連携</div>
+      </div>
     </div>
 
-    <div class="glass sync-card rise">
-      <h3><i>STEP 1</i>現在地を渡して、壁打ちする</h3>
-      <p>全データ＋壁打ち用の指示をコピー。ChatGPTに貼ると、目標の分解を一緒に進めて、最後に取り込み用データを返してくれます。</p>
-      <button class="btn primary" id="btnExport">壁打ちプロンプトをコピー</button>
+    <div class="card rise">
+      <h3><i>CHATGPT — 常時連携</i>言うだけで反映させる</h3>
+      <p>このアプリの正データはGitHubの <code>purpose/data.json</code>。ChatGPT（GitHubコネクタ／Codex）に「data.jsonの◯◯ゴールにタスク追加して」と言えば、次の同期で画面に反映されます。下にトークンを入れると、このアプリも同じファイルへ自動保存・自動読込します。</p>
+      <input type="password" id="tokenInput" placeholder="GitHub Fine-grained token（Contents: Read/Write）">
+      <button class="btn primary" style="width:100%" id="btnSyncNow">保存して今すぐ同期</button>
+      <div class="syncstat" id="syncStat">未接続 — この端末内のみで動作中</div>
     </div>
 
-    <div class="glass sync-card rise">
-      <h3><i>STEP 2</i>結果を取り込む</h3>
-      <p>返ってきた PURPOSE_JSON をここへ。全体でも一部（タスク追加だけ）でも反映できます。</p>
-      <textarea id="pasteArea" placeholder='{"tasks":[...]} または全体JSON'></textarea>
-      <button class="btn ghostb" id="btnImport">取り込む</button>
+    <div class="card rise">
+      <h3><i>CHATGPT — 壁打ち</i>分解を手伝ってもらう</h3>
+      <p>全データ＋指示をコピーしてChatGPTへ。壁打ち後、返ってきたJSONを下に貼れば反映。連携済みならChatGPTに直接コミットさせてもOK。</p>
+      <button class="btn ghost" style="width:100%;margin-bottom:14px" id="btnExport">壁打ちプロンプトをコピー</button>
+      <textarea id="pasteArea" placeholder='返ってきたJSONを貼る（全体でも {"tasks":[...]} だけでも）'></textarea>
+      <button class="btn ghost" style="width:100%" id="btnImport">取り込む</button>
     </div>
 
-    <div class="glass sync-card rise">
+    <div class="card rise">
       <h3><i>BACKUP</i>書き出し</h3>
-      <p>データはこの端末の中だけにあります。ときどき書き出しておくと安心。</p>
-      <button class="btn ghostb" id="btnBackup">JSONを書き出す</button>
+      <p>いまの全データをファイルに書き出します。</p>
+      <button class="btn ghost" style="width:100%" id="btnBackup">JSONを書き出す</button>
     </div>
   </section>
 
 </main>
 
 <div class="inputbar show" id="inputbar">
-  <div class="glass pill inputwrap">
+  <div class="inputwrap">
     <input id="taskInput" placeholder="タスクを追加" enterkeyhint="done">
     <button class="icobtn" id="btnMic" title="音声入力"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
     <button class="icobtn add" id="btnAdd"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
   </div>
 </div>
 
-<nav><div class="glass pill tabbar">
-  <button class="tab active" data-scr="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v4.5l3 2"/></svg>TODAY</button>
-  <button class="tab" data-scr="bp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 3v18M12 8l6.5-3.5M12 8L5.5 4.5M12 15l6.5-3.5M12 15l-6.5-3.5M12 21l6.5-3.5M12 21l-6.5-3.5"/></svg>設計図</button>
-  <button class="tab" data-scr="sync"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 12a4 4 0 0 1 4-4h6M14 4l4 4-4 4M16 12a4 4 0 0 1-4 4H6M10 20l-4-4 4-4"/></svg>連携</button>
+<nav><div class="tabbar">
+  <button class="tab active" data-scr="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v4.5l3 2"/></svg>TODAY</button>
+  <button class="tab" data-scr="goals"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>GOALS</button>
+  <button class="tab" data-scr="sync"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M8 12a4 4 0 0 1 4-4h6M14 4l4 4-4 4M16 12a4 4 0 0 1-4 4H6M10 20l-4-4 4-4"/></svg>LINK</button>
 </div></nav>
 
-<div class="glass pill" id="toast"></div>
+<div id="toast"></div>
 </div>
 
 <script>
 /* ================= state ================= */
-const KEY='purpose.v1';
-const DECADE_LABELS=['20代','30代','40代','50代','60代','70代'];
-const emptyState=()=>({
-  purpose:'',
-  decades:DECADE_LABELS.map(l=>({label:l,goal:''})),
-  year:{}, quarter:{}, month:{}, week:{},
-  tasks:[]
-});
-let S=load();
-function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.decades)return Object.assign(emptyState(),d)}catch(e){}return emptyState()}
-function save(){localStorage.setItem(KEY,JSON.stringify(S))}
+const KEY='purpose.v2';
+const REPO='gjnzqqf8dq-coder/purpose', PATH='data.json', BRANCH='main';
+const emptyState=()=>({goals:[],tasks:[],del:{}});
+let S=load(), sha=null, pushT=null;
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.goals)return Object.assign(emptyState(),d)}catch(e){}return emptyState()}
+function persist(){localStorage.setItem(KEY,JSON.stringify(S))}
+function save(){persist();schedulePush();render()}
+const uid=p=>(p||'x')+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36);
 
-/* ================= date utils ================= */
+/* ================= dates ================= */
 const pad=n=>String(n).padStart(2,'0');
 const fmt=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-function isoWeek(d){const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const day=t.getUTCDay()||7;t.setUTCDate(t.getUTCDate()+4-day);const y0=new Date(Date.UTC(t.getUTCFullYear(),0,1));return[t.getUTCFullYear(),Math.ceil(((t-y0)/864e5+1)/7)]}
 const now=new Date();
-const keys={
-  year:String(now.getFullYear()),
-  quarter:`${now.getFullYear()}-Q${Math.floor(now.getMonth()/3)+1}`,
-  month:`${now.getFullYear()}-${pad(now.getMonth()+1)}`,
-  week:(()=>{const[y,w]=isoWeek(now);return`${y}-W${pad(w)}`})()
-};
-const curDecadeIdx=0;
 let selDate=fmt(now);
+const WD=['SUN','MON','TUE','WED','THU','FRI','SAT'];
+function dleft(dl){const a=new Date(selDateToday()+'T00:00:00'),b=new Date(dl+'T00:00:00');return Math.round((b-a)/864e5)}
+function selDateToday(){return fmt(new Date())}
 
 /* ================= toast ================= */
 let toastT;
-function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2200)}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2200)}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 
 /* ================= tabs ================= */
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{
@@ -314,170 +281,227 @@ document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('scr-'+b.dataset.scr).classList.add('active');
   document.getElementById('inputbar').classList.toggle('show',b.dataset.scr==='today');
-  if(b.dataset.scr==='bp')renderBP();
-  document.getElementById('main').scrollTo({top:0});
+  render();document.getElementById('main').scrollTo({top:0});
 });
 
-/* ================= TODAY ================= */
-const WD=['SUN','MON','TUE','WED','THU','FRI','SAT'];
-const WDJ=['日','月','火','水','木','金','土'];
+/* ================= render ================= */
+let openGoal=null;
+function render(){renderToday();renderGoals();renderSyncStat()}
+
 function renderToday(){
   const d=new Date(selDate+'T00:00:00');
   document.getElementById('todayWd').textContent=`${WD[d.getDay()]} — ${d.getFullYear()}`;
-  document.getElementById('todayDate').innerHTML=`${d.getMonth()+1}<b>月</b>${d.getDate()}<b>日</b>`;
-  const q=document.getElementById('npPurpose');
-  if(S.purpose){q.textContent=S.purpose;q.classList.remove('ghost')}
-  else{q.textContent='設計図タブで、人生のパーパスを書くことから始まる。';q.classList.add('ghost')}
-  const chain=[
-    ['DECADE',S.decades[curDecadeIdx]?.goal],
-    ['YEAR',S.year[keys.year]],
-    ['MONTH',S.month[keys.month]],
-    ['WEEK',S.week[keys.week]]
-  ];
-  document.getElementById('npChain').innerHTML=chain.map(([k,v],i)=>
-    `<div class="th-row${v?(i===3?' on':''):' empty'}"><b>${k}</b><span>${esc(v?v.split('\n')[0]:'未設定')}</span></div>`).join('');
-  renderDays();renderTasks();
-}
-function renderDays(){
+  document.getElementById('todayDate').innerHTML=`${d.getMonth()+1}<b>月</b> ${d.getDate()}<b>日</b>`;
+  // days
   const wrap=document.getElementById('dayScroll');wrap.innerHTML='';
   for(let i=-3;i<=10;i++){
-    const d=new Date(now);d.setDate(d.getDate()+i);const ds=fmt(d);
+    const dd=new Date(now);dd.setDate(dd.getDate()+i);const ds=fmt(dd);
     const el=document.createElement('div');
     el.className='day'+(ds===selDate?' sel':'')+(ds===fmt(now)?' today':'');
-    el.innerHTML=`<small>${WD[d.getDay()]}</small><b>${d.getDate()}</b>`;
+    el.innerHTML=`<small>${WD[dd.getDay()]}</small><b>${dd.getDate()}</b>`;
     el.onclick=()=>{selDate=ds;renderToday()};
     wrap.appendChild(el);
   }
-}
-function dayTasks(){return S.tasks.filter(t=>t.date===selDate)}
-function renderTasks(){
+  // tasks
   const list=document.getElementById('taskList');list.innerHTML='';
-  const ts=dayTasks();
-  if(!ts.length){list.innerHTML='<div class="emptystate">まだ何もない。<br>下から書くか、話しかけるか。</div>'}
+  const ts=S.tasks.filter(t=>t.date===selDate);
+  if(!ts.length)list.innerHTML='<div class="emptystate">まだ何もない。<br>下から書くか、ChatGPTに言うか。</div>';
   ts.forEach(t=>{
-    const el=document.createElement('div');el.className='glass task'+(t.done?' done':'');
-    el.innerHTML=`<div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a14" stroke-width="3.4" stroke-linecap="round"><path d="M4 12.5l5 5L20 6.5"/></svg></div><div class="t-title">${esc(t.title)}</div>`;
+    const g=S.goals.find(x=>x.id===t.goalId);
+    const el=document.createElement('div');el.className='task'+(t.done?' done':'');
+    el.innerHTML=`<div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"><path d="M4 12.5l5 5L20 6.5"/></svg></div>
+      <div class="t-body"><div class="t-title">${esc(t.title)}</div>${g?`<div class="t-goal">${esc(g.title)}${g.deadline?` ・ D-${Math.max(dleft(g.deadline),0)}`:''}</div>`:''}</div>`;
     let press;
-    el.addEventListener('pointerdown',()=>{press=setTimeout(()=>{press=null;if(confirm('このタスクを削除する？')){S.tasks=S.tasks.filter(x=>x.id!==t.id);save();renderToday()}},550)});
-    el.addEventListener('pointerup',()=>{if(press){clearTimeout(press);t.done=!t.done;save();renderToday()}});
+    el.addEventListener('pointerdown',()=>{press=setTimeout(()=>{press=null;if(confirm('このタスクを削除する？')){S.del[t.id]=Date.now();S.tasks=S.tasks.filter(x=>x.id!==t.id);save()}},550)});
+    el.addEventListener('pointerup',()=>{if(press){clearTimeout(press);t.done=!t.done;t.u=Date.now();save()}});
     el.addEventListener('pointerleave',()=>clearTimeout(press));
     list.appendChild(el);
   });
-  const done=ts.filter(t=>t.done).length, pct=ts.length?Math.round(done/ts.length*100):0;
+  const done=ts.filter(t=>t.done).length,pct=ts.length?Math.round(done/ts.length*100):0;
   document.getElementById('ringPct').textContent=pct;
-  document.getElementById('ringBar').style.strokeDashoffset=125.7*(1-pct/100);
+  document.getElementById('ringBar').style.strokeDashoffset=119.4*(1-pct/100);
 }
+
+function renderGoals(){
+  const list=document.getElementById('goalList');list.innerHTML='';
+  const gs=[...S.goals].sort((a,b)=>(a.deadline||'9999')<(b.deadline||'9999')?-1:1);
+  if(!gs.length)list.innerHTML='<div class="emptystate">ゴールがまだない。<br>「1年後、どうなっていたいか」から。</div>';
+  gs.forEach(g=>{
+    const linked=S.tasks.filter(t=>t.goalId===g.id);
+    const done=linked.filter(t=>t.done).length;
+    const dl=g.deadline?dleft(g.deadline):null;
+    const el=document.createElement('div');el.className='goal'+(openGoal===g.id?' open':'');
+    el.innerHTML=`
+      <div class="g-top">
+        <div class="g-title">${esc(g.title)}</div>
+        <div class="g-d${dl!==null&&dl<0?' over':''}">
+          ${dl!==null?`<b>${dl<0?'+'+(-dl):'D-'+dl}</b><span>${g.deadline.replace(/-/g,'.')}</span>`:'<b>—</b><span>期限なし</span>'}
+        </div>
+      </div>
+      <div class="g-meta">
+        <div class="g-bar"><i style="width:${linked.length?done/linked.length*100:0}%"></i></div>
+        <div class="g-count">${done}/${linked.length}</div>
+      </div>
+      <div class="g-detail">
+        <div class="g-note${g.note?'':' ghost'}">${esc(g.note||'メモなし — タップで編集')}</div>
+        <div class="g-tasks">${linked.slice().sort((a,b)=>a.date<b.date?-1:1).map(t=>`
+          <div class="g-task${t.done?' done':''}" data-tid="${t.id}"><div class="mini">${t.done?'<svg viewBox="0 0 24 24" width="8" height="8" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"><path d="M4 12.5l5 5L20 6.5"/></svg>':''}</div><span>${esc(t.title)}</span><i>${t.date.slice(5).replace('-','/')}</i></div>`).join('')}</div>
+        <div class="g-actions">
+          <button class="chip" data-act="task">今日にタスク追加</button>
+          <button class="chip" data-act="edit">編集</button>
+          <button class="chip danger" data-act="del">削除</button>
+        </div>
+      </div>`;
+    el.querySelector('.g-top').onclick=()=>{openGoal=openGoal===g.id?null:g.id;renderGoals()};
+    el.querySelector('.g-meta').onclick=()=>{openGoal=openGoal===g.id?null:g.id;renderGoals()};
+    el.querySelectorAll('.g-task').forEach(row=>row.onclick=e=>{
+      const t=S.tasks.find(x=>x.id===row.dataset.tid);if(t){t.done=!t.done;t.u=Date.now();save();openGoal=g.id;renderGoals()}
+    });
+    el.querySelector('[data-act=task]').onclick=()=>{
+      const title=prompt('タスク名');if(title&&title.trim()){S.tasks.push({id:uid('t'),title:title.trim(),date:fmt(new Date()),done:false,goalId:g.id,u:Date.now()});save();openGoal=g.id;renderGoals();toast('今日に追加した')}
+    };
+    el.querySelector('[data-act=edit]').onclick=()=>{
+      const f=document.getElementById('gform');f.classList.add('show');f.dataset.edit=g.id;
+      document.getElementById('gfTitle').value=g.title;document.getElementById('gfDate').value=g.deadline||'';document.getElementById('gfNote').value=g.note||'';
+      document.getElementById('main').scrollTo({top:0,behavior:'smooth'});
+    };
+    el.querySelector('[data-act=del]').onclick=()=>{
+      if(confirm(`「${g.title}」を削除する？（紐づくタスクは残る）`)){S.del[g.id]=Date.now();S.goals=S.goals.filter(x=>x.id!==g.id);S.tasks.forEach(t=>{if(t.goalId===g.id){t.goalId=null;t.u=Date.now()}});save()}
+    };
+    list.appendChild(el);
+  });
+}
+document.getElementById('btnAddGoal').onclick=()=>{
+  const f=document.getElementById('gform');f.dataset.edit='';['gfTitle','gfNote'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('gfDate').value='';f.classList.add('show');document.getElementById('gfTitle').focus();
+};
+document.getElementById('gfCancel').onclick=()=>document.getElementById('gform').classList.remove('show');
+document.getElementById('gfSave').onclick=()=>{
+  const f=document.getElementById('gform');
+  const title=document.getElementById('gfTitle').value.trim();
+  if(!title){toast('ゴール名を入れて');return}
+  const deadline=document.getElementById('gfDate').value||null;
+  const note=document.getElementById('gfNote').value.trim();
+  if(f.dataset.edit){const g=S.goals.find(x=>x.id===f.dataset.edit);if(g){Object.assign(g,{title,deadline,note,u:Date.now()})}}
+  else S.goals.push({id:uid('g'),title,deadline,note,u:Date.now()});
+  f.classList.remove('show');save();
+};
+
+/* ================= tasks (today input) ================= */
 function addTask(title){
   title=title.trim();if(!title)return;
-  S.tasks.push({id:Date.now()+''+Math.floor(Math.random()*999),date:selDate,title,done:false});
-  save();renderToday();
+  S.tasks.push({id:uid('t'),date:selDate,title,done:false,goalId:null,u:Date.now()});
+  save();
 }
 document.getElementById('btnAdd').onclick=()=>{const i=document.getElementById('taskInput');addTask(i.value);i.value=''};
 document.getElementById('taskInput').addEventListener('keydown',e=>{if(e.key==='Enter'){addTask(e.target.value);e.target.value=''}});
-
-/* voice input */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 const mic=document.getElementById('btnMic');
 if(!SR){mic.style.display='none'}
-else{
-  let rec=null;
+else{let rec=null;
   mic.onclick=()=>{
     if(rec){rec.stop();return}
-    rec=new SR();rec.lang='ja-JP';rec.interimResults=false;
-    mic.classList.add('rec');
+    rec=new SR();rec.lang='ja-JP';rec.interimResults=false;mic.classList.add('rec');
     rec.onresult=e=>{document.getElementById('taskInput').value=e.results[0][0].transcript};
     rec.onend=()=>{mic.classList.remove('rec');rec=null;const i=document.getElementById('taskInput');if(i.value){addTask(i.value);i.value=''}};
-    rec.onerror=()=>{mic.classList.remove('rec');rec=null;toast('音声入力できませんでした')};
+    rec.onerror=()=>{mic.classList.remove('rec');rec=null;toast('音声入力できなかった')};
     rec.start();
   };
 }
 
-/* ================= BLUEPRINT ================= */
-function lvSection(tag,meta,value,onSave,cls){
-  const sec=document.createElement('div');sec.className='lv '+(cls||'')+(value?' filled':'');
-  sec.innerHTML=`<div class="lv-tag"><b>${tag}</b><span>${meta||''}</span></div>`;
-  const p=document.createElement('div');p.className='lv-text'+(value?'':' ghost');
-  p.textContent=value||'タップして書く';
-  sec.appendChild(p);
-  p.onclick=()=>{
-    if(sec.querySelector('textarea'))return;
-    const ta=document.createElement('textarea');ta.className='editor';ta.value=value||'';
-    p.replaceWith(ta);ta.focus();
-    ta.addEventListener('blur',()=>{onSave(ta.value.trim());renderBP()});
-    ta.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.metaKey||e.ctrlKey))ta.blur()});
+/* ================= merge ================= */
+function mergeState(a,b){
+  const out=emptyState();
+  out.del={...a.del,...b.del};
+  for(const k of Object.keys(out.del))for(const src of[a.del,b.del])if(src[k]&&src[k]>out.del[k])out.del[k]=src[k];
+  const pick=(la,lb)=>{
+    const m=new Map();
+    [...la,...lb].forEach(e=>{if(!e||!e.id)return;const ex=m.get(e.id);if(!ex||(e.u||0)>(ex.u||0))m.set(e.id,e)});
+    return[...m.values()].filter(e=>!(out.del[e.id]&&out.del[e.id]>(e.u||0)));
   };
-  return sec;
-}
-function renderBP(){
-  const b=document.getElementById('bpBody');b.innerHTML='';
-  b.appendChild(lvSection('PURPOSE','人生の目的',S.purpose,v=>{S.purpose=v;save()},'purpose'));
-  // decades
-  const dsec=document.createElement('div');dsec.className='lv'+(S.decades.some(d=>d.goal)?' filled':'');
-  dsec.innerHTML='<div class="lv-tag"><b>DECADES</b><span>年代ごとの到達点</span></div>';
-  const row=document.createElement('div');row.className='decades';
-  S.decades.forEach((d,i)=>{
-    const c=document.createElement('div');c.className='dec'+(i===curDecadeIdx?' cur':'');
-    c.innerHTML=`<b>${d.label}${i===curDecadeIdx?' — NOW':''}</b>`;
-    const p=document.createElement('p');p.className=d.goal?'':'ghost';p.textContent=d.goal||'未設定';c.appendChild(p);
-    c.onclick=e=>{e.stopPropagation();
-      if(c.querySelector('textarea'))return;
-      const ta=document.createElement('textarea');ta.className='editor';ta.value=d.goal||'';ta.style.minHeight='64px';ta.style.fontSize='13px';
-      p.replaceWith(ta);ta.focus();
-      ta.addEventListener('blur',()=>{S.decades[i].goal=ta.value.trim();save();renderBP()});
-    };
-    row.appendChild(c);
-  });
-  dsec.appendChild(row);b.appendChild(dsec);
-  b.appendChild(lvSection('YEAR',keys.year,S.year[keys.year],v=>{S.year[keys.year]=v;save()}));
-  b.appendChild(lvSection('QUARTER',keys.quarter.replace('-',' '),S.quarter[keys.quarter],v=>{S.quarter[keys.quarter]=v;save()}));
-  b.appendChild(lvSection('MONTH',`${now.getMonth()+1}月`,S.month[keys.month],v=>{S.month[keys.month]=v;save()}));
-  b.appendChild(lvSection('WEEK','今週',S.week[keys.week],v=>{S.week[keys.week]=v;save()}));
-  renderToday();
+  out.goals=pick(a.goals||[],b.goals||[]);
+  out.tasks=pick(a.tasks||[],b.tasks||[]);
+  return out;
 }
 
-/* ================= SYNC ================= */
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+/* ================= github sync ================= */
+const tok=()=>localStorage.getItem('purpose.token')||'';
+const b64e=s=>btoa(String.fromCharCode(...new TextEncoder().encode(s)));
+const b64d=s=>new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\n/g,'')),c=>c.charCodeAt(0)));
+async function gh(path,opt={}){
+  const r=await fetch(`https://api.github.com/repos/${REPO}/${path}`,{...opt,headers:{'Authorization':'Bearer '+tok(),'Accept':'application/vnd.github+json',...(opt.headers||{})}});
+  if(!r.ok&&r.status!==404)throw new Error('GitHub '+r.status);
+  return r.status===404?null:r.json();
+}
+async function pull(){
+  const j=await gh(`contents/${PATH}?ref=${BRANCH}&t=${Date.now()}`);
+  if(!j)return false;
+  sha=j.sha;
+  let remote;try{remote=JSON.parse(b64d(j.content))}catch(e){return false}
+  S=mergeState(S,Object.assign(emptyState(),remote));persist();render();
+  return true;
+}
+async function push(){
+  const body={message:'update from Purpose app',content:b64e(JSON.stringify(S,null,2)),branch:BRANCH};
+  if(sha)body.sha=sha;
+  try{
+    const j=await gh(`contents/${PATH}`,{method:'PUT',body:JSON.stringify(body)});
+    if(j&&j.content){sha=j.content.sha;setStat('同期済み '+new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'}))}
+  }catch(e){ // sha conflict → pull(merge) then retry once
+    try{await pull();body.sha=sha;body.content=b64e(JSON.stringify(S,null,2));
+      const j2=await gh(`contents/${PATH}`,{method:'PUT',body:JSON.stringify(body)});
+      if(j2&&j2.content){sha=j2.content.sha;setStat('同期済み（マージ）')}
+    }catch(e2){setStat('同期エラー — 後で再試行')}
+  }
+}
+function schedulePush(){if(!tok())return;clearTimeout(pushT);pushT=setTimeout(push,3500)}
+function setStat(m){document.getElementById('syncStat').innerHTML=m?`<b>${esc(m)}</b>`:''}
+function renderSyncStat(){if(!tok())setStat('未接続 — この端末内のみで動作中')}
+document.getElementById('btnSyncNow').onclick=async()=>{
+  const v=document.getElementById('tokenInput').value.trim();
+  if(v)localStorage.setItem('purpose.token',v);
+  if(!tok()){toast('トークンを入れて');return}
+  document.getElementById('tokenInput').value='';
+  setStat('同期中…');
+  try{await pull();await push();toast('同期した')}
+  catch(e){setStat('接続できない — トークンを確認');toast('同期に失敗')}
+};
+
+/* ================= export / import ================= */
 document.getElementById('btnExport').onclick=async()=>{
-  const prompt=`あなたは目標設計のコーチです。私は「Purpose」というアプリで、人生の目的→年代→年→四半期→月→週→今日のタスク、と目標を分解して管理しています。
+  const p=`あなたは目標達成のコーチです。私は「Purpose」というアプリで複数のゴール（期限つき）と日々のタスクを管理しています。
 
-以下が現在の全データです（PURPOSE_JSON形式）。
-
+現在の全データ（PURPOSE_JSON）：
 \`\`\`json
 ${JSON.stringify(S,null,2)}
 \`\`\`
 
-やってほしいこと：
-1. まず現在地を読み、質問や指摘をしながら私と壁打ちしてください（一度に質問は2つまで）。
-2. 議論がまとまったら、最後に更新後の完全なデータを PURPOSE_JSON として1つのjsonコードブロックで出力してください。
-3. フォーマットは上と同一。tasksのdateは"YYYY-MM-DD"、idは既存を維持し新規は"new1"等でOK。勝手に既存タスクを消さないこと。
-4. 出力の一部だけ返す場合は {"tasks":[...]} のように該当キーだけでも取り込めます。
+スキーマ：
+- goals: {id, title, deadline:"YYYY-MM-DD"|null, note, u:更新epoch_ms}
+- tasks: {id, title, date:"YYYY-MM-DD", done, goalId:ゴールのid|null, u}
+- 新規idは"g_xxx"/"t_xxx"等ユニークに。uは必ず現在時刻のepoch msに。既存を消さない。
 
-今日は${fmt(now)}です。では、現在地の要約と最初の質問からお願いします。`;
-  try{await navigator.clipboard.writeText(prompt);toast('コピーした。ChatGPTへ')}
-  catch(e){const ta=document.getElementById('pasteArea');ta.value=prompt;ta.select();toast('下の欄に出したのでコピーして')}
+やってほしいこと：
+1. 現在地を読んで壁打ち（質問は一度に2つまで）。ゴールの分解＝期限から逆算して日付つきタスクに落とすのが目的。
+2. まとまったら、変更・追加分だけを {"goals":[...],"tasks":[...]} のjsonコードブロックで出力。
+
+今日は${fmt(now)}。では現在地の要約と最初の質問から。`;
+  try{await navigator.clipboard.writeText(p);toast('コピーした。ChatGPTへ')}
+  catch(e){document.getElementById('pasteArea').value=p;toast('下の欄からコピーして')}
 };
 document.getElementById('btnImport').onclick=()=>{
   let raw=document.getElementById('pasteArea').value.trim();
   if(!raw){toast('先に貼り付けて');return}
   const m=raw.match(/```(?:json)?\s*([\s\S]*?)```/);if(m)raw=m[1];
   let j;try{j=JSON.parse(raw)}catch(e){toast('JSONとして読めなかった');return}
-  const before=JSON.stringify(S);
   if(Array.isArray(j))j={tasks:j};
-  let added=0;
-  if(j.purpose!==undefined)S.purpose=String(j.purpose);
-  if(Array.isArray(j.decades))j.decades.forEach((d,i)=>{const t=S.decades.find(x=>x.label===d.label)||S.decades[i];if(t&&d.goal!==undefined)t.goal=String(d.goal)});
-  ['year','quarter','month','week'].forEach(k=>{if(j[k]&&typeof j[k]==='object')Object.assign(S[k],j[k])});
-  if(Array.isArray(j.tasks)){
-    j.tasks.forEach(t=>{
-      if(!t||!t.title)return;
-      const ex=t.id&&S.tasks.find(x=>x.id===String(t.id));
-      if(ex){Object.assign(ex,{title:String(t.title),date:t.date||ex.date,done:!!t.done})}
-      else{S.tasks.push({id:'g'+Date.now()+Math.floor(Math.random()*9999),date:t.date||fmt(now),title:String(t.title),done:!!t.done});added++}
-    });
-  }
+  const inc=emptyState();
+  inc.goals=(j.goals||[]).map(g=>({id:g.id||uid('g'),title:String(g.title||''),deadline:g.deadline||null,note:g.note||'',u:g.u||Date.now()})).filter(g=>g.title);
+  inc.tasks=(j.tasks||[]).map(t=>({id:t.id||uid('t'),title:String(t.title||''),date:t.date||fmt(now),done:!!t.done,goalId:t.goalId||null,u:t.u||Date.now()})).filter(t=>t.title);
+  const before=JSON.stringify(S);
+  S=mergeState(S,inc);
   if(JSON.stringify(S)===before){toast('変更なし');return}
-  save();renderBP();document.getElementById('pasteArea').value='';
-  toast(added?`取り込んだ（タスク+${added}）`:'取り込んだ');
+  document.getElementById('pasteArea').value='';save();toast('取り込んだ');
 };
 document.getElementById('btnBackup').onclick=()=>{
   const a=document.createElement('a');
@@ -486,7 +510,8 @@ document.getElementById('btnBackup').onclick=()=>{
 };
 
 /* ================= boot ================= */
-renderBP();
+render();
+if(tok()){setStat('同期中…');pull().then(ok=>{setStat(ok?'同期済み':'リモート未作成 — 保存で作られる')}).catch(()=>setStat('接続できない — トークンを確認'))}
 </script>
 </body>
 </html>
