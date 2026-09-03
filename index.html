@@ -83,6 +83,36 @@
   .sub-none{font-size:12px;color:var(--gray2);margin:2px 0 4px 19px}
   .gb-open{display:block;border:none;background:none;font-family:inherit;font-size:13px;color:var(--gray);cursor:pointer;padding:10px 0 4px;transition:opacity .3s}
   .gb-open:active{opacity:.4;transition:opacity .05s}
+  .gb-plan{display:block;border:none;background:none;font-family:inherit;font-size:13px;color:var(--gray);cursor:pointer;padding:10px 0 2px;transition:opacity .3s}
+  .gb-plan:active{opacity:.4;transition:opacity .05s}
+  .gb-plan.todo{color:var(--ink);font-weight:600}
+  .gb-plan.todo::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:#ff9500;margin-right:7px;vertical-align:1px}
+  .pl-lead{font-size:13.5px;color:var(--gray);line-height:1.5;margin:2px 0 4px}
+  .pl-sec{display:flex;align-items:baseline;gap:8px;margin:26px 0 2px}
+  .pl-sec b{font-size:11px;letter-spacing:.13em;color:var(--gray2);font-weight:700}
+  .pl-sec span{font-size:13px;color:var(--gray)}
+  .pl-row{display:flex;align-items:center;gap:11px;padding:11px 0;font-size:15.5px;border-bottom:.5px solid var(--sep);cursor:pointer}
+  .pl-row .n{flex:none;width:20px;height:20px;border-radius:6px;background:var(--fill);display:grid;place-items:center;font-size:11.5px;color:var(--gray);font-variant-numeric:tabular-nums}
+  .pl-row .c{flex:none;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--gray2);display:grid;place-items:center;transition:background .3s,border-color .3s}
+  .pl-row .c svg{opacity:0;transform:scale(.4);transition:.3s var(--spring)}
+  .pl-row.done .c{background:var(--ink);border-color:var(--ink)}
+  .pl-row.done .c svg{opacity:1;transform:scale(1)}
+  .pl-row .t{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pl-row.done .t{color:var(--gray);text-decoration:line-through;text-decoration-color:var(--gray2)}
+  .pl-row .w{flex:none;font-size:12.5px;color:var(--gray);font-variant-numeric:tabular-nums}
+  .pl-row .go{flex:none;border:none;background:var(--fill);color:var(--ink);font-family:inherit;font-size:11.5px;font-weight:600;border-radius:8px;padding:5px 9px;cursor:pointer;transition:transform .3s var(--spring),opacity .3s}
+  .pl-row .go:active{transform:scale(.92);opacity:.6;transition:transform .06s}
+  .pl-row .go.off{background:none;color:var(--gray2)}
+  .pl-alt{padding:12px 0;border-bottom:.5px solid var(--sep)}
+  .pl-alt .q{font-size:15px;line-height:1.5}
+  .pl-alt .q em{font-style:normal;color:var(--gray)}
+  .pl-alt .h{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:14.5px}
+  .pl-alt .h .c{flex:none;width:19px;height:19px;border-radius:50%;border:1.5px solid var(--gray2);display:grid;place-items:center;transition:background .3s,border-color .3s;cursor:pointer}
+  .pl-alt .h .c svg{opacity:0;transform:scale(.4);transition:.3s var(--spring)}
+  .pl-alt.done .h .c{background:var(--ink);border-color:var(--ink)}
+  .pl-alt.done .h .c svg{opacity:1;transform:scale(1)}
+  .pl-alt.done .h span{color:var(--gray);text-decoration:line-through;text-decoration-color:var(--gray2)}
+  .pl-empty{font-size:13.5px;color:var(--gray2);padding:12px 0}
 
   /* ============ task rows (swipe) ============ */
   .t-row{position:relative;overflow:hidden;margin:0 -20px;touch-action:pan-y}
@@ -367,7 +397,7 @@ const REPO='gjnzqqf8dq-coder/purpose', PATH='data.json', BRANCH='main';
 const emptyState=()=>({goals:[],tasks:[],del:{}});
 let S=load(), sha=null, pushT=null, lastPull=0;
 function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.goals)return norm(Object.assign(emptyState(),d))}catch(e){}return emptyState()}
-function norm(s){s.goals.forEach(g=>{if(!Array.isArray(g.miles))g.miles=[]});return s}
+function norm(s){s.goals.forEach(g=>{if(!Array.isArray(g.miles))g.miles=[];planOf(g)});return s}
 function persist(){localStorage.setItem(KEY,JSON.stringify(S))}
 function save(){persist();schedulePush();render()}
 function saveQuiet(){persist();schedulePush()}
@@ -668,6 +698,7 @@ function renderHome(){
       </div>
       <div class="gb-exp"><div><div class="inner">
         ${subs}
+        <button class="gb-plan${planCount(g)?'':' todo'}">フライトプラン${planCount(g)?` ${planOf(g).route.length}工程`:'を書く'} ›</button>
         <button class="gb-open">ゴールをひらく（編集・マトリョーシカ追加） ›</button>
       </div></div></div>
     </div>`;
@@ -691,6 +722,8 @@ function renderHome(){
         openMileSheet(sb.dataset.gid,sb.dataset.mid);
       });
     });
+    const pb=el.querySelector('.gb-plan');
+    if(pb)onTap(pb,()=>openPlanSheet(gid));
     const ob=el.querySelector('.gb-open');
     if(ob)onTap(ob,()=>openGoalSheet(gid));
   });
@@ -899,6 +932,114 @@ function openGoalSheet(gid){
   });
 }
 
+/* ================= FLIGHT PLAN（ゴールに向かう前に一周見ておく） ================= */
+function emptyPlan(){return{route:[],cargo:[],alt:[]}}
+function planOf(g){if(!g.plan||typeof g.plan!=='object')g.plan=emptyPlan();
+  ['route','cargo','alt'].forEach(k=>{if(!Array.isArray(g.plan[k]))g.plan[k]=[]});return g.plan}
+function planCount(g){const p=planOf(g);return p.route.length+p.cargo.length+p.alt.length}
+const CK=CHECK.replace('width="11" height="11"','width="10" height="10"');
+
+function openPlanSheet(gid){
+  const g=S.goals.find(x=>x.id===gid);if(!g)return;
+  openSheet(body=>{
+    const draw=()=>{
+      const p=planOf(g);
+      body.innerHTML=`
+        <div class="sh-kicker">FLIGHT PLAN</div>
+        <div class="sh-title">${esc(g.title)}</div>
+        <div class="pl-lead">着くまでに実際に何が起きるかを、先に一周見ておく。</div>
+
+        <div class="pl-sec"><b>ROUTE</b><span>通る道</span></div>
+        <div id="plR">${p.route.length?p.route.map((r,i)=>`
+          <div class="pl-row" data-i="${i}">
+            <div class="n">${i+1}</div><div class="t">${esc(r.title)}</div>
+            ${r.when?`<div class="w">${esc(r.when)}</div>`:''}
+            <button class="go${r.m?' off':''}" data-act="mile" data-i="${i}">${r.m?'済':'目標に'}</button>
+          </div>`).join(''):'<div class="pl-empty">ゴールまでに必ず通る工程を、順に置く。</div>'}
+        </div>
+        <div class="addrow"><input id="plRAdd" placeholder="工程／時期は「 : 」の後に" enterkeyhint="done"><button id="plRBtn">追加</button></div>
+
+        <div class="pl-sec"><b>CARGO</b><span>要る人・要るモノ</span></div>
+        <div id="plC">${p.cargo.length?p.cargo.map((c,i)=>`
+          <div class="pl-row${c.done?' done':''}" data-i="${i}">
+            <div class="c">${CK}</div><div class="t">${esc(c.title)}</div>
+            ${c.due?`<div class="w">${esc(c.due.slice(5).replace('-','/'))}</div>`:''}
+            <button class="go${c.t?' off':''}" data-act="task" data-i="${i}">${c.t?'済':'タスクに'}</button>
+          </div>`).join(''):'<div class="pl-empty">その工程で要る人・モノ・お金と、頼む期限。</div>'}
+        </div>
+        <div class="addrow"><input id="plCAdd" placeholder="要るもの／期限は「 : 」の後に" enterkeyhint="done"><button id="plCBtn">追加</button></div>
+
+        <div class="pl-sec"><b>ALTERNATE</b><span>分かれ道</span></div>
+        <div id="plA">${p.alt.length?p.alt.map((a,i)=>`
+          <div class="pl-alt${a.done?' done':''}" data-i="${i}">
+            <div class="q">もし<b>${esc(a.cond)}</b>なら<em> → ${esc(a.risk)}</em></div>
+            <div class="h"><div class="c">${CK}</div><span>いまの一手：${esc(a.hedge)}</span></div>
+          </div>`).join(''):'<div class="pl-empty">まだ決まっていない分岐と、どちらに転んでも損しない一手。</div>'}
+        </div>
+        <div class="addrow"><input id="plAAdd" placeholder="条件 / 起きること / いまの一手" enterkeyhint="done"><button id="plABtn">追加</button></div>
+
+        <div class="sh-actions"><button class="btn plain" id="plBack">ゴールに戻る</button></div>`;
+      bind();
+    };
+    const touch=()=>{g.u=Date.now();persist();schedulePush()};
+    const bind=()=>{
+      const p=planOf(g);
+      /* ROUTE 追加：「工程 : 時期」 */
+      const addR=()=>{const el=body.querySelector('#plRAdd'),v=el.value.trim();if(!v)return;
+        const m=v.split(/\s*[:：]\s*/);
+        p.route.push({id:uid('r'),title:m[0],when:m[1]||''});touch();draw()};
+      body.querySelector('#plRBtn').onclick=addR;
+      body.querySelector('#plRAdd').addEventListener('keydown',e=>{if(e.key==='Enter')addR()});
+      /* CARGO 追加：「要るもの : 期限(YYYY-MM-DD or M/D)」 */
+      const addC=()=>{const el=body.querySelector('#plCAdd'),v=el.value.trim();if(!v)return;
+        const m=v.split(/\s*[:：]\s*/);
+        p.cargo.push({id:uid('c'),title:m[0],due:normDate(m[1]||''),done:false});touch();draw()};
+      body.querySelector('#plCBtn').onclick=addC;
+      body.querySelector('#plCAdd').addEventListener('keydown',e=>{if(e.key==='Enter')addC()});
+      /* ALT 追加：「条件 / 起きること / 一手」 */
+      const addA=()=>{const el=body.querySelector('#plAAdd'),v=el.value.trim();if(!v)return;
+        const m=v.split(/\s*[\/／]\s*/);
+        if(m.length<2){toast('「条件 / 起きること / 一手」で入れて');return}
+        p.alt.push({id:uid('a'),cond:m[0],risk:m[1]||'',hedge:m[2]||'',done:false});touch();draw()};
+      body.querySelector('#plABtn').onclick=addA;
+      body.querySelector('#plAAdd').addEventListener('keydown',e=>{if(e.key==='Enter')addA()});
+
+      body.querySelectorAll('#plR .pl-row').forEach(row=>{
+        const i=+row.dataset.i;
+        const btn=row.querySelector('.go');
+        if(btn)btn.onclick=e=>{e.stopPropagation();const r=p.route[i];if(r.m){toast('もう目標にしてある');return}
+          g.miles.push({id:uid('m'),title:r.title,done:false});r.m=true;touch();render();draw();toast('マトリョーシカにした')};
+        onLongPress(row,()=>{p.route.splice(i,1);touch();draw();toast('消した')},550);
+      });
+      body.querySelectorAll('#plC .pl-row').forEach(row=>{
+        const i=+row.dataset.i;
+        const btn=row.querySelector('.go');
+        if(btn)btn.onclick=e=>{e.stopPropagation();const c=p.cargo[i];if(c.t){toast('もうタスクにしてある');return}
+          S.tasks.push({id:uid('t'),title:c.title,date:c.due||TODAY,done:false,goalId:g.id,mileId:null,u:Date.now()});
+          c.t=true;touch();render();draw();toast('タスクにした')};
+        onTap(row,e=>{if(e.target.closest('.go'))return;const c=p.cargo[i];c.done=!c.done;touch();draw()});
+        onLongPress(row,()=>{p.cargo.splice(i,1);touch();draw();toast('消した')},550);
+      });
+      body.querySelectorAll('#plA .pl-alt').forEach(row=>{
+        const i=+row.dataset.i;
+        onTap(row,()=>{const a=p.alt[i];a.done=!a.done;touch();draw()});
+        onLongPress(row,()=>{p.alt.splice(i,1);touch();draw();toast('消した')},550);
+      });
+      body.querySelector('#plBack').onclick=()=>openGoalSheet(g.id);
+    };
+    draw();
+  });
+}
+/* 「9/7」「2026-09-07」どちらでも受ける */
+function normDate(s){
+  s=(s||'').trim();if(!s)return'';
+  let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if(m)return `${m[1]}-${String(m[2]).padStart(2,'0')}-${String(m[3]).padStart(2,'0')}`;
+  m=s.match(/^(\d{1,2})[\/月](\d{1,2})日?$/);
+  if(m){const y=now.getFullYear();return `${y}-${String(m[1]).padStart(2,'0')}-${String(m[2]).padStart(2,'0')}`}
+  return '';
+}
+
 /* ================= milestone sheet ================= */
 function openMileSheet(gid,mid){
   const g=S.goals.find(x=>x.id===gid);if(!g)return;
@@ -976,7 +1117,8 @@ function openGoalForm(gid){
       const deadline=body.querySelector('#gfDate').value||null;
       const note=body.querySelector('#gfNote').value.trim();
       if(g)Object.assign(g,{title,deadline,note,u:Date.now()});
-      else{const ng={id:uid('g'),title,deadline,note,miles:[],u:Date.now()};S.goals.push(ng);expandedGoal=ng.id}
+      else{const ng={id:uid('g'),title,deadline,note,miles:[],plan:emptyPlan(),u:Date.now()};S.goals.push(ng);expandedGoal=ng.id;
+        closeSheet();save();setTimeout(()=>openPlanSheet(ng.id),240);return}
       closeSheet();save();
     };
   });
