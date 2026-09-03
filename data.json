@@ -1,30 +1,432 @@
 {
-  "goals": [
-    {"id":"g_dentsu_final","title":"電通に受かる","deadline":"2027-06-30","note":"アート職照準。PF12作品＋人の動かし方まで","u":1788177421477,
-     "miles":[
-       {"id":"m_dentsu_intern","title":"インターンに通る","done":false},
-       {"id":"m_dentsu_pencil","title":"金の鉛筆を取る","done":false},
-       {"id":"m_dentsu_spi","title":"SPIで高得点を取る","done":false},
-       {"id":"m_dentsu_souki","title":"早期選考に呼ばれる","done":false},
-       {"id":"m_dentsu_mensetsu","title":"最終面接を突破する","done":false}
-     ]},
-    {"id":"g_dentsu_1ji","title":"一次選考を通過する","deadline":"2026-09-21","note":"","u":1788177421477,
-     "miles":[
-       {"id":"m_1ji_es","title":"ESを完成させる","done":false},
-       {"id":"m_1ji_pf","title":"PFを提出形式に整える","done":false},
-       {"id":"m_1ji_submit","title":"提出する","done":false}
-     ]},
-    {"id":"g_hyrox","title":"HYROXを完走する","deadline":"2026-11-30","note":"週3回52分メニュー継続","u":1788177421477,
-     "miles":[
-       {"id":"m_hyrox_entry","title":"エントリーする","done":false},
-       {"id":"m_hyrox_4w","title":"週3トレを4週連続","done":false},
-       {"id":"m_hyrox_sim","title":"模擬レースをやる","done":false},
-       {"id":"m_hyrox_race","title":"本番完走","done":false}
-     ]}
-  ],
-  "tasks": [
-    {"id":"t_demo1","title":"ES設問の下書きを1本書く","date":"2026-08-31","done":false,"goalId":"g_dentsu_1ji","mileId":"m_1ji_es","u":1788177421477},
-    {"id":"t_demo2","title":"筋トレ 52分","date":"2026-08-31","done":false,"goalId":"g_hyrox","mileId":"m_hyrox_4w","u":1788177421477}
-  ],
-  "del": {}
+ "cats": [
+  {
+   "id": "c_shukatsu",
+   "name": "就活",
+   "hue": 222,
+   "u": 1788425089000
+  },
+  {
+   "id": "c_seisaku",
+   "name": "制作",
+   "hue": 28,
+   "u": 1788425089000
+  },
+  {
+   "id": "c_karada",
+   "name": "からだ",
+   "hue": 152,
+   "u": 1788425089000
+  },
+  {
+   "id": "c_manabi",
+   "name": "学び",
+   "hue": 272,
+   "u": 1788425089000
+  },
+  {
+   "id": "c_kurashi",
+   "name": "くらし",
+   "hue": 338,
+   "u": 1788425089000
+  }
+ ],
+ "goals": [
+  {
+   "id": "g_hakuhodo_souki",
+   "title": "博報堂に受かる",
+   "deadline": "2026-10-16",
+   "cat": "c_shukatsu",
+   "note": "28卒早期選考。夏IS クリエイティブ篇の実績（入浴剤1位／ドライクリスタル2位）が軸。MyPage=axol.jp（ID d7a1255629）。",
+   "u": 1788425089000,
+   "miles": [
+    {
+     "id": "m_hs_entry",
+     "title": "早期選考エントリーを出す（9/4 12:00）",
+     "done": false
+    },
+    {
+     "id": "m_hs_fes",
+     "title": "博FES in September に出る（9/7）",
+     "done": false
+    },
+    {
+     "id": "m_hs_kekka",
+     "title": "書類通過→面接を即予約（9/10）",
+     "done": false
+    },
+    {
+     "id": "m_hs_final",
+     "title": "最終面接を突破する（10/7頃）",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "g_gakusei_koukoku",
+   "title": "学生広告日本一で勝つ",
+   "deadline": "2026-09-07",
+   "cat": "c_seisaku",
+   "note": "亀田製菓「柿の種」課題。カリ杯96点／じぶんの柿の種95点が確定案。",
+   "u": 1788425089000,
+   "miles": [
+    {
+     "id": "m_gk_deck",
+     "title": "プレゼンテーション資料を作る",
+     "done": false
+    },
+    {
+     "id": "m_gk_submit",
+     "title": "9/7 までに提出する",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "g_iloveyou",
+   "title": "I LOVE YOU プロジェクトを前に進める",
+   "deadline": "2026-09-10",
+   "cat": "c_seisaku",
+   "note": "9/10 メンターとのミーティング。CA連携・30万円助成（Co-Beacon）。",
+   "u": 1788425089000,
+   "miles": [
+    {
+     "id": "m_ily_deck",
+     "title": "メンターMTG用のスライドを作る",
+     "done": false
+    },
+    {
+     "id": "m_ily_mtg",
+     "title": "9/10 メンターMTG",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "g_idea_school",
+   "title": "アイデアの学校で通用する",
+   "deadline": "2026-09-11",
+   "cat": "c_shukatsu",
+   "note": "去年の実課題を練習で解く。提出形式は【プレゼン資料ではなく1枚ビジュアル】でよい。9/11を目安に飯原さんへ見せてブラッシュアップしてもらう。",
+   "u": 1788425089000,
+   "miles": [
+    {
+     "id": "m_is_make",
+     "title": "過去課題を1枚ビジュアルで解く",
+     "done": false
+    },
+    {
+     "id": "m_is_review",
+     "title": "飯原さんにブラッシュアップしてもらう",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "g_manabu",
+   "title": "勉強する時間をつくる",
+   "deadline": null,
+   "cat": "c_manabi",
+   "note": "「勉強したい」から起こしたゴール。何を勉強するかは未定。",
+   "u": 1788425089000,
+   "miles": [
+    {
+     "id": "m_mn_what",
+     "title": "何を勉強するか決める",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "g_dentsu_1ji",
+   "title": "一次選考を通過する",
+   "deadline": "2026-09-21",
+   "cat": "c_shukatsu",
+   "note": "",
+   "u": 1788425089000,
+   "miles": [
+    {
+     "id": "m_1ji_es",
+     "title": "ESを完成させる",
+     "done": false
+    },
+    {
+     "id": "m_1ji_pf",
+     "title": "PFを提出形式に整える",
+     "done": false
+    },
+    {
+     "id": "m_1ji_submit",
+     "title": "提出する",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "g_dentsu_final",
+   "title": "電通に受かる",
+   "deadline": "2027-06-30",
+   "cat": "c_shukatsu",
+   "note": "アート職照準。PF12作品＋人の動かし方まで",
+   "u": 1788425089000,
+   "miles": [
+    {
+     "id": "m_dentsu_intern",
+     "title": "インターンに通る",
+     "done": false
+    },
+    {
+     "id": "m_dentsu_pencil",
+     "title": "金の鉛筆を取る",
+     "done": false
+    },
+    {
+     "id": "m_dentsu_spi",
+     "title": "SPIで高得点を取る",
+     "done": false
+    },
+    {
+     "id": "m_dentsu_souki",
+     "title": "早期選考に呼ばれる",
+     "done": false
+    },
+    {
+     "id": "m_dentsu_mensetsu",
+     "title": "最終面接を突破する",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "g_hyrox",
+   "title": "HYROXを完走する",
+   "deadline": "2026-11-30",
+   "cat": "c_karada",
+   "note": "週3回52分メニュー継続",
+   "u": 1788425089000,
+   "miles": [
+    {
+     "id": "m_hyrox_entry",
+     "title": "エントリーする",
+     "done": false
+    },
+    {
+     "id": "m_hyrox_4w",
+     "title": "週3トレを4週連続",
+     "done": false
+    },
+    {
+     "id": "m_hyrox_sim",
+     "title": "模擬レースをやる",
+     "done": false
+    },
+    {
+     "id": "m_hyrox_race",
+     "title": "本番完走",
+     "done": false
+    }
+   ]
+  }
+ ],
+ "tasks": [
+  {
+   "id": "t_gk_deck",
+   "title": "プレゼン資料を組む",
+   "date": "2026-09-05",
+   "done": false,
+   "goalId": "g_gakusei_koukoku",
+   "mileId": "m_gk_deck",
+   "u": 1788425089000
+  },
+  {
+   "id": "t_gk_submit",
+   "title": "提出する",
+   "date": "2026-09-07",
+   "done": false,
+   "goalId": "g_gakusei_koukoku",
+   "mileId": "m_gk_submit",
+   "u": 1788425089000
+  },
+  {
+   "id": "t_ily_deck",
+   "title": "メンター向けスライドを作る",
+   "date": "2026-09-09",
+   "done": false,
+   "goalId": "g_iloveyou",
+   "mileId": "m_ily_deck",
+   "u": 1788425089000
+  },
+  {
+   "id": "t_ily_mtg",
+   "title": "メンターMTG",
+   "date": "2026-09-10",
+   "done": false,
+   "goalId": "g_iloveyou",
+   "mileId": "m_ily_mtg",
+   "u": 1788425089000
+  },
+  {
+   "id": "t_ily_concept",
+   "title": "コンセプトを考える（※何のコンセプトか要確認）",
+   "date": "2026-09-09",
+   "done": false,
+   "goalId": "g_iloveyou",
+   "mileId": "m_ily_deck",
+   "u": 1788425089000
+  },
+  {
+   "id": "t_is_q1",
+   "title": "課題① 課題名を思い出す／確認する",
+   "date": "2026-09-08",
+   "done": false,
+   "goalId": "g_idea_school",
+   "mileId": "m_is_make",
+   "u": 1788425089000
+  },
+  {
+   "id": "t_is_q2",
+   "title": "課題② みそ汁を飲む人を増やすアイデア",
+   "date": "2026-09-08",
+   "done": false,
+   "goalId": "g_idea_school",
+   "mileId": "m_is_make",
+   "u": 1788425089000
+  },
+  {
+   "id": "t_is_q3",
+   "title": "課題③ 感じる違和感をGoogleのプロダクトにして社員としてプレゼン",
+   "date": "2026-09-09",
+   "done": false,
+   "goalId": "g_idea_school",
+   "mileId": "m_is_make",
+   "u": 1788425089000
+  },
+  {
+   "id": "t_is_q4",
+   "title": "課題④ 新しいサラダブランド",
+   "date": "2026-09-09",
+   "done": false,
+   "goalId": "g_idea_school",
+   "mileId": "m_is_make",
+   "u": 1788425089000
+  },
+  {
+   "id": "t_is_q5",
+   "title": "課題⑤ 道の駅に平均単価1万円の場所ができた、というサービス",
+   "date": "2026-09-10",
+   "done": false,
+   "goalId": "g_idea_school",
+   "mileId": "m_is_make",
+   "u": 1788425089000
+  },
+  {
+   "id": "t_is_q6",
+   "title": "課題⑥ 2040年に起業した、その時のアイデア",
+   "date": "2026-09-10",
+   "done": false,
+   "goalId": "g_idea_school",
+   "mileId": "m_is_make",
+   "u": 1788425089000
+  },
+  {
+   "id": "t_is_show",
+   "title": "飯原さんに見せる（9/11目安）",
+   "date": "2026-09-11",
+   "done": false,
+   "goalId": "g_idea_school",
+   "mileId": "m_is_review",
+   "u": 1788425089000
+  },
+  {
+   "id": "t_spi_check",
+   "title": "早期選考に呼ばれた場合SPIを受け直す必要があるか調べる",
+   "date": "2026-09-04",
+   "done": false,
+   "goalId": "g_dentsu_final",
+   "mileId": "m_dentsu_spi",
+   "u": 1788425089000
+  },
+  {
+   "id": "t_mn_what",
+   "title": "何を勉強するか決める",
+   "date": "2026-09-12",
+   "done": false,
+   "goalId": "g_manabu",
+   "mileId": "m_mn_what",
+   "u": 1788425089000
+  },
+  {
+   "id": "t_hb_shibou",
+   "title": "志望動機書PDFを作る（A4上限2枚）",
+   "date": "2026-09-03",
+   "done": false,
+   "goalId": "g_hakuhodo_souki",
+   "mileId": "m_hs_entry",
+   "u": 1788425089000
+  },
+  {
+   "id": "t_hb_shokushu",
+   "title": "希望職種 第1〜3希望＋理由を書く（300/100/100字）",
+   "date": "2026-09-03",
+   "done": false,
+   "goalId": "g_hakuhodo_souki",
+   "mileId": "m_hs_entry",
+   "u": 1788425089000
+  },
+  {
+   "id": "t_hb_submit",
+   "title": "MyPageから提出する（9/4 12:00 厳守）",
+   "date": "2026-09-04",
+   "done": false,
+   "goalId": "g_hakuhodo_souki",
+   "mileId": "m_hs_entry",
+   "u": 1788425089000
+  },
+  {
+   "id": "t_hb_test",
+   "title": "テストセンター適性検査（8/26 受検済）",
+   "date": "2026-08-26",
+   "done": true,
+   "goalId": "g_hakuhodo_souki",
+   "mileId": "m_hs_entry",
+   "u": 1788425089000
+  },
+  {
+   "id": "t_hb_geidai",
+   "title": "藝大の学校アカウントで学内の博報堂告知を確認する",
+   "date": "2026-09-03",
+   "done": false,
+   "goalId": "g_hakuhodo_souki",
+   "mileId": "m_hs_entry",
+   "u": 1788425089000
+  },
+  {
+   "id": "t_hb_fes",
+   "title": "博FES in September 17:00〜21:00（要申込・9/7は予定が重複）",
+   "date": "2026-09-07",
+   "done": false,
+   "goalId": "g_hakuhodo_souki",
+   "mileId": "m_hs_fes",
+   "u": 1788425089000
+  },
+  {
+   "id": "t_hb_yoyaku",
+   "title": "書類結果を確認し、キャリアダイアログ＋最終面接を即予約",
+   "date": "2026-09-10",
+   "done": false,
+   "goalId": "g_hakuhodo_souki",
+   "mileId": "m_hs_kekka",
+   "u": 1788425089000
+  },
+  {
+   "id": "t_hb_final",
+   "title": "最終面接（赤坂Bizタワー・スーツ）",
+   "date": "2026-10-07",
+   "done": false,
+   "goalId": "g_hakuhodo_souki",
+   "mileId": "m_hs_final",
+   "u": 1788425089000
+  }
+ ],
+ "del": {}
 }
