@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#eef0f4">
+<meta name="theme-color" content="#f2f2f7">
 <meta name="apple-mobile-web-app-title" content="Purpose">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -13,48 +13,39 @@
 <title>Purpose</title>
 <style>
 /* ============================================================
-   Purpose v9 — Liquid Glass
-   ・入力は「声」だけ（キーボードは隠しフォールバック）
-   ・ゴールはカテゴリで分ける
-   ・マトリョーシカ＝入れ子（同心角丸・凹凸で階層を見せる）
+   Purpose v10 — iOS 26 Liquid Glass（正しい使い方）
+   鉄則: ガラスは「浮いているクローム」だけ。コンテンツはガラスにしない。
+   ・入力UIなし（追加・編集は Claude / ChatGPT が data.json を書く）
+   ・アプリ＝眺めて、チェックして、消すだけ
    ============================================================ */
 :root{
   color-scheme:light dark;
 
-  /* --- 同心角丸（Liquid Glass の concentricity）--- */
-  --r1:30px; --p1:9px;      /* ゴール器 */
-  --r2:21px; --p2:7px;      /* 中の目標 = 30-9 */
-  --r3:14px;                /* タスク    = 21-7 */
+  /* 同心角丸 */
+  --r1:26px; --p1:16px;   /* ゴールカード */
+  --r2:14px;              /* 中のグループ */
+  --r3:10px;              /* タスク行 */
 
-  /* --- 地の色（ガラスは背後に何か無いと見えない）--- */
-  --amb-h:222;
-  --bg:#eceef2;
-  --surface:#ffffff;
-  --ink:#0b0b0e;
-  --ink-2:#3c3c43;
-  --gray:#84848d;
-  --gray2:#b8b8c2;
-  --sep:rgba(60,60,67,.13);
-  --fill:rgba(120,120,128,.10);
-  --press:rgba(120,120,128,.18);
-  --red:#e0402c;
-  --amber:#f09000;
+  /* iOS システム配色（inset grouped） */
+  --bg:#f2f2f7;           /* systemGroupedBackground */
+  --card:#ffffff;         /* secondarySystemGroupedBackground */
+  --bg2:#f2f2f7;          /* カードの中に掘る面 */
+  --chipbg:#ffffff;
+  --ink:#000000;
+  --ink2:#3c3c43;
+  --gray:rgba(60,60,67,.6);      /* secondaryLabel */
+  --gray3:rgba(60,60,67,.3);     /* tertiaryLabel */
+  --sep:rgba(60,60,67,.29);      /* separator */
+  --fill:rgba(120,120,128,.12);  /* systemFill */
+  --press:rgba(120,120,128,.2);
+  --red:#ff3b30;
+  --amber:#ff9500;
+  --card-sh:0 0 0 .5px rgba(0,0,0,.02),0 1px 2px rgba(0,0,0,.05);
 
-  /* --- ガラス --- */
-  --glass:rgba(255,255,255,.55);
-  --glass-hi:rgba(255,255,255,.72);
-  --rim:rgba(255,255,255,.85);
-  --rim-lo:rgba(255,255,255,.45);
-  --edge:rgba(0,0,0,.055);
-  --sh-1:0 1px 1px rgba(0,0,0,.035);
-  --sh-2:0 8px 22px -8px rgba(0,0,0,.16);
-  --sh-3:0 28px 64px -26px rgba(0,0,0,.28);
-
-  /* --- 入れ子の凹凸 --- */
-  --nest-in:rgba(120,120,128,.085);        /* 掘った面 */
-  --nest-in-edge:rgba(0,0,0,.055);
-  --nest-up:rgba(255,255,255,.92);         /* 中に置いた板 */
-  --chip:#ffffff;                          /* 芯（不透明・スワイプの下地）*/
+  /* ガラス（クローム専用） */
+  --glass:rgba(255,255,255,.6);
+  --rim:rgba(255,255,255,.9);
+  --edge:rgba(0,0,0,.08);
 
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Hiragino Sans","Noto Sans JP",sans-serif;
   --ease:cubic-bezier(.22,.9,.28,1);
@@ -62,16 +53,13 @@
 }
 @media (prefers-color-scheme:dark){
   :root{
-    --bg:#0d0e11; --surface:#17181c; --ink:#f6f6f8; --ink-2:#c8c8d0;
-    --gray:#8b8b95; --gray2:#4e4e57; --sep:rgba(255,255,255,.11);
-    --fill:rgba(255,255,255,.09); --press:rgba(255,255,255,.16);
-    --glass:rgba(38,39,45,.55); --glass-hi:rgba(52,53,60,.7);
-    --rim:rgba(255,255,255,.24); --rim-lo:rgba(255,255,255,.1);
-    --edge:rgba(255,255,255,.06);
-    --sh-2:0 8px 22px -8px rgba(0,0,0,.6);
-    --sh-3:0 28px 64px -26px rgba(0,0,0,.8);
-    --nest-in:rgba(0,0,0,.28); --nest-in-edge:rgba(0,0,0,.5);
-    --nest-up:rgba(255,255,255,.07); --chip:#212227;
+    --bg:#000000; --card:#1c1c1e; --bg2:#2c2c2e; --chipbg:#1c1c1e;
+    --ink:#ffffff; --ink2:#ebebf5;
+    --gray:rgba(235,235,245,.6); --gray3:rgba(235,235,245,.3);
+    --sep:rgba(84,84,88,.6); --fill:rgba(120,120,128,.24); --press:rgba(120,120,128,.34);
+    --red:#ff453a; --amber:#ff9f0a;
+    --card-sh:0 0 0 .5px rgba(255,255,255,.04);
+    --glass:rgba(30,30,32,.6); --rim:rgba(255,255,255,.18); --edge:rgba(255,255,255,.08);
   }
 }
 
@@ -82,465 +70,332 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font);overflow:hidd
 input,textarea{user-select:text;-webkit-user-select:text}
 button{font-family:inherit;color:inherit}
 
-/* ============ ambient ground（ガラスが屈折する相手）============ */
-#amb{position:fixed;inset:-20% -10%;z-index:0;pointer-events:none;filter:blur(0px);
-  transition:opacity .9s var(--ease)}
-#amb i{position:absolute;display:block;border-radius:50%;filter:blur(60px);opacity:.55;
-  transition:background 1.2s var(--ease)}
-#amb i:nth-child(1){width:62vmax;height:62vmax;left:-14%;top:-16%;
-  background:radial-gradient(circle,hsl(var(--amb-h) 70% 74%/.5),transparent 66%);animation:d1 34s var(--ease) infinite alternate}
-#amb i:nth-child(2){width:54vmax;height:54vmax;right:-16%;top:12%;
-  background:radial-gradient(circle,hsl(calc(var(--amb-h) + 48) 72% 76%/.42),transparent 66%);animation:d2 41s var(--ease) infinite alternate}
-#amb i:nth-child(3){width:66vmax;height:66vmax;left:8%;bottom:-30%;
-  background:radial-gradient(circle,hsl(calc(var(--amb-h) - 42) 68% 78%/.38),transparent 66%);animation:d3 47s var(--ease) infinite alternate}
-@keyframes d1{to{transform:translate3d(9vmax,7vmax,0) scale(1.14)}}
-@keyframes d2{to{transform:translate3d(-11vmax,9vmax,0) scale(1.1)}}
-@keyframes d3{to{transform:translate3d(7vmax,-8vmax,0) scale(1.16)}}
-@media (prefers-color-scheme:dark){#amb i{opacity:.34;filter:blur(80px)}}
-
 /* ============ shell ============ */
-#app{position:relative;z-index:1;height:100dvh;display:flex;flex-direction:column;max-width:540px;margin:0 auto}
-main{flex:1;overflow-y:auto;padding:calc(env(safe-area-inset-top) + 22px) 16px 168px;
+#app{position:relative;height:100dvh;display:flex;flex-direction:column;max-width:560px;margin:0 auto}
+main{flex:1;min-height:0;overflow-y:auto;padding:calc(env(safe-area-inset-top) + 18px) 16px 140px;
   -webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-y:contain}
 main::-webkit-scrollbar{display:none}
 .screen{display:none}
-.screen.active{display:block;animation:in .38s var(--ease) both}
-@keyframes in{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.screen.active{display:block;animation:in .36s var(--ease) both}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
-.caption{font-size:12.5px;color:var(--gray);letter-spacing:.02em}
-.large-title{font-size:33px;font-weight:700;letter-spacing:.005em;line-height:1.2;margin:3px 0 2px}
-.navrow{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:0 4px 16px}
-.empty{color:var(--gray);font-size:14.5px;padding:34px 6px;text-align:center;line-height:2.1}
+.caption{font-size:13px;color:var(--gray);letter-spacing:-.01em;font-weight:400}
+.large-title{font-size:34px;font-weight:700;letter-spacing:-.015em;line-height:1.18;margin:2px 0 0}
+.navrow{margin:2px 4px 14px}
+.empty{color:var(--gray);font-size:15px;padding:40px 12px;text-align:center;line-height:2.1}
 
-/* ============ liquid glass primitives ============ */
-.glass{position:relative;isolation:isolate;
-  background:var(--glass);
-  backdrop-filter:blur(22px) saturate(190%) brightness(1.03);
-  -webkit-backdrop-filter:blur(22px) saturate(190%) brightness(1.03);
-  box-shadow:var(--sh-1),var(--sh-2),
-    inset 0 0 0 .5px var(--edge),
-    inset 0 1px .5px var(--rim),
-    inset 0 -1px 1.5px rgba(0,0,0,.045)}
-/* 反射（specular）— 上辺に光が乗り、角で回り込む */
-.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:2;
-  background:
-    linear-gradient(150deg,var(--rim) 0%,transparent 26%),
-    linear-gradient(330deg,var(--rim-lo) 0%,transparent 20%);
-  mix-blend-mode:screen;opacity:.9}
-/* 縁の色収差 */
-.glass::after{content:"";position:absolute;inset:-.5px;border-radius:inherit;pointer-events:none;z-index:3;opacity:.42;
-  background:conic-gradient(from 205deg,rgba(255,176,116,.34),rgba(126,176,255,.3) 28%,transparent 44%,rgba(140,224,255,.26) 62%,rgba(255,166,132,.3) 84%,rgba(255,176,116,.34));
-  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000);
-  mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000)}
-.glass.flat::after{opacity:0}
-
-.gbtn{border:none;background:var(--glass-hi);cursor:pointer;position:relative;
-  backdrop-filter:blur(18px) saturate(180%);-webkit-backdrop-filter:blur(18px) saturate(180%);
-  box-shadow:var(--sh-1),var(--sh-2),inset 0 0 0 .5px var(--edge),inset 0 1px .5px var(--rim);
-  transition:transform .42s var(--spring),opacity .3s,background .3s}
-.gbtn:active{transform:scale(.93);opacity:.82;transition:transform .07s}
-.round{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;flex:none}
-
-/* ============ scroll edge effect ============ */
-#edgeTop{position:fixed;top:0;left:0;right:0;height:calc(env(safe-area-inset-top) + 8px);z-index:8;pointer-events:none;
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  -webkit-mask:linear-gradient(#000 40%,transparent);mask:linear-gradient(#000 40%,transparent);
+/* ============ chrome: scroll edge ============ */
+#edgeTop{position:fixed;top:0;left:0;right:0;height:calc(env(safe-area-inset-top) + 4px);z-index:8;pointer-events:none;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  -webkit-mask:linear-gradient(#000 30%,transparent);mask:linear-gradient(#000 30%,transparent);
   opacity:0;transition:opacity .3s var(--ease)}
 #edgeTop.on{opacity:1}
-#edgeBot{position:fixed;bottom:0;left:0;right:0;height:150px;z-index:6;pointer-events:none;
-  backdrop-filter:blur(11px);-webkit-backdrop-filter:blur(11px);
-  -webkit-mask:linear-gradient(transparent,#000 78%);mask:linear-gradient(transparent,#000 78%)}
-
-#topbar{position:fixed;top:0;left:0;right:0;z-index:9;max-width:540px;margin:0 auto;
-  height:calc(env(safe-area-inset-top) + 48px);padding-top:env(safe-area-inset-top);
-  display:flex;align-items:center;justify-content:center;font-size:16.5px;font-weight:600;
-  background:color-mix(in srgb,var(--bg) 62%,transparent);
-  backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);
-  box-shadow:0 .5px 0 var(--sep);opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
+#topbar{position:fixed;top:0;left:0;right:0;z-index:9;max-width:560px;margin:0 auto;
+  height:calc(env(safe-area-inset-top) + 46px);padding-top:env(safe-area-inset-top);
+  display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:600;letter-spacing:-.02em;
+  background:color-mix(in srgb,var(--bg) 72%,transparent);
+  backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:0 .5px 0 var(--sep);opacity:0;pointer-events:none;transition:opacity .28s var(--ease)}
 #topbar.show{opacity:1}
 
-/* ============ category chips ============ */
-.chips{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding:2px 4px 14px;margin:0 -16px;
-  padding-left:16px;padding-right:16px;scroll-padding:16px}
+/* ============ category chips（コンテンツ側＝ガラスにしない） ============ */
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 16px 16px;margin:0 -16px}
 .chips::-webkit-scrollbar{display:none}
 .chip{flex:none;display:flex;align-items:center;gap:6px;border:none;cursor:pointer;
-  padding:8px 14px;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:.01em;
-  color:var(--ink-2);background:var(--glass-hi);
-  backdrop-filter:blur(16px) saturate(180%);-webkit-backdrop-filter:blur(16px) saturate(180%);
-  box-shadow:inset 0 0 0 .5px var(--edge),inset 0 1px .5px var(--rim),var(--sh-1);
-  transition:transform .4s var(--spring),background .35s var(--ease),color .35s var(--ease)}
+  padding:8px 14px;border-radius:999px;font-size:13.5px;font-weight:600;letter-spacing:-.01em;
+  color:var(--ink);background:var(--chipbg);box-shadow:var(--card-sh);
+  transition:transform .4s var(--spring),background .3s var(--ease),color .3s var(--ease)}
 .chip:active{transform:scale(.94);transition:transform .07s}
-.chip i{width:7px;height:7px;border-radius:50%;flex:none;background:hsl(var(--h,220) 66% 55%)}
-.chip small{font-size:11px;color:var(--gray);font-variant-numeric:tabular-nums}
-.chip.on{background:var(--ink);color:var(--bg);box-shadow:var(--sh-2),inset 0 1px .5px rgba(255,255,255,.28)}
-.chip.on small{color:color-mix(in srgb,var(--bg) 62%,transparent)}
-.chip.on i{box-shadow:0 0 0 1.5px color-mix(in srgb,var(--bg) 45%,transparent)}
+.chip i{width:7px;height:7px;border-radius:50%;flex:none;background:hsl(var(--h,220) 70% 52%)}
+.chip small{font-size:11.5px;font-weight:500;color:var(--gray);font-variant-numeric:tabular-nums}
+.chip.on{background:var(--ink);color:var(--bg)}
+.chip.on small{color:color-mix(in srgb,var(--bg) 60%,transparent)}
+.chip.on i{box-shadow:0 0 0 1.5px color-mix(in srgb,var(--bg) 40%,transparent)}
 
-/* ============ category section ============ */
-.catsec{display:flex;align-items:center;gap:8px;margin:26px 6px 9px}
-.catsec:first-child{margin-top:4px}
-.catsec i{width:8px;height:8px;border-radius:50%;flex:none;background:hsl(var(--h,220) 66% 55%);
-  box-shadow:0 0 0 3px hsl(var(--h,220) 66% 55%/.16)}
-.catsec b{font-size:13px;font-weight:700;letter-spacing:.02em}
-.catsec span{font-size:11.5px;color:var(--gray);font-variant-numeric:tabular-nums;margin-left:auto}
+.catsec{display:flex;align-items:center;gap:7px;margin:24px 8px 8px}
+.catsec:first-of-type{margin-top:2px}
+.catsec i{width:7px;height:7px;border-radius:50%;flex:none;background:hsl(var(--h,220) 70% 52%)}
+.catsec b{font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--gray)}
+.catsec span{font-size:12px;color:var(--gray3);font-variant-numeric:tabular-nums;margin-left:auto}
 
 /* ============================================================
-   MATRYOSHKA — 入れ子（外＝ゴール／中＝中の目標／芯＝タスク）
+   GOAL CARD — コンテンツ。ガラス禁止。iOSのinset groupedそのもの
    ============================================================ */
-.goal{border-radius:var(--r1);padding:var(--p1);margin-bottom:13px;
-  --h:220;
-  background:linear-gradient(180deg,color-mix(in srgb,hsl(var(--h) 60% 92%) 26%,var(--glass)),var(--glass));
-  transition:box-shadow .5s var(--ease)}
-.goal.open{box-shadow:var(--sh-1),var(--sh-3),inset 0 0 0 .5px var(--edge),inset 0 1px .5px var(--rim)}
-
-.g-head{padding:13px 13px 4px;cursor:pointer;border-radius:calc(var(--r1) - var(--p1));
-  transition:background .45s var(--ease)}
+.goal{border-radius:var(--r1);background:var(--card);box-shadow:var(--card-sh);
+  margin-bottom:12px;overflow:hidden;--h:220}
+.g-head{padding:15px var(--p1) 5px;cursor:pointer;transition:background .4s var(--ease)}
 .g-head:active{background:var(--press);transition:background .07s}
-.g-kick{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;letter-spacing:.13em;
-  color:var(--gray);margin-bottom:7px}
-.g-kick i{width:6px;height:6px;border-radius:50%;background:hsl(var(--h) 66% 55%)}
-.g-kick em{font-style:normal;margin-left:auto;letter-spacing:.02em;font-weight:600;font-size:11.5px;
+.g-kick{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;
+  color:var(--gray);margin-bottom:6px;letter-spacing:-.01em}
+.g-kick i{width:6px;height:6px;border-radius:50%;background:hsl(var(--h) 70% 52%)}
+.g-kick em{font-style:normal;margin-left:auto;font-weight:500;font-size:12px;
   font-variant-numeric:tabular-nums;color:var(--gray)}
-.g-kick em.over{color:var(--red)}
-.g-kick em b{font-size:14px;color:var(--ink);font-weight:700}
-.g-kick em.over b{color:var(--red)}
-.g-title{font-size:19px;font-weight:650;line-height:1.38;letter-spacing:.005em;word-break:break-word}
+.g-kick em b{font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-.02em}
+.g-kick em.over,.g-kick em.over b{color:var(--red)}
+.g-title{font-size:19px;font-weight:600;line-height:1.35;letter-spacing:-.015em;word-break:break-word}
 
-/* 外殻の進捗＝マトリョーシカが何個開いたか */
-.g-route{position:relative;height:24px;margin:13px 2px 2px}
-.g-track{position:absolute;left:0;right:0;top:11px;height:2.5px;border-radius:3px;
-  background:var(--nest-in);box-shadow:inset 0 .5px 1px var(--nest-in-edge)}
-.g-fill{position:absolute;left:0;top:11px;height:2.5px;border-radius:3px;background:var(--ink);
+/* 進捗ルート */
+.g-route{position:relative;height:22px;margin:12px 2px 0}
+.g-track{position:absolute;left:0;right:0;top:10px;height:3px;border-radius:2px;background:var(--fill)}
+.g-fill{position:absolute;left:0;top:10px;height:3px;border-radius:2px;background:var(--ink);
   transition:width .9s var(--ease)}
-.mdot{position:absolute;top:0;width:24px;height:24px;transform:translateX(-50%);display:grid;place-items:center}
-.mdot i{width:11px;height:11px;border-radius:50%;background:var(--surface);
-  box-shadow:inset 0 0 0 1.5px var(--gray2);transition:.35s var(--spring)}
+.mdot{position:absolute;top:0;width:22px;height:22px;transform:translateX(-50%);display:grid;place-items:center}
+.mdot i{width:10px;height:10px;border-radius:50%;background:var(--card);
+  box-shadow:inset 0 0 0 1.5px var(--gray3);transition:.35s var(--spring)}
 .mdot.done i{background:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
-.mdot.next i{width:14px;height:14px;background:var(--surface);
-  box-shadow:inset 0 0 0 2.5px var(--ink),0 0 0 4px color-mix(in srgb,var(--ink) 10%,transparent)}
-.g-sum{display:flex;gap:10px;align-items:baseline;font-size:12.5px;color:var(--gray);padding:2px 3px 11px}
+.mdot.next i{width:13px;height:13px;box-shadow:inset 0 0 0 2.5px var(--ink)}
+.g-sum{display:flex;gap:10px;align-items:baseline;font-size:12.5px;color:var(--gray);padding:4px 2px 12px;letter-spacing:-.01em}
 .g-sum em{font-style:normal;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.g-sum span{margin-left:auto;flex:none;font-variant-numeric:tabular-nums}
+.g-sum span{margin-left:auto;flex:none;font-variant-numeric:tabular-nums;color:var(--gray3)}
 
-/* --- 入れ子の器（掘った面）--- */
-.g-nest{display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s var(--ease)}
+/* 展開 */
+.g-nest{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--ease)}
 .goal.open .g-nest{grid-template-rows:1fr}
 .g-nest>div{min-height:0;overflow:hidden}
-.nest-in{border-radius:var(--r2);background:var(--nest-in);padding:var(--p2);margin-top:2px;
-  box-shadow:inset 0 1px 2px var(--nest-in-edge),inset 0 0 0 .5px rgba(0,0,0,.03)}
-.nest-lbl{display:flex;align-items:center;gap:7px;font-size:10px;font-weight:700;letter-spacing:.12em;
-  color:var(--gray);padding:5px 8px 8px}
-.nest-lbl:after{content:"";flex:1;height:.5px;background:var(--sep)}
+.g-inner{padding:0 var(--p1) 8px}
 
-/* --- 中の目標（掘った面に置かれた板）--- */
-.mile{border-radius:var(--r2);background:var(--nest-up);margin-bottom:6px;overflow:hidden;
-  box-shadow:0 1px 2px rgba(0,0,0,.05),inset 0 0 0 .5px rgba(255,255,255,.5);
-  transition:box-shadow .4s var(--ease)}
-.mile:last-child{margin-bottom:0}
-.mile.on{box-shadow:0 4px 14px -4px rgba(0,0,0,.16),inset 0 0 0 .5px rgba(255,255,255,.6)}
-.m-head{display:flex;align-items:center;gap:10px;padding:11px 12px;cursor:pointer;
-  transition:background .4s var(--ease)}
-.m-head:active{background:var(--press);transition:background .07s}
-.m-num{flex:none;width:19px;height:19px;border-radius:7px;display:grid;place-items:center;
-  font-size:10.5px;font-weight:700;font-variant-numeric:tabular-nums;
-  background:var(--fill);color:var(--gray);transition:.4s var(--ease)}
+/* 中の目標＝ヘアライン区切りの行（iOSのリスト） */
+.mile{border-top:.5px solid var(--sep)}
+.mile:first-child{border-top:none}
+.m-head{display:flex;align-items:center;gap:11px;padding:12px 2px;cursor:pointer;
+  transition:opacity .3s}
+.m-head:active{opacity:.5;transition:opacity .06s}
+.m-num{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
+  font-size:11.5px;font-weight:600;font-variant-numeric:tabular-nums;
+  background:var(--fill);color:var(--gray);transition:.35s var(--ease)}
 .m-head.done .m-num{background:var(--ink);color:var(--bg)}
-.m-title{flex:1;min-width:0;font-size:14.5px;font-weight:600;line-height:1.4;
+.m-title{flex:1;min-width:0;font-size:15.5px;font-weight:500;line-height:1.4;letter-spacing:-.01em;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:color .4s}
-.m-head.done .m-title{color:var(--gray);text-decoration:line-through;text-decoration-color:var(--gray2)}
-.m-cnt{flex:none;font-size:11px;color:var(--gray);font-variant-numeric:tabular-nums;
-  background:var(--fill);border-radius:6px;padding:2.5px 6px}
-.m-chev{flex:none;width:13px;color:var(--gray2);transition:transform .45s var(--spring)}
+.m-head.done .m-title{color:var(--gray);text-decoration:line-through;text-decoration-color:var(--gray3)}
+.m-cnt{flex:none;font-size:12px;color:var(--gray3);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.m-chev{flex:none;width:12px;color:var(--gray3);transition:transform .45s var(--spring)}
 .mile.on .m-chev{transform:rotate(90deg)}
 
-/* --- 芯：タスク（板の中にさらに掘った面）--- */
-.m-nest{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--ease)}
+/* 芯：タスク群＝カードの中に掘った面（同心角丸） */
+.m-nest{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease)}
 .mile.on .m-nest{grid-template-rows:1fr}
 .m-nest>div{min-height:0;overflow:hidden}
-.m-inner{margin:0 7px 7px;padding:5px;border-radius:var(--r3);background:var(--nest-in);
-  box-shadow:inset 0 1px 2px var(--nest-in-edge)}
-.tk{position:relative;overflow:hidden;border-radius:calc(var(--r3) - 4px);touch-action:pan-y;margin-bottom:3px}
-.tk:last-child{margin-bottom:0}
-.tk-del{position:absolute;top:0;right:0;bottom:0;width:88px;background:var(--red);color:#fff;
-  font-size:14px;font-weight:600;border:none;display:grid;place-items:center;cursor:pointer}
-.tk-slide{position:relative;display:flex;align-items:center;gap:10px;padding:9px 10px;
-  background:var(--chip);border-radius:inherit;will-change:transform;
-  box-shadow:inset 0 0 0 .5px rgba(255,255,255,.4);transition:background .45s var(--ease)}
+.m-inner{margin:0 0 12px 33px;border-radius:var(--r2);background:var(--bg2);overflow:hidden}
+.tk{position:relative;overflow:hidden;touch-action:pan-y}
+.tk+.tk .tk-slide{box-shadow:0 -.5px 0 var(--sep)}
+.tk-del{position:absolute;top:0;right:0;bottom:0;width:84px;background:var(--red);color:#fff;
+  font-size:14px;font-weight:600;border:none;display:grid;place-items:center;cursor:pointer;
+  opacity:0;transition:opacity .12s}
+.tk.sw .tk-del{opacity:1}
+.tk-slide{position:relative;display:flex;align-items:center;gap:10px;padding:10px 12px;
+  background:var(--bg2);will-change:transform;transition:background .4s var(--ease)}
 .tk.pressed .tk-slide{background:var(--press);transition:background .07s}
-.tk-c{flex:none;width:19px;height:19px;border-radius:50%;display:grid;place-items:center;
-  box-shadow:inset 0 0 0 1.5px var(--gray2);transition:.35s var(--ease)}
+.tk-c{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;
+  box-shadow:inset 0 0 0 1.5px var(--gray3);transition:.35s var(--ease)}
 .tk-c svg{opacity:0;transform:scale(.4);transition:.3s var(--spring)}
 .tk.done .tk-c{background:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
 .tk.done .tk-c svg{opacity:1;transform:scale(1)}
-.tk-t{flex:1;min-width:0;font-size:13.5px;line-height:1.4;position:relative;transition:color .45s}
+.tk-t{flex:1;min-width:0;font-size:14px;line-height:1.4;letter-spacing:-.01em;position:relative;transition:color .45s}
 .tk.done .tk-t{color:var(--gray)}
-.tk.done .tk-t::after{content:"";position:absolute;left:0;top:54%;height:1.2px;width:100%;background:var(--gray2)}
-.tk-d{flex:none;font-size:11px;color:var(--gray);font-variant-numeric:tabular-nums}
+.tk.done .tk-t::after{content:"";position:absolute;left:0;top:54%;height:1px;width:100%;background:var(--gray3)}
+.tk-d{flex:none;font-size:11.5px;color:var(--gray3);font-variant-numeric:tabular-nums}
 .tk-d.over{color:var(--red)}
-.m-none{font-size:12px;color:var(--gray);padding:9px 8px;text-align:center}
+.m-none{font-size:12.5px;color:var(--gray3);padding:10px 12px}
 
-/* --- 器の足元 --- */
-.g-foot{display:flex;gap:6px;padding:9px 4px 3px}
-.g-foot button{flex:1;border:none;background:none;cursor:pointer;font-size:12.5px;font-weight:600;
-  color:var(--gray);padding:8px;border-radius:12px;transition:background .4s,color .3s}
-.g-foot button:active{background:var(--press);color:var(--ink);transition:background .07s}
-.g-foot button.mic{color:var(--ink)}
-.g-foot .plan.todo{color:var(--amber)}
+.g-foot{display:flex;gap:2px;padding:2px 6px 8px;border-top:.5px solid var(--sep);margin:0 var(--p1)}
+.g-foot button{flex:1;border:none;background:none;cursor:pointer;font-size:13px;font-weight:500;
+  letter-spacing:-.01em;color:var(--gray);padding:10px 4px 8px;transition:opacity .3s}
+.g-foot button:active{opacity:.4;transition:opacity .06s}
+.g-foot .plan.todo{color:var(--amber);font-weight:600}
 
-/* ============ floating bar (tabs + mic) ============ */
-nav{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 16px);z-index:11;
-  display:flex;justify-content:center;align-items:center;gap:10px;pointer-events:none;
-  transition:transform .5s var(--ease)}
+/* ============================================================
+   FLOATING CHROME — ここだけがガラス
+   ============================================================ */
+#edgeBot{position:fixed;bottom:0;left:0;right:0;height:120px;z-index:6;pointer-events:none;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  -webkit-mask:linear-gradient(transparent,#000 82%);mask:linear-gradient(transparent,#000 82%)}
+nav{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 14px);z-index:11;
+  display:flex;justify-content:center;pointer-events:none}
 .tabbar{pointer-events:auto;position:relative;display:flex;padding:5px;border-radius:999px;touch-action:none;
+  background:var(--glass);
+  backdrop-filter:blur(24px) saturate(190%);-webkit-backdrop-filter:blur(24px) saturate(190%);
+  box-shadow:0 8px 28px rgba(0,0,0,.14),
+    inset 0 0 0 .5px var(--edge),
+    inset 0 1px .5px var(--rim);
   transition:padding .45s var(--spring)}
-.tab{width:84px;padding:8px 0 7px;border-radius:999px;border:none;background:none;color:var(--gray);
-  font-size:9.5px;font-weight:600;letter-spacing:.02em;cursor:pointer;
+.tab{width:92px;padding:9px 0 8px;border-radius:999px;border:none;background:none;color:var(--gray);
+  font-size:10px;font-weight:600;letter-spacing:0;cursor:pointer;
   display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;z-index:4;
   transition:color .3s var(--ease),width .45s var(--spring)}
-.tab svg{width:22px;height:22px}
+.tab svg{width:23px;height:23px}
 .tab b{font-weight:600;max-height:14px;overflow:hidden;transition:max-height .4s var(--ease),opacity .3s}
 .tab.active{color:var(--ink)}
-nav.mini .tab{width:56px}
+nav.mini .tab{width:60px}
 nav.mini .tab b{max-height:0;opacity:0}
-#lens{position:absolute;z-index:1;top:5px;left:5px;width:84px;height:calc(100% - 10px);border-radius:999px;
-  background:rgba(255,255,255,.4);
-  backdrop-filter:blur(3px) saturate(200%) brightness(1.07);-webkit-backdrop-filter:blur(3px) saturate(200%) brightness(1.07);
+#lens{position:absolute;z-index:1;top:5px;left:5px;width:92px;height:calc(100% - 10px);border-radius:999px;
+  background:rgba(255,255,255,.42);
+  backdrop-filter:blur(3px) saturate(200%) brightness(1.06);-webkit-backdrop-filter:blur(3px) saturate(200%) brightness(1.06);
   box-shadow:0 4px 14px rgba(0,0,0,.12),
     inset 0 0 0 .5px rgba(255,255,255,.7),inset 0 1.5px 1.5px rgba(255,255,255,.95),
     inset 0 -1.5px 2px rgba(0,0,0,.07),inset 2px 0 3px -1px rgba(255,255,255,.5),inset -2px 0 3px -1px rgba(255,255,255,.5);
   transition:transform .55s var(--spring),scale .35s var(--spring),width .45s var(--spring);will-change:transform}
-@media (prefers-color-scheme:dark){#lens{background:rgba(255,255,255,.11);
-  box-shadow:0 4px 14px rgba(0,0,0,.4),inset 0 0 0 .5px rgba(255,255,255,.2),inset 0 1.5px 1.5px rgba(255,255,255,.22)}}
-nav.mini #lens{width:56px}
-#lens::before{content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;opacity:.5;
+@media (prefers-color-scheme:dark){#lens{background:rgba(255,255,255,.12);
+  box-shadow:0 4px 14px rgba(0,0,0,.4),inset 0 0 0 .5px rgba(255,255,255,.22),inset 0 1.5px 1.5px rgba(255,255,255,.24),inset 0 -1.5px 2px rgba(0,0,0,.3)}}
+nav.mini #lens{width:60px}
+#lens::before{content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;opacity:.45;
   background:conic-gradient(from 210deg,rgba(255,180,120,.25),rgba(140,180,255,.22) 30%,transparent 45%,rgba(140,220,255,.18) 62%,rgba(255,170,140,.2) 82%,rgba(255,180,120,.25));
   -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2.5px),#000);mask:radial-gradient(farthest-side,transparent calc(100% - 2.5px),#000)}
 #lens::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;mix-blend-mode:screen;
-  background:linear-gradient(115deg,rgba(255,255,255,.85) 0%,rgba(255,255,255,0) 30%),
-    linear-gradient(295deg,rgba(255,255,255,.4) 0%,transparent 24%),
-    radial-gradient(120% 90% at 50% -30%,rgba(255,255,255,.5),transparent 55%);
+  background:linear-gradient(115deg,rgba(255,255,255,.8) 0%,rgba(255,255,255,0) 30%),
+    linear-gradient(295deg,rgba(255,255,255,.35) 0%,transparent 24%),
+    radial-gradient(120% 90% at 50% -30%,rgba(255,255,255,.45),transparent 55%);
   background-size:220% 100%,220% 100%,100% 100%;
-  background-position:calc(var(--lx,0px)) 0,calc(var(--lx,0px)*.6) 0,0 0;opacity:.85}
-.refract #lens{backdrop-filter:blur(1.5px) saturate(200%) brightness(1.06) url(#lensFilter)}
+  background-position:calc(var(--lx,0px)) 0,calc(var(--lx,0px)*.6) 0,0 0;opacity:.8}
+.refract #lens{backdrop-filter:blur(1.5px) saturate(200%) brightness(1.05) url(#lensFilter)}
 
-#micBtn{pointer-events:auto;width:56px;height:56px;border-radius:50%;flex:none;display:grid;place-items:center;
-  border:none;cursor:pointer;background:var(--ink);color:var(--bg);
-  box-shadow:0 10px 30px -8px rgba(0,0,0,.45),inset 0 1px 1px rgba(255,255,255,.28);
-  transition:transform .5s var(--spring),width .45s var(--spring),height .45s var(--spring)}
-#micBtn:active{transform:scale(.9);transition:transform .07s}
-#micBtn svg{width:24px;height:24px}
-nav.mini #micBtn{width:48px;height:48px}
+#toast{position:fixed;top:calc(env(safe-area-inset-top) + 16px);left:50%;
+  transform:translateX(-50%) translateY(-90px);z-index:30;padding:12px 22px;font-size:13.5px;font-weight:600;
+  letter-spacing:-.01em;transition:.55s var(--spring);white-space:nowrap;border-radius:999px;
+  background:var(--glass);color:var(--ink);
+  backdrop-filter:blur(24px) saturate(190%);-webkit-backdrop-filter:blur(24px) saturate(190%);
+  box-shadow:0 8px 28px rgba(0,0,0,.16),inset 0 0 0 .5px var(--edge),inset 0 1px .5px var(--rim)}
+#toast.show{transform:translateX(-50%) translateY(0)}
 
-/* ============ voice ============ */
-#vdim{position:fixed;inset:0;z-index:20;opacity:0;pointer-events:none;transition:opacity .35s var(--ease);
-  background:color-mix(in srgb,var(--bg) 90%,transparent);
-  backdrop-filter:blur(40px) saturate(150%);-webkit-backdrop-filter:blur(40px) saturate(150%)}
-body.listening nav{opacity:0;pointer-events:none;transform:translateY(30px)}
-nav{transition:transform .5s var(--ease),opacity .3s var(--ease)}
-#vdim.on{opacity:1;pointer-events:auto}
-#voice{position:fixed;inset:auto 0 0 0;z-index:21;max-width:540px;margin:0 auto;
-  padding:0 18px calc(env(safe-area-inset-bottom) + 22px);display:none;flex-direction:column;justify-content:flex-end;
-  min-height:100dvh;pointer-events:none}
-#voice.on{display:flex}
-#voice>*{pointer-events:auto}
-.v-live{flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:0 6px 26px;min-height:0}
-.v-hint{font-size:12.5px;color:var(--gray);letter-spacing:.04em;margin-bottom:12px}
-.v-text{font-size:27px;font-weight:650;line-height:1.55;letter-spacing:.005em;word-break:break-word;
-  max-height:44vh;overflow-y:auto;scrollbar-width:none}
-.v-text::-webkit-scrollbar{display:none}
-.v-text .im{color:var(--gray2)}
-.v-orb{width:88px;height:88px;border-radius:50%;margin:0 auto 18px;position:relative;flex:none;
-  background:var(--ink);display:grid;place-items:center;color:var(--bg);
-  box-shadow:0 14px 40px -10px rgba(0,0,0,.5)}
-.v-orb svg{width:34px;height:34px}
-.v-orb::before,.v-orb::after{content:"";position:absolute;inset:0;border-radius:50%;
-  box-shadow:0 0 0 1.5px color-mix(in srgb,var(--ink) 30%,transparent);animation:pulse 2.4s var(--ease) infinite}
-.v-orb::after{animation-delay:1.2s}
-@keyframes pulse{0%{transform:scale(1);opacity:.7}100%{transform:scale(2.1);opacity:0}}
-.v-orb.idle::before,.v-orb.idle::after{animation:none;opacity:0}
-.v-card{border-radius:26px;padding:16px 18px 18px;margin-bottom:12px}
-.v-row{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--gray);margin-bottom:9px}
-.v-row b{color:var(--ink);font-size:13px;font-weight:650}
-.v-what{font-size:18px;font-weight:650;line-height:1.5;margin-bottom:13px;word-break:break-word}
-.v-opts{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:5px}
-.v-opt{border:none;cursor:pointer;padding:7px 12px;border-radius:999px;font-size:12px;font-weight:600;
-  background:var(--fill);color:var(--ink-2);transition:transform .4s var(--spring),background .3s,color .3s}
-.v-opt:active{transform:scale(.93);transition:transform .07s}
-.v-opt.on{background:var(--ink);color:var(--bg)}
-.v-sec{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--gray);margin:13px 0 7px}
-.v-acts{display:flex;gap:8px;margin-top:16px}
-.v-kb{display:block;width:100%;border:none;background:none;cursor:pointer;color:var(--gray);
-  font-size:12px;padding:12px;text-align:center}
-.v-kbfield{display:none;margin-bottom:12px}
-.v-kbfield.on{display:block}
-.v-kbfield input{width:100%;border:none;background:var(--fill);border-radius:16px;font-family:inherit;
-  font-size:17px;padding:14px 16px;outline:none;color:var(--ink)}
-.v-dest{max-height:38vh;overflow-y:auto;scrollbar-width:none}
-.v-dest::-webkit-scrollbar{display:none}
-.v-d{display:flex;align-items:center;gap:10px;width:100%;border:none;background:none;cursor:pointer;
-  padding:11px 10px;border-radius:14px;text-align:left;font-size:14px;transition:background .35s}
-.v-d:active{background:var(--press);transition:background .07s}
-.v-d.on{background:var(--fill)}
-.v-d i{width:7px;height:7px;border-radius:50%;flex:none;background:hsl(var(--h,220) 66% 55%)}
-.v-d span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.v-d small{flex:none;font-size:11px;color:var(--gray)}
-.v-d.sub{padding-left:26px;font-size:13.5px;color:var(--ink-2)}
-
-/* ============ sheet ============ */
-#dim{position:fixed;inset:0;background:rgba(0,0,0,.26);z-index:14;opacity:0;pointer-events:none;
-  transition:opacity .32s var(--ease);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+/* ============ sheet（浮くレイヤー＝マテリアル可。高不透明で可読性優先） ============ */
+#dim{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:14;opacity:0;pointer-events:none;
+  transition:opacity .32s var(--ease)}
 #dim.show{opacity:1;pointer-events:auto}
-#sheet{position:fixed;left:0;right:0;bottom:0;max-width:540px;margin:0 auto;z-index:15;
-  background:color-mix(in srgb,var(--surface) 82%,transparent);
-  backdrop-filter:blur(40px) saturate(190%);-webkit-backdrop-filter:blur(40px) saturate(190%);
-  border-radius:32px 32px 0 0;transform:translateY(105%);will-change:transform;
-  box-shadow:0 -10px 50px rgba(0,0,0,.2),inset 0 1px .5px var(--rim);display:none}
-.sh-grab{padding:10px 0 5px;touch-action:none;cursor:grab}
-.sh-handle{width:38px;height:5px;border-radius:3px;background:var(--gray2);margin:0 auto;opacity:.7}
+#sheet{position:fixed;left:0;right:0;bottom:0;max-width:560px;margin:0 auto;z-index:15;
+  background:color-mix(in srgb,var(--card) 92%,transparent);
+  backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);
+  border-radius:28px 28px 0 0;transform:translateY(105%);will-change:transform;
+  box-shadow:0 -8px 44px rgba(0,0,0,.18),inset 0 1px .5px var(--rim);display:none}
+.sh-grab{padding:10px 0 4px;touch-action:none;cursor:grab}
+.sh-handle{width:36px;height:5px;border-radius:3px;background:var(--gray3);margin:0 auto}
 #sheetBody{max-height:78dvh;overflow-y:auto;padding:8px 22px calc(env(safe-area-inset-bottom) + 26px);
   -webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;scrollbar-width:none}
 #sheetBody::-webkit-scrollbar{display:none}
-.sh-kicker{font-size:10.5px;font-weight:700;letter-spacing:.13em;color:var(--gray);margin-top:8px}
-.sh-title{font-size:22px;font-weight:650;margin-top:9px;line-height:1.45;word-break:break-word}
+.sh-kicker{font-size:12px;font-weight:500;color:var(--gray);margin-top:8px;letter-spacing:-.01em}
+.sh-title{font-size:22px;font-weight:700;margin-top:6px;line-height:1.4;letter-spacing:-.02em;word-break:break-word}
 .sh-date{font-size:13.5px;color:var(--gray);margin-top:4px;font-variant-numeric:tabular-nums}
-.sh-note{font-size:14.5px;color:var(--ink-2);line-height:1.85;white-space:pre-wrap;word-break:break-word;margin-top:12px}
-.sh-sec{font-size:10.5px;font-weight:700;letter-spacing:.12em;color:var(--gray);margin:24px 0 7px}
-.row{display:flex;align-items:center;gap:11px;padding:11px 10px;margin:0 -10px;border-radius:14px;
-  font-size:15px;cursor:pointer;transition:background .35s}
+.sh-note{font-size:14.5px;color:var(--ink2);line-height:1.85;white-space:pre-wrap;word-break:break-word;margin-top:12px}
+.sh-sec{font-size:12px;font-weight:500;color:var(--gray);margin:24px 0 6px;letter-spacing:-.01em}
+.row{display:flex;align-items:center;gap:11px;padding:11px 10px;margin:0 -10px;border-radius:12px;
+  font-size:15px;letter-spacing:-.01em;cursor:pointer;transition:background .35s}
 .row:active{background:var(--press);transition:background .07s}
-.row .c{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;
-  box-shadow:inset 0 0 0 1.5px var(--gray2);transition:.3s}
+.row .c{flex:none;width:21px;height:21px;border-radius:50%;display:grid;place-items:center;
+  box-shadow:inset 0 0 0 1.5px var(--gray3);transition:.3s}
 .row .c svg{opacity:0;transform:scale(.4);transition:.3s var(--spring)}
 .row.done .c{background:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
 .row.done .c svg{opacity:1;transform:scale(1)}
 .row span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:color .4s}
-.row.done span{color:var(--gray);text-decoration:line-through;text-decoration-color:var(--gray2)}
-.row small,.row i{flex:none;font-size:11.5px;color:var(--gray);font-style:normal;font-variant-numeric:tabular-nums}
-.sh-actions{display:flex;gap:8px;margin-top:24px}
-.btn{flex:1;padding:14px;border-radius:999px;border:none;font-size:15px;font-weight:650;cursor:pointer;
+.row.done span{color:var(--gray);text-decoration:line-through;text-decoration-color:var(--gray3)}
+.row small,.row i{flex:none;font-size:11.5px;color:var(--gray3);font-style:normal;font-variant-numeric:tabular-nums}
+.opts{display:flex;gap:6px;flex-wrap:wrap}
+.opt{border:none;cursor:pointer;padding:7px 13px;border-radius:999px;font-size:12.5px;font-weight:600;
+  letter-spacing:-.01em;background:var(--fill);color:var(--ink2);
+  transition:transform .4s var(--spring),background .3s,color .3s}
+.opt:active{transform:scale(.93);transition:transform .07s}
+.opt.on{background:var(--ink);color:var(--bg)}
+.sh-actions{display:flex;gap:8px;margin-top:26px}
+.btn{flex:1;padding:14px;border-radius:999px;border:none;font-size:15px;font-weight:600;
+  letter-spacing:-.01em;cursor:pointer;
   transition:transform .4s var(--spring),opacity .3s,background .3s,color .3s}
 .btn:active{transform:scale(.96);opacity:.85;transition:transform .07s}
 .btn.primary{background:var(--ink);color:var(--bg)}
 .btn.plain{background:var(--fill);color:var(--ink)}
 .btn.dangerous{background:var(--fill);color:var(--red)}
 .btn.dangerous.arm{background:var(--red);color:#fff}
-.micline{display:flex;align-items:center;gap:10px;width:100%;border:none;cursor:pointer;margin-top:12px;
-  padding:13px 15px;border-radius:16px;background:var(--fill);color:var(--ink);font-size:14.5px;font-weight:600;
-  transition:transform .4s var(--spring),background .3s}
-.micline:active{transform:scale(.975);transition:transform .07s}
-.micline svg{width:17px;height:17px;flex:none}
-.field{display:block;width:100%;text-align:left;border:none;background:var(--fill);border-radius:16px;
-  font-family:inherit;font-size:16.5px;padding:14px 15px;outline:none;color:var(--ink);margin-bottom:9px}
-.field.ph{color:var(--gray2)}
-textarea.field{line-height:1.7;resize:none;min-height:70px}
-.pl-lead{font-size:13px;color:var(--gray);line-height:1.6;margin:4px 0 2px}
+.pl-lead{font-size:13px;color:var(--gray);line-height:1.7;margin:4px 0 2px}
 .pl-row{display:flex;align-items:center;gap:11px;padding:11px 0;font-size:14.5px;border-bottom:.5px solid var(--sep)}
-.pl-row .n{flex:none;width:20px;height:20px;border-radius:7px;background:var(--fill);display:grid;place-items:center;
-  font-size:11px;color:var(--gray);font-variant-numeric:tabular-nums}
+.pl-row .n{flex:none;width:21px;height:21px;border-radius:50%;background:var(--fill);display:grid;place-items:center;
+  font-size:11px;font-weight:600;color:var(--gray);font-variant-numeric:tabular-nums}
 .pl-row .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pl-row .w{flex:none;font-size:11.5px;color:var(--gray);font-variant-numeric:tabular-nums}
-.pl-row .go{flex:none;border:none;background:var(--ink);color:var(--bg);font-size:11px;font-weight:650;
-  border-radius:9px;padding:6px 10px;cursor:pointer;transition:transform .4s var(--spring),opacity .3s}
+.pl-row .w{flex:none;font-size:11.5px;color:var(--gray3);font-variant-numeric:tabular-nums}
+.pl-row .go{flex:none;border:none;background:var(--ink);color:var(--bg);font-size:11.5px;font-weight:600;
+  border-radius:999px;padding:6px 11px;cursor:pointer;transition:transform .4s var(--spring),opacity .3s}
 .pl-row .go:active{transform:scale(.92);transition:transform .07s}
-.pl-row .go.off{background:var(--fill);color:var(--gray2)}
-.pl-alt{padding:12px 0;border-bottom:.5px solid var(--sep);font-size:14px;line-height:1.6}
+.pl-row .go.off{background:var(--fill);color:var(--gray3)}
+.pl-alt{padding:12px 0;border-bottom:.5px solid var(--sep);font-size:14px;line-height:1.65}
 .pl-alt em{font-style:normal;color:var(--gray)}
-.pl-alt .h{margin-top:6px;color:var(--ink-2);font-size:13.5px}
-.pl-empty{font-size:12.5px;color:var(--gray2);padding:11px 0}
+.pl-alt .h{margin-top:5px;color:var(--ink2);font-size:13.5px}
+.pl-empty{font-size:12.5px;color:var(--gray3);padding:11px 0}
 .setwrap p{font-size:12.5px;color:var(--gray);line-height:1.8;margin:8px 0 12px}
-.setwrap input,.setwrap textarea{width:100%;border:none;background:var(--fill);border-radius:14px;
+.setwrap input,.setwrap textarea{width:100%;border:none;background:var(--fill);border-radius:12px;
   font-family:ui-monospace,monospace;font-size:16px;padding:12px;outline:none;margin-bottom:8px;color:var(--ink)}
 .setwrap textarea{min-height:80px;resize:vertical}
 .setwrap .btn{width:100%;margin-bottom:8px;padding:12px;font-size:14px}
 .stat{font-size:11.5px;color:var(--gray);margin-top:6px;line-height:1.7}
 
 /* ============ calendar ============ */
-.cal-wrap{border-radius:var(--r1);padding:14px 12px 10px}
-.cal-head{display:flex;align-items:center;justify-content:space-between;margin:0 4px 10px}
-.cal-title{font-size:18px;font-weight:650;font-variant-numeric:tabular-nums}
-.cal-nav{display:flex;gap:3px}
+.cal-wrap{border-radius:var(--r1);background:var(--card);box-shadow:var(--card-sh);padding:14px 12px 10px}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin:0 6px 10px}
+.cal-title{font-size:18px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.cal-nav{display:flex;gap:2px}
 .cal-nav button{width:36px;height:36px;border:none;background:none;cursor:pointer;font-size:19px;
-  border-radius:50%;transition:background .4s}
+  color:var(--gray);border-radius:50%;transition:background .4s}
 .cal-nav button:active{background:var(--press);transition:background .05s}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:3px;text-align:center}
-.cal-wd{font-size:11px;color:var(--gray);font-weight:600;padding:4px 0 8px}
-.cal-d{position:relative;height:46px;display:flex;flex-direction:column;align-items:center;padding-top:4px;cursor:pointer}
-.cal-d span{width:33px;height:33px;display:grid;place-items:center;font-size:17.5px;font-weight:400;
-  border-radius:50%;font-variant-numeric:tabular-nums;transition:background .35s var(--ease),color .35s var(--ease)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:2px;text-align:center}
+.cal-wd{font-size:11px;color:var(--gray3);font-weight:600;padding:4px 0 8px}
+.cal-d{position:relative;height:45px;display:flex;flex-direction:column;align-items:center;padding-top:4px;cursor:pointer}
+.cal-d span{width:33px;height:33px;display:grid;place-items:center;font-size:17px;font-weight:400;
+  border-radius:50%;font-variant-numeric:tabular-nums;letter-spacing:-.02em;
+  transition:background .35s var(--ease),color .35s var(--ease)}
 .cal-d:active span{background:var(--press);transition:background .05s}
-.cal-d.dim span{color:var(--gray2)}
+.cal-d.dim span{color:var(--gray3)}
 .cal-d.today span{font-weight:700}
 .cal-d.sel span{background:var(--ink);color:var(--bg);font-weight:600}
-.cal-d .dot{width:4.5px;height:4.5px;border-radius:50%;background:var(--gray2);margin-top:1px}
+.cal-d .dot{width:4.5px;height:4.5px;border-radius:50%;background:var(--gray3);margin-top:1px}
 .cal-d .dot.on{background:var(--ink)}
-.cal-d .flag{position:absolute;top:1px;right:5px;width:5px;height:5px;border-radius:50%;background:var(--red)}
-.cal-detail{margin-top:14px;border-radius:var(--r1);padding:14px 16px}
+.cal-d .flag{position:absolute;top:1px;right:6px;width:5px;height:5px;border-radius:50%;background:var(--red)}
+.cal-detail{margin-top:12px;border-radius:var(--r1);background:var(--card);box-shadow:var(--card-sh);padding:14px 16px}
 .sec-sub{font-size:12.5px;color:var(--gray);margin-bottom:4px}
 .cal-dl{padding:11px 0;border-bottom:.5px solid var(--sep);display:flex;align-items:center;gap:11px;font-size:14.5px}
 .cal-dl .f{flex:none;width:6px;height:6px;border-radius:50%;background:var(--red)}
 .cal-dl small{color:var(--gray);font-size:12px;margin-left:auto;flex:none}
-
-#toast{position:fixed;top:calc(env(safe-area-inset-top) + 16px);left:50%;
-  transform:translateX(-50%) translateY(-90px);z-index:30;padding:12px 22px;font-size:13.5px;font-weight:600;
-  transition:.55s var(--spring);white-space:nowrap;border-radius:999px}
-#toast.show{transform:translateX(-50%) translateY(0)}
+.cal-detail .m-inner{margin:8px 0 0}
 
 /* ============ desktop ============ */
 #sidebar,#inspector{display:none}
-#content{flex:1;display:flex;flex-direction:column;min-width:0;position:relative}
+#content{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;position:relative}
 @media (min-width:960px){
   #app{max-width:none;flex-direction:row}
   nav,#topbar,#edgeBot{display:none}
-  #sidebar{display:flex;flex-direction:column;width:262px;flex:none;padding:26px 12px 18px;overflow-y:auto;
-    scrollbar-width:none;background:color-mix(in srgb,var(--surface) 42%,transparent);
-    backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);
+  #sidebar{display:flex;flex-direction:column;width:264px;flex:none;padding:26px 12px 18px;overflow-y:auto;
+    scrollbar-width:none;background:color-mix(in srgb,var(--card) 55%,var(--bg));
     box-shadow:inset -.5px 0 0 var(--sep)}
   #sidebar::-webkit-scrollbar{display:none}
-  .sb-logo{font-size:14.5px;font-weight:700;letter-spacing:.02em;padding:0 12px 20px}
-  .sb-sec{font-size:10px;color:var(--gray);letter-spacing:.11em;font-weight:700;padding:14px 12px 6px;
-    display:flex;align-items:center;gap:6px}
-  .sb-sec i{width:6px;height:6px;border-radius:50%;background:hsl(var(--h,220) 66% 55%)}
+  .sb-logo{font-size:14.5px;font-weight:700;letter-spacing:-.02em;padding:0 12px 18px}
+  .sb-sec{font-size:11px;color:var(--gray);font-weight:600;padding:14px 12px 6px;
+    display:flex;align-items:center;gap:6px;letter-spacing:-.01em}
+  .sb-sec i{width:6px;height:6px;border-radius:50%;background:hsl(var(--h,220) 70% 52%)}
   .sb-item{display:flex;align-items:center;gap:9px;width:100%;border:none;background:none;
-    font-size:13px;font-weight:600;color:var(--ink);padding:9px 12px;border-radius:11px;cursor:pointer;text-align:left;
+    font-size:13px;font-weight:500;color:var(--ink);padding:9px 12px;border-radius:10px;cursor:pointer;text-align:left;
     transition:background .3s var(--ease)}
   .sb-item:hover{background:var(--fill)}
   .sb-item.on{background:var(--press)}
   .sb-item svg{width:16px;height:16px;flex:none;color:var(--gray)}
   .sb-goal{display:block;width:100%;border:none;background:none;text-align:left;cursor:pointer;
-    padding:9px 12px 10px;border-radius:11px;transition:background .3s var(--ease)}
+    padding:9px 12px 10px;border-radius:10px;transition:background .3s var(--ease)}
   .sb-goal:hover{background:var(--fill)}
   .sb-goal.on{background:var(--press)}
   .sb-goal .t{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
-  .sb-goal .t b{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
-  .sb-goal .t small{flex:none;font-size:10.5px;color:var(--gray);font-variant-numeric:tabular-nums}
+  .sb-goal .t b{font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+  .sb-goal .t small{flex:none;font-size:10.5px;color:var(--gray3);font-variant-numeric:tabular-nums}
   .sb-goal .t small.over{color:var(--red)}
-  .sb-goal .bar{height:2.5px;background:var(--nest-in);border-radius:2px;margin-top:7px;overflow:hidden}
+  .sb-goal .bar{height:3px;background:var(--fill);border-radius:2px;margin-top:7px;overflow:hidden}
   .sb-goal .bar i{display:block;height:100%;background:var(--ink);border-radius:2px;transition:width .7s var(--ease)}
-  .sb-mic{margin:14px 6px 0;width:calc(100% - 12px);display:flex;align-items:center;gap:9px;justify-content:center;
-    border:none;cursor:pointer;padding:12px;border-radius:14px;background:var(--ink);color:var(--bg);
-    font-size:13px;font-weight:650;transition:transform .4s var(--spring)}
-  .sb-mic:active{transform:scale(.97);transition:transform .07s}
-  .sb-mic svg{width:16px;height:16px}
   #content{flex-direction:row}
-  main{flex:1;min-width:0;padding:40px 40px 70px}
-  .screen.active{max-width:720px;margin:0 auto;width:100%}
+  main{flex:1;min-width:0;padding:38px 40px 70px}
+  .screen.active{max-width:700px;margin:0 auto;width:100%}
   .large-title{font-size:29px}
-  #inspector{display:block;width:352px;flex:none;overflow-y:auto;padding:44px 26px 56px;scrollbar-width:none;
-    background:color-mix(in srgb,var(--surface) 34%,transparent);
-    backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);
-    box-shadow:inset .5px 0 0 var(--sep)}
+  #inspector{display:block;width:350px;flex:none;overflow-y:auto;padding:42px 26px 56px;scrollbar-width:none;
+    background:color-mix(in srgb,var(--card) 45%,var(--bg));box-shadow:inset .5px 0 0 var(--sep)}
   #inspector::-webkit-scrollbar{display:none}
-  .ins-empty{color:var(--gray2);font-size:13px;text-align:center;margin-top:36vh;line-height:2}
+  .ins-empty{color:var(--gray3);font-size:13px;text-align:center;margin-top:36vh;line-height:2}
   .cal-detail{display:none}
   .g-head:hover{background:var(--fill)}
-  .m-head:hover{background:var(--fill)}
+  .m-head:hover .m-title{color:var(--ink)}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<div id="amb"><i></i><i></i><i></i></div>
-
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <filter id="lensFilter" x="0" y="0" width="100%" height="100%">
     <feImage id="lensMap" result="map"/>
@@ -551,7 +406,6 @@ textarea.field{line-height:1.7;resize:none;min-height:70px}
 <div id="app">
 <aside id="sidebar">
   <div class="sb-logo">Purpose</div>
-  <button class="sb-mic" id="sbMic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="9" y="2.5" width="6" height="11.5" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3.5"/></svg>声で追加</button>
   <div id="sbGoals"></div>
   <div class="sb-sec" style="margin-top:8px">ビュー</div>
   <button class="sb-item" id="sbCal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="4"/><path d="M3.5 9.5h17M8 2.8v3.4M16 2.8v3.4"/></svg>カレンダー</button>
@@ -563,13 +417,8 @@ textarea.field{line-height:1.7;resize:none;min-height:70px}
 
   <section class="screen active" id="scr-home">
     <div class="navrow">
-      <div>
-        <div class="caption" id="homeCap"></div>
-        <h1 class="large-title" id="homeTitle">ゴール</h1>
-      </div>
-      <button class="gbtn round" id="btnAddGoal" aria-label="ゴールを追加">
-        <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-      </button>
+      <div class="caption" id="homeCap"></div>
+      <h1 class="large-title" id="homeTitle">ゴール</h1>
     </div>
     <div class="chips" id="catChips"></div>
     <div id="goalBlocks"></div>
@@ -577,19 +426,17 @@ textarea.field{line-height:1.7;resize:none;min-height:70px}
 
   <section class="screen" id="scr-cal">
     <div class="navrow">
-      <div>
-        <div class="caption">スケジュール</div>
-        <h1 class="large-title">カレンダー</h1>
-      </div>
+      <div class="caption">スケジュール</div>
+      <h1 class="large-title">カレンダー</h1>
     </div>
-    <div class="cal-wrap glass">
+    <div class="cal-wrap">
       <div class="cal-head">
         <div class="cal-title" id="calTitle"></div>
         <div class="cal-nav"><button id="calPrev">‹</button><button id="calNext">›</button></div>
       </div>
       <div class="cal-grid" id="calGrid"></div>
     </div>
-    <div class="cal-detail glass" id="calDetail"></div>
+    <div class="cal-detail" id="calDetail"></div>
   </section>
 
 </main>
@@ -604,37 +451,25 @@ textarea.field{line-height:1.7;resize:none;min-height:70px}
 
 <div id="setNode" class="setwrap" style="display:none">
   <div class="sh-title" style="margin-top:4px">設定</div>
-  <p>ChatGPTには「GitHubの <b>purpose/data.json</b> を編集して」と言えば全端末に反映。このアプリからの書き戻しにはトークンを一度だけ保存。</p>
+  <p>追加・編集は Claude か ChatGPT に「purpose の <b>data.json</b> に入れて」と言う。全端末に自動反映。このアプリからの書き戻しにはトークンを一度だけ保存。</p>
   <input type="password" id="tokenInput" placeholder="GitHub token（Contents: Read/Write）">
   <button class="btn primary" id="btnSyncNow">保存して同期</button>
   <button class="btn plain" id="btnExport">壁打ちプロンプトをコピー</button>
-  <textarea id="pasteArea" placeholder="ChatGPTのJSONを貼って取り込み"></textarea>
+  <textarea id="pasteArea" placeholder="AIのJSONを貼って取り込み"></textarea>
   <button class="btn plain" id="btnImport">取り込む</button>
   <button class="btn plain" id="btnBackup">バックアップ書き出し</button>
   <div class="stat" id="syncStat"></div>
 </div>
 
 <nav id="navbar">
-  <div class="tabbar glass" id="tabbar">
+  <div class="tabbar" id="tabbar">
     <div id="lens"></div>
     <button class="tab active" data-scr="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2.6" y="2.6" width="18.8" height="18.8" rx="6.2"/><rect x="6.6" y="6.6" width="10.8" height="10.8" rx="3.6"/><rect x="10.3" y="10.3" width="3.4" height="3.4" rx="1.2" fill="currentColor"/></svg><b>ゴール</b></button>
     <button class="tab" data-scr="cal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="4"/><path d="M3.5 9.5h17M8 2.8v3.4M16 2.8v3.4"/></svg><b>カレンダー</b></button>
   </div>
-  <button id="micBtn" aria-label="声で追加">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="9" y="2.5" width="6" height="11.5" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3.5"/></svg>
-  </button>
 </nav>
 
-<div id="vdim"></div>
-<div id="voice">
-  <div class="v-live">
-    <div class="v-hint" id="vHint">聞いています…</div>
-    <div class="v-text" id="vText"></div>
-  </div>
-  <div id="vStage"></div>
-</div>
-
-<div id="toast" class="glass"></div>
+<div id="toast"></div>
 </div>
 
 <script>
@@ -642,11 +477,11 @@ textarea.field{line-height:1.7;resize:none;min-height:70px}
 const KEY='purpose.v2';
 const REPO='gjnzqqf8dq-coder/purpose', PATH='data.json', BRANCH='main';
 const DEFCATS=[
-  {id:'c_shukatsu',name:'就活',   hue:222,u:1},
-  {id:'c_seisaku', name:'制作',   hue:28, u:1},
-  {id:'c_karada',  name:'からだ', hue:152,u:1},
-  {id:'c_manabi',  name:'学び',   hue:272,u:1},
-  {id:'c_kurashi', name:'くらし', hue:338,u:1}
+  {id:'c_shukatsu',name:'就活',  hue:222,u:1},
+  {id:'c_seisaku', name:'藝大',  hue:345,u:1},
+  {id:'c_karada',  name:'筋トレ',hue:152,u:1},
+  {id:'c_manabi',  name:'学び',  hue:272,u:1},
+  {id:'c_kurashi', name:'くらし',hue:35, u:1}
 ];
 const emptyState=()=>({goals:[],tasks:[],cats:[],del:{}});
 let S=load(), sha=null, pushT=null, lastPull=0;
@@ -671,7 +506,6 @@ const fmt=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 const now=new Date(), TODAY=fmt(now);
 const WDJ=['日','月','火','水','木','金','土'];
 const dleft=dl=>Math.round((new Date(dl+'T00:00:00')-new Date(TODAY+'T00:00:00'))/864e5);
-const shiftDay=n=>{const d=new Date(TODAY+'T00:00:00');d.setDate(d.getDate()+n);return fmt(d)};
 let calY=now.getFullYear(), calM=now.getMonth(), calSel=TODAY;
 
 /* ============================================================ physics */
@@ -693,7 +527,6 @@ function toast(m){const t=document.getElementById('toast');t.textContent=m;t.cla
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 const CK=s=>`<svg viewBox="0 0 24 24" width="${s||11}" height="${s||11}" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" style="color:var(--bg)"><path d="M4 12.5l5 5L20 6.5"/></svg>`;
 const CHEV='<svg class="m-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>';
-const MICSVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="9" y="2.5" width="6" height="11.5" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3.5"/></svg>';
 function onTap(el,fn){
   let p=null;
   el.addEventListener('pointerdown',e=>{p={x:e.clientX,y:e.clientY}});
@@ -731,7 +564,7 @@ function closeSheet(fromY){
   sheetAnim.onfinish=()=>{sheet.style.display='none';returnSettingsNode()};
   sheetOpen=false;
 }
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(vOpen)closeVoice();else closeSheet()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
 onTap(dim,()=>closeSheet());
 function returnSettingsNode(){const n=document.getElementById('setNode');
   if(n&&n.parentElement===sheetBody){n.style.display='none';document.body.appendChild(n)}}
@@ -768,7 +601,7 @@ sheet.addEventListener('pointercancel',shEnd);
 const TABS=['home','cal'], TABTITLE={home:'ゴール',cal:'カレンダー'};
 let curTab='home';
 const lens=document.getElementById('lens'), tabbar=document.getElementById('tabbar'), navbar=document.getElementById('navbar');
-const tabW=()=>navbar.classList.contains('mini')?56:84;
+const tabW=()=>navbar.classList.contains('mini')?60:92;
 function lensX(x){lens.style.transform=`translateX(${x}px)`;lens.style.setProperty('--lx',(-x*.38)+'px')}
 function lensTo(i){lensX(i*tabW())}
 function setTab(name){
@@ -828,7 +661,7 @@ tabbar.addEventListener('pointercancel',()=>{lens.style.transition='';lens.style
 (function(){
   try{
     if(!CSS.supports('backdrop-filter','url(#lensFilter)'))return;
-    const W=168,H=84,c=document.createElement('canvas');c.width=W;c.height=H;
+    const W=184,H=84,c=document.createElement('canvas');c.width=W;c.height=H;
     const g=c.getContext('2d'),img=g.createImageData(W,H);
     for(let y=0;y<H;y++)for(let x=0;x<W;x++){
       const nx=(x-W/2)/(W/2),ny=(y-H/2)/(H/2);
@@ -864,15 +697,11 @@ const sortedGoals=()=>[...S.goals].sort((a,b)=>(a.deadline||'9999')<(b.deadline|
 const goalTasks=g=>S.tasks.filter(t=>t.goalId===g.id);
 const mileTasks=m=>S.tasks.filter(t=>t.mileId===m.id).sort((a,b)=>a.date<b.date?-1:1);
 function dLabel(g){
-  if(!g.deadline)return'期限なし';
+  if(!g.deadline)return'';
   const d=dleft(g.deadline);
-  if(d===0)return'<b>今日</b>が期限';
-  if(d<0)return`<b>${-d}</b>日 超過`;
+  if(d===0)return'<b>今日</b>';
+  if(d<0)return`<b>${-d}</b>日超過`;
   return`あと<b>${d}</b>日`;
-}
-function setAmbient(){
-  const h=curCat==='all'?222:(S.cats.find(c=>c.id===curCat)||{hue:222}).hue;
-  document.documentElement.style.setProperty('--amb-h',h);
 }
 
 /* ---- category chips ---- */
@@ -885,10 +714,9 @@ function renderChips(){
   if(un)html+=`<button class="chip${curCat==='none'?' on':''}" data-c="none">未分類<small>${un}</small></button>`;
   box.innerHTML=html;
   box.querySelectorAll('.chip').forEach(b=>onTap(b,()=>{
-    curCat=b.dataset.c;setAmbient();renderChips();renderHome();
+    curCat=b.dataset.c;renderChips();renderHome();
     b.animate([{transform:'scale(.9)'},{transform:'scale(1)'}],{duration:420,easing:SPR_POP});
   }));
-  setAmbient();
 }
 
 /* ---- sidebar (desktop) ---- */
@@ -925,7 +753,7 @@ function groupGoals(list){
   return out;
 }
 
-/* ---- HOME : matryoshka ---- */
+/* ---- HOME ---- */
 function renderHome(){
   document.getElementById('homeCap').textContent=`${now.getMonth()+1}月${now.getDate()}日 ${WDJ[now.getDay()]}曜日`;
   const wrap=document.getElementById('goalBlocks');
@@ -934,7 +762,7 @@ function renderHome(){
   else if(curCat!=='all')gs=gs.filter(g=>g.cat===curCat);
 
   if(!S.goals.length){
-    wrap.innerHTML='<div class="empty">マイクを押して<br>「電通に受かる、ってゴールを作って」<br><br>ChatGPTに「purposeのdata.jsonに入れて」でもOK。</div>';
+    wrap.innerHTML='<div class="empty">ClaudeかChatGPTに<br>「purposeのdata.jsonにゴールを入れて」<br>と言えば、ここに現れる。</div>';
     return;
   }
   if(!gs.length){wrap.innerHTML='<div class="empty">このカテゴリにはまだゴールがない。</div>';return}
@@ -942,7 +770,7 @@ function renderHome(){
 
   const groups=curCat==='all'?groupGoals(gs):[{cat:null,name:'',hue:220,list:gs}];
   wrap.innerHTML=groups.map(gr=>{
-    const head=curCat==='all'
+    const head=curCat==='all'&&gr.name
       ?`<div class="catsec" style="--h:${gr.hue}">${gr.cat?'<i></i>':''}<b>${esc(gr.name)}</b><span>${gr.list.length}</span></div>`:'';
     return head+gr.list.map(goalCard).join('');
   }).join('');
@@ -961,10 +789,9 @@ function goalCard(g){
       <div class="g-fill" style="width:${lastDone<0?0:pos(lastDone)}%"></div>
       ${ms.map((m,i)=>`<div class="mdot${m.done?' done':(m===next?' next':'')}" style="left:${pos(i)}%"><i></i></div>`).join('')}
     </div>
-    <div class="g-sum"><em>${next?'いま：'+esc(next.title):'ぜんぶ開いた 🎉'}</em><span>${doneN}/${ms.length}</span></div>`;
+    <div class="g-sum"><em>${next?'いま：'+esc(next.title):'ぜんぶ達成 🎉'}</em><span>${doneN}/${ms.length}</span></div>`;
   }else{
-    route=`<div class="g-route"><div class="g-track"></div></div>
-      <div class="g-sum"><em>中の目標がまだ無い</em></div>`;
+    route=`<div class="g-sum" style="padding-top:10px"><em>中の目標がまだ無い — AIに分解してもらう</em></div>`;
   }
 
   const miles=ms.map((m,i)=>{
@@ -972,7 +799,7 @@ function goalCard(g){
     const on=openMile===m.id||(openMile===null&&m===next);
     const inner=ts.length
       ?ts.map(t=>taskChip(t)).join('')
-      :'<div class="m-none">タスクがまだ無い — マイクで足す</div>';
+      :'<div class="m-none">タスクなし</div>';
     return `<div class="mile${on?' on':''}" data-mid="${m.id}" data-gid="${g.id}">
       <div class="m-head${m.done?' done':''}">
         <div class="m-num">${m.done?CK(9):i+1}</div>
@@ -984,22 +811,18 @@ function goalCard(g){
     </div>`;
   }).join('');
 
-  return `<article class="goal glass${isOpen?' open':''}" data-gid="${g.id}" style="--h:${h}">
+  return `<article class="goal${isOpen?' open':''}" data-gid="${g.id}" style="--h:${h}">
     <div class="g-head">
-      <div class="g-kick">${c?'<i></i>'+esc(c.name):'<i style="background:var(--gray2)"></i>未分類'}
+      <div class="g-kick">${c?'<i></i>'+esc(c.name):'<i style="background:var(--gray3)"></i>未分類'}
         <em class="${g.deadline&&dleft(g.deadline)<0?'over':''}">${dLabel(g)}</em></div>
       <div class="g-title">${esc(g.title)}</div>
       ${route}
     </div>
     <div class="g-nest"><div>
-      <div class="nest-in">
-        <div class="nest-lbl">中の目標（マトリョーシカ）</div>
-        ${ms.length?miles:'<div class="m-none">まだ無い — マイクで「〜を中の目標にして」</div>'}
-      </div>
+      <div class="g-inner">${ms.length?miles:''}</div>
       <div class="g-foot">
-        <button class="mic" data-act="mic">${MICSVG.replace('<svg','<svg width="14" height="14" style="vertical-align:-2px;margin-right:5px;display:inline-block"')}声で足す</button>
-        <button class="plan${planCount(g)?'':' todo'}" data-act="plan">${planCount(g)?'フライトプラン':'プランを書く'}</button>
-        <button data-act="open">ひらく</button>
+        <button class="plan${planCount(g)?'':' todo'}" data-act="plan">${planCount(g)?'フライトプラン':'プラン未記入'}</button>
+        <button data-act="open">くわしく</button>
       </div>
     </div></div>
   </article>`;
@@ -1034,9 +857,7 @@ function bindHome(wrap){
       onLongPress(mel.querySelector('.m-head'),()=>openMileSheet(gid,mel.dataset.mid),520);
     });
     el.querySelectorAll('.g-foot button').forEach(b=>onTap(b,()=>{
-      const a=b.dataset.act;
-      if(a==='mic')openVoice({goalId:gid});
-      else if(a==='plan')openPlanSheet(gid);
+      if(b.dataset.act==='plan')openPlanSheet(gid);
       else openGoalSheet(gid);
     }));
     bindTasks(el);
@@ -1065,7 +886,8 @@ function renderInspector(){
     box.innerHTML=`<div class="sh-kicker">${calSel.replace(/-/g,'/')}</div>
       <div class="sh-title">${d.getMonth()+1}月${d.getDate()}日 ${WDJ[d.getDay()]}曜日</div>
       ${dls.map(g=>`<div class="cal-dl"><div class="f"></div><span>${esc(g.title)}</span><small>期限</small></div>`).join('')}
-      <div style="margin-top:8px">${ts.length?ts.map(t=>taskChip(t)).join(''):(dls.length?'':'<div class="ins-empty">この日の予定はない</div>')}</div>`;
+      ${ts.length?`<div class="m-inner" style="margin:10px 0 0">${ts.map(t=>taskChip(t)).join('')}</div>`:''}
+      ${!ts.length&&!dls.length?'<div class="ins-empty">この日の予定はない</div>':''}`;
     bindTasks(box);return;
   }
   const sel=inspectorMile();
@@ -1075,8 +897,7 @@ function renderInspector(){
     <div class="sh-kicker">${esc(g.title)}</div>
     <div class="sh-title" style="margin-top:6px">${esc(m.title)}</div>
     <div class="sh-sec">タスク</div>
-    <div id="insTasks">${ts.length?ts.map(t=>`<div class="row${t.done?' done':''}" data-tid="${t.id}"><div class="c">${CK(10)}</div><span>${esc(t.title)}</span><i>${t.date.slice(5).replace('-','/')}</i></div>`).join(''):'<div class="pl-empty">まだ無い</div>'}</div>
-    <button class="micline" id="insMic">${MICSVG}声でタスクを足す</button>
+    <div id="insTasks">${ts.length?ts.map(t=>`<div class="row${t.done?' done':''}" data-tid="${t.id}"><div class="c">${CK(10)}</div><span>${esc(t.title)}</span><i>${t.date.slice(5).replace('-','/')}</i></div>`).join(''):'<div class="pl-empty">まだ無い — AIに頼む</div>'}</div>
     <div class="sh-actions">
       <button class="btn ${m.done?'plain':'primary'}" id="insDone">${m.done?'未達成に戻す':'達成にする'}</button>
       <button class="btn dangerous" id="insDel">削除</button>
@@ -1085,8 +906,7 @@ function renderInspector(){
     const t=S.tasks.find(x=>x.id===row.dataset.tid);if(!t)return;
     t.done=!t.done;t.u=Date.now();row.classList.toggle('done',t.done);saveQuiet();renderHome();
   });
-  box.querySelector('#insMic').onclick=()=>openVoice({goalId:g.id,mileId:m.id});
-  box.querySelector('#insDone').onclick=()=>{m.done=!m.done;g.u=Date.now();save();renderInspector();if(m.done)toast('中の目標を達成')};
+  box.querySelector('#insDone').onclick=()=>{m.done=!m.done;g.u=Date.now();save();renderInspector();if(m.done)toast('達成')};
   const del=box.querySelector('#insDel');
   del.onclick=()=>{
     if(!del.classList.contains('arm')){del.classList.add('arm');del.textContent='本当に削除する';
@@ -1107,20 +927,20 @@ function bindTasks(root){
     let p=null;
     el.addEventListener('pointerdown',e=>{
       if(e.target===delBtn)return;
-      p={x0:e.clientX,y0:e.clientY,mode:null,base:openRow===el?-88:0,t0:performance.now()};
+      p={x0:e.clientX,y0:e.clientY,mode:null,base:openRow===el?-84:0,t0:performance.now()};
       el.classList.add('pressed');
     });
     el.addEventListener('pointermove',e=>{
       if(!p)return;
       const dx=e.clientX-p.x0, dy=e.clientY-p.y0;
       if(!p.mode){
-        if(Math.abs(dx)>8&&Math.abs(dx)>Math.abs(dy)){p.mode='x';el.setPointerCapture(e.pointerId);el.classList.remove('pressed')}
+        if(Math.abs(dx)>8&&Math.abs(dx)>Math.abs(dy)){p.mode='x';el.classList.add('sw');el.setPointerCapture(e.pointerId);el.classList.remove('pressed')}
         else if(Math.abs(dy)>8){p=null;el.classList.remove('pressed');return}
       }
       if(p.mode==='x'){
         let x=p.base+dx;
         if(x>0)x=rubber(x,30);
-        if(x<-110)x=-110-rubber(-x-110,40);
+        if(x<-108)x=-108-rubber(-x-108,40);
         slide.style.transform=`translateX(${x}px)`;p.x=x;p.t1=performance.now();
       }
     });
@@ -1130,20 +950,21 @@ function bindTasks(root){
       const st=p;p=null;
       if(st.mode==='x'){
         const x=st.x??st.base, v=(x-st.base)/Math.max(1,(st.t1||performance.now())-st.t0);
-        if(x<-96||v<-.5){doDelete(el,t);openRow=null;return}
-        if(x<-44){
-          if(openRow&&openRow!==el)openRow.querySelector('.tk-slide').style.transform='';
+        if(x<-94||v<-.5){doDelete(el,t);openRow=null;return}
+        if(x<-42){
+          if(openRow&&openRow!==el){openRow.querySelector('.tk-slide').style.transform='';openRow.classList.remove('sw')}
           openRow=el;
-          slide.animate([{transform:`translateX(${x}px)`},{transform:'translateX(-88px)'}],{duration:460,easing:SPR_POP,fill:'both'});
-          slide.style.transform='translateX(-88px)';
+          slide.animate([{transform:`translateX(${x}px)`},{transform:'translateX(-84px)'}],{duration:460,easing:SPR_POP,fill:'both'});
+          slide.style.transform='translateX(-84px)';
         }else{
           slide.animate([{transform:`translateX(${x}px)`},{transform:'translateX(0)'}],{duration:460,easing:SPR_POP,fill:'both'});
           slide.style.transform='';
+          setTimeout(()=>el.classList.remove('sw'),460);
           if(openRow===el)openRow=null;
         }
         return;
       }
-      if(openRow){openRow.querySelector('.tk-slide').style.transform='';openRow=null;return}
+      if(openRow){openRow.querySelector('.tk-slide').style.transform='';openRow.classList.remove('sw');openRow=null;return}
       t.done=!t.done;t.u=Date.now();
       el.classList.toggle('done',t.done);
       if(t.done)el.querySelector('.tk-c').animate([{transform:'scale(1)'},{transform:'scale(1.3)'},{transform:'scale(1)'}],
@@ -1169,232 +990,31 @@ function doDelete(el,t){
   };
 }
 
-/* ============================================================ VOICE — 唯一の入力口 */
-const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-const vdim=document.getElementById('vdim'), vEl=document.getElementById('voice');
-const vText=document.getElementById('vText'), vHint=document.getElementById('vHint'), vStage=document.getElementById('vStage');
-let rec=null, vOpen=false, vCtx=null, vFinal='', vDraft=null;
-
-function openVoice(ctx){
-  vCtx=ctx||{};vFinal='';vDraft=null;
-  if(sheetOpen)closeSheet();
-  vEl.classList.add('on');vdim.classList.add('on');document.body.classList.add('listening');vOpen=true;
-  vText.innerHTML='';
-  vEl.animate([{opacity:0},{opacity:1}],{duration:260,easing:'ease-out'});
-  stageListen();
-  startRec();
-}
-function closeVoice(){
-  if(!vOpen)return;
-  stopRec();vOpen=false;vdim.classList.remove('on');document.body.classList.remove('listening');
-  vEl.animate([{opacity:1},{opacity:0}],{duration:200,easing:'ease-in'}).onfinish=()=>vEl.classList.remove('on');
-}
-onTap(vdim,()=>closeVoice());
-
-function stageListen(){
-  vHint.textContent=SR?'聞いています…':'声が使えない端末 — 下からどうぞ';
-  vStage.innerHTML=`
-    <div class="v-orb${SR?'':' idle'}" id="vOrb">${MICSVG.replace('<svg','<svg width="34" height="34"')}</div>
-    <div class="v-kbfield${SR?'':' on'}" id="vKbf"><input id="vKb" placeholder="ここに書く" enterkeyhint="done"></div>
-    <button class="v-kb" id="vKbT">${SR?'キーボードで入れる':''}</button>`;
-  const kb=vStage.querySelector('#vKb');
-  const go=()=>{const v=kb.value.trim();if(!v)return;stopRec();vFinal=v;stageConfirm(v)};
-  kb.addEventListener('keydown',e=>{if(e.key==='Enter')go()});
-  kb.addEventListener('blur',go);
-  const t=vStage.querySelector('#vKbT');
-  if(SR)onTap(t,()=>{vStage.querySelector('#vKbf').classList.add('on');stopRec();vHint.textContent='書いて Enter';kb.focus()});
-  onTap(vStage.querySelector('#vOrb'),()=>{if(rec)stopRec();else startRec()});
-}
-
-function startRec(){
-  if(!SR)return;
-  try{
-    rec=new SR();rec.lang='ja-JP';rec.interimResults=true;rec.continuous=false;
-    rec.onresult=e=>{
-      let fin='',itm='';
-      for(let i=e.resultIndex;i<e.results.length;i++){
-        const r=e.results[i];
-        if(r.isFinal)fin+=r[0].transcript;else itm+=r[0].transcript;
-      }
-      if(fin)vFinal+=fin;
-      vText.innerHTML=esc(vFinal)+(itm?`<span class="im">${esc(itm)}</span>`:'');
-    };
-    rec.onerror=ev=>{vHint.textContent=ev.error==='not-allowed'?'マイクが許可されていない':'聞き取れなかった — もう一度';rec=null};
-    rec.onend=()=>{rec=null;const v=vFinal.trim();if(vOpen&&v)stageConfirm(v);else if(vOpen)vHint.textContent='もう一度、丸を押して話す'};
-    rec.start();
-  }catch(e){rec=null}
-}
-function stopRec(){if(rec){try{rec.onend=null;rec.stop()}catch(e){}rec=null}}
-
-/* --- 日本語をゆるく解釈する --- */
-const WD_MAP={'日':0,'月':1,'火':2,'水':3,'木':4,'金':5,'土':6};
-function parseDate(s){
-  let m;
-  if(/明後日|あさって/.test(s))return{date:shiftDay(2),hit:/明後日|あさって/};
-  if(/明日|あした|あす/.test(s))return{date:shiftDay(1),hit:/明日|あした|あす/};
-  if(/今日|きょう/.test(s))return{date:TODAY,hit:/今日|きょう/};
-  if((m=s.match(/(\d{1,2})\s*[\/月]\s*(\d{1,2})\s*日?/))){
-    const y=now.getFullYear();
-    let d=`${y}-${pad(+m[1])}-${pad(+m[2])}`;
-    if(d<TODAY)d=`${y+1}-${pad(+m[1])}-${pad(+m[2])}`;
-    return{date:d,hit:m[0]};
-  }
-  if((m=s.match(/(\d{1,2})\s*日後/)))return{date:shiftDay(+m[1]),hit:m[0]};
-  if(/来週/.test(s))return{date:shiftDay(7),hit:/来週/};
-  if(/今週末|週末/.test(s)){let n=6-now.getDay();if(n<=0)n+=7;return{date:shiftDay(n),hit:/今週末|週末/}}
-  if((m=s.match(/(今度の|次の|来週の)?([日月火水木金土])曜/))){
-    const tgt=WD_MAP[m[2]];let n=(tgt-now.getDay()+7)%7;if(n===0)n=7;
-    if(m[1]==='来週の')n+=7;
-    return{date:shiftDay(n),hit:m[0]};
-  }
-  return null;
-}
-function cleanTitle(s,dateHit){
-  let t=s;
-  if(dateHit)t=t.replace(dateHit,'');
-  t=t.replace(/^[\s、,]*(までには|までに|まで|には|は|に|の|を)\s*/,'');
-  t=t.replace(/^(purpose|パーパス)[にへ、,\s]*/i,'');
-  t=t.replace(/(という|って)?(新しい)?(ゴール|目標|中の目標|マトリョーシカ|マイルストーン|タスク|やること)?\s*(を|に|は)?\s*(作って|つくって|追加して|足して|入れて|登録して|して|しといて|お願い)\s*[。、!！]?$/,'');
-  t=t.replace(/^(ゴール|目標|中の目標|マトリョーシカ|タスク|やること)\s*[はで、:：]\s*/,'');
-  t=t.replace(/[。、,\s]+$/,'').trim();
-  return t||s.trim();
-}
-function parseSpoken(s,ctx){
-  const d=parseDate(s);
-  let kind='task';
-  if(/(ゴール|目標)を?\s*(新しく|作|つく|追加|立て)/.test(s)||/^新しいゴール/.test(s))kind='goal';
-  if(/(中の目標|マトリョーシカ|マイルストーン)/.test(s))kind='mile';
-  if(/(タスク|やること|todo|トゥドゥ)/i.test(s))kind='task';
-  const title=cleanTitle(s,d&&d.hit);
-  // 行き先
-  let goalId=ctx.goalId||expandedGoal||null, mileId=ctx.mileId||null;
-  if(!mileId&&goalId&&kind==='task'){
-    const g=S.goals.find(x=>x.id===goalId);
-    const nx=g&&(g.miles||[]).find(m=>!m.done);
-    if(nx)mileId=nx.id;
-  }
-  // 声の中にゴール名が出てきたらそちらを優先
-  S.goals.forEach(g=>{const k=g.title.replace(/[のをにはがで]/g,'');
-    if(k.length>2&&s.includes(k.slice(0,Math.min(5,k.length))))goalId=g.id});
-  return{kind,title,date:(d&&d.date)||TODAY,goalId,mileId};
-}
-
-function stageConfirm(raw){
-  stopRec();
-  vDraft=parseSpoken(raw,vCtx||{});
-  vText.innerHTML=esc(raw);
-  drawConfirm();
-}
-function destLabel(d){
-  if(d.kind==='goal')return'新しいゴールとして';
-  const g=S.goals.find(x=>x.id===d.goalId);
-  if(!g)return'どこにも紐づけない';
-  const m=d.mileId&&(g.miles||[]).find(x=>x.id===d.mileId);
-  return d.kind==='mile'?`${g.title} の中`:(m?`${g.title} › ${m.title}`:`${g.title}（中の目標なし）`);
-}
-function drawConfirm(){
-  const d=vDraft;
-  vHint.textContent='これでいい？';
-  const dOpts=[['今日',TODAY],['明日',shiftDay(1)],['今週末',(()=>{let n=6-now.getDay();if(n<=0)n+=7;return shiftDay(n)})()],['来週',shiftDay(7)]];
-  vStage.innerHTML=`
-    <div class="v-card glass">
-      <div class="v-row"><b>${d.kind==='goal'?'ゴール':d.kind==='mile'?'中の目標':'タスク'}</b>として</div>
-      <div class="v-what">${esc(d.title)}</div>
-      <div class="v-row" style="margin-bottom:7px">入る場所　<b id="vDestL">${esc(destLabel(d))}</b></div>
-      <button class="v-opt" id="vChg">場所を選ぶ</button>
-      ${d.kind==='task'?`<div class="v-sec">日付</div><div class="v-opts">${
-        dOpts.map(([n,v])=>`<button class="v-opt${d.date===v?' on':''}" data-d="${v}">${n}</button>`).join('')
-      }</div>`:''}
-      <div class="v-acts">
-        <button class="btn plain" id="vAgain">言い直す</button>
-        <button class="btn primary" id="vOk">入れる</button>
-      </div>
-    </div>`;
-  vStage.querySelectorAll('.v-opt[data-d]').forEach(b=>onTap(b,()=>{
-    vDraft.date=b.dataset.d;
-    vStage.querySelectorAll('.v-opt[data-d]').forEach(x=>x.classList.toggle('on',x===b));
-  }));
-  onTap(vStage.querySelector('#vChg'),drawDest);
-  onTap(vStage.querySelector('#vAgain'),()=>{vFinal='';vText.innerHTML='';stageListen();startRec()});
-  onTap(vStage.querySelector('#vOk'),commitVoice);
-  vStage.firstElementChild.animate([{opacity:0,transform:'translateY(14px) scale(.97)'},{opacity:1,transform:'none'}],
-    {duration:440,easing:SPR_SOFT});
-}
-function drawDest(){
-  const d=vDraft;
-  let rows='';
-  if(d.kind!=='goal'){
-    sortedGoals().forEach(g=>{
-      rows+=`<button class="v-d${d.goalId===g.id&&!d.mileId?' on':''}" data-g="${g.id}" style="--h:${hueOf(g)}"><i></i><span>${esc(g.title)}</span><small>ゴール</small></button>`;
-      if(d.kind==='task')(g.miles||[]).forEach(m=>{
-        rows+=`<button class="v-d sub${d.mileId===m.id?' on':''}" data-g="${g.id}" data-m="${m.id}"><span>${esc(m.title)}</span><small>${mileTasks(m).length}</small></button>`;
-      });
-    });
-  }
-  const cats=S.cats.map(c=>`<button class="v-opt${d.cat===c.id?' on':''}" data-cat="${c.id}">${esc(c.name)}</button>`).join('');
-  vStage.innerHTML=`<div class="v-card glass">
-    ${d.kind==='goal'
-      ?`<div class="v-sec">カテゴリ</div><div class="v-opts">${cats}</div>`
-      :`<div class="v-sec">どこに入れる</div><div class="v-dest">${rows||'<div class="pl-empty">ゴールがまだ無い</div>'}</div>`}
-    <div class="v-acts"><button class="btn plain" id="vBack">戻る</button></div>
-  </div>`;
-  vStage.querySelectorAll('.v-d').forEach(b=>onTap(b,()=>{
-    vDraft.goalId=b.dataset.g;vDraft.mileId=b.dataset.m||null;drawConfirm();
-  }));
-  vStage.querySelectorAll('.v-opt[data-cat]').forEach(b=>onTap(b,()=>{vDraft.cat=b.dataset.cat;drawConfirm()}));
-  onTap(vStage.querySelector('#vBack'),drawConfirm);
-}
-function commitVoice(){
-  const d=vDraft;if(!d||!d.title){closeVoice();return}
-  if(d.kind==='goal'){
-    const g={id:uid('g_'),title:d.title,deadline:null,note:'',cat:d.cat||null,miles:[],plan:emptyPlan(),u:Date.now()};
-    S.goals.push(g);expandedGoal=g.id;toast('ゴールを作った');
-  }else if(d.kind==='mile'){
-    const g=S.goals.find(x=>x.id===d.goalId);
-    if(!g){toast('先にゴールを作って');return}
-    g.miles.push({id:uid('m_'),title:d.title,done:false});g.u=Date.now();
-    expandedGoal=g.id;toast('中の目標にした');
-  }else{
-    S.tasks.push({id:uid('t_'),title:d.title,date:d.date,done:false,
-      goalId:d.goalId||null,mileId:d.mileId||null,u:Date.now()});
-    if(d.mileId)openMile=d.mileId;
-    if(d.goalId)expandedGoal=d.goalId;
-    toast('タスクにした');
-  }
-  save();closeVoice();
-}
-onTap(document.getElementById('micBtn'),()=>openVoice({}));
-const sbm=document.getElementById('sbMic');if(sbm)sbm.onclick=()=>openVoice({});
-
 /* ============================================================ goal sheet */
 function openGoalSheet(gid){
-  const g=S.goals.find(x=>x.id===gid);
-  if(!g){openGoalForm(null);return}
+  const g=S.goals.find(x=>x.id===gid);if(!g)return;
   openSheet(body=>{
     const ms=g.miles||[], untied=goalTasks(g).filter(t=>!t.mileId);
-    const c=catOf(g);
     body.innerHTML=`
       <div class="sh-kicker">ゴール</div>
       <div class="sh-title">${esc(g.title)}</div>
       <div class="sh-date">${g.deadline?g.deadline.replace(/-/g,'/')+'　'+dLabel(g).replace(/<\/?b>/g,''):'期限なし'}</div>
-      <div class="sh-sec">カテゴリ</div>
-      <div class="v-opts">${S.cats.map(x=>`<button class="v-opt${g.cat===x.id?' on':''}" data-cat="${x.id}">${esc(x.name)}</button>`).join('')}
-        <button class="v-opt${g.cat?'':' on'}" data-cat="">未分類</button></div>
       ${g.note?`<div class="sh-note">${esc(g.note)}</div>`:''}
-      <div class="sh-sec">中の目標（マトリョーシカ）</div>
+      <div class="sh-sec">カテゴリ</div>
+      <div class="opts">${S.cats.map(x=>`<button class="opt${g.cat===x.id?' on':''}" data-cat="${x.id}">${esc(x.name)}</button>`).join('')}
+        <button class="opt${g.cat?'':' on'}" data-cat="">未分類</button></div>
+      <div class="sh-sec">中の目標</div>
       <div id="shMiles">${ms.length?ms.map(m=>`
-        <div class="row${m.done?' done':''}" data-mid="${m.id}"><div class="c">${CK(10)}</div><span>${esc(m.title)}</span><small>${mileTasks(m).filter(t=>t.done).length}/${mileTasks(m).length}</small></div>`).join(''):'<div class="pl-empty">まだ無い</div>'}
+        <div class="row${m.done?' done':''}" data-mid="${m.id}"><div class="c">${CK(10)}</div><span>${esc(m.title)}</span><small>${mileTasks(m).filter(t=>t.done).length}/${mileTasks(m).length}</small></div>`).join(''):'<div class="pl-empty">まだ無い — AIに分解してもらう</div>'}
       </div>
-      <button class="micline" id="shMic">${MICSVG}声で中の目標を足す</button>
       ${untied.length?`<div class="sh-sec">紐づいていないタスク</div><div id="shUntied">${untied.map(t=>`
         <div class="row${t.done?' done':''}" data-tid="${t.id}"><div class="c">${CK(10)}</div><span>${esc(t.title)}</span><i>${t.date.slice(5).replace('-','/')}</i></div>`).join('')}</div>`:''}
       <div class="sh-actions">
-        <button class="btn plain" id="shEdit">編集</button>
-        <button class="btn dangerous" id="shDel">削除</button>
+        <button class="btn dangerous" id="shDel">ゴールを削除</button>
       </div>`;
-    body.querySelectorAll('.v-opt[data-cat]').forEach(b=>onTap(b,()=>{
+    body.querySelectorAll('.opt[data-cat]').forEach(b=>onTap(b,()=>{
       g.cat=b.dataset.cat||null;g.u=Date.now();
-      body.querySelectorAll('.v-opt[data-cat]').forEach(x=>x.classList.toggle('on',x===b));
+      body.querySelectorAll('.opt[data-cat]').forEach(x=>x.classList.toggle('on',x===b));
       save();
     }));
     body.querySelectorAll('#shMiles .row').forEach(row=>onTap(row,()=>openMileSheet(g.id,row.dataset.mid)));
@@ -1402,12 +1022,10 @@ function openGoalSheet(gid){
       const t=S.tasks.find(x=>x.id===row.dataset.tid);if(!t)return;
       t.done=!t.done;t.u=Date.now();row.classList.toggle('done',t.done);saveQuiet();renderHome();
     }));
-    body.querySelector('#shMic').onclick=()=>openVoice({goalId:g.id,forceKind:'mile'});
-    body.querySelector('#shEdit').onclick=()=>openGoalForm(g.id);
     const del=body.querySelector('#shDel');
     del.onclick=()=>{
       if(!del.classList.contains('arm')){del.classList.add('arm');del.textContent='本当に削除する';
-        setTimeout(()=>{del.classList.remove('arm');del.textContent='削除'},2600);return}
+        setTimeout(()=>{del.classList.remove('arm');del.textContent='ゴールを削除'},2600);return}
       S.del[g.id]=Date.now();S.goals=S.goals.filter(x=>x.id!==g.id);
       S.tasks.forEach(t=>{if(t.goalId===g.id){t.goalId=null;t.mileId=null;t.u=Date.now()}});
       closeSheet();save();toast('削除した');
@@ -1426,9 +1044,8 @@ function openMileSheet(gid,mid){
       <div class="sh-title">${esc(m.title)}</div>
       <div class="sh-sec">タスク</div>
       <div id="shMT">${ts.length?ts.map(t=>`
-        <div class="row${t.done?' done':''}" data-tid="${t.id}"><div class="c">${CK(10)}</div><span>${esc(t.title)}</span><i>${t.date.slice(5).replace('-','/')}</i></div>`).join(''):'<div class="pl-empty">まだ無い</div>'}
+        <div class="row${t.done?' done':''}" data-tid="${t.id}"><div class="c">${CK(10)}</div><span>${esc(t.title)}</span><i>${t.date.slice(5).replace('-','/')}</i></div>`).join(''):'<div class="pl-empty">まだ無い — AIに頼む</div>'}
       </div>
-      <button class="micline" id="shMTMic">${MICSVG}声でタスクを足す</button>
       <div class="sh-actions">
         <button class="btn ${m.done?'plain':'primary'}" id="shMDone">${m.done?'未達成に戻す':'達成にする'}</button>
         <button class="btn dangerous" id="shMDel">削除</button>
@@ -1437,8 +1054,7 @@ function openMileSheet(gid,mid){
       const t=S.tasks.find(x=>x.id===row.dataset.tid);if(!t)return;
       t.done=!t.done;t.u=Date.now();row.classList.toggle('done',t.done);saveQuiet();renderHome();
     }));
-    body.querySelector('#shMTMic').onclick=()=>openVoice({goalId:g.id,mileId:m.id});
-    body.querySelector('#shMDone').onclick=()=>{m.done=!m.done;g.u=Date.now();save();closeSheet();if(m.done)toast('中の目標を達成')};
+    body.querySelector('#shMDone').onclick=()=>{m.done=!m.done;g.u=Date.now();save();closeSheet();if(m.done)toast('達成')};
     const del=body.querySelector('#shMDel');
     del.onclick=()=>{
       if(!del.classList.contains('arm')){del.classList.add('arm');del.textContent='本当に削除する';
@@ -1450,7 +1066,7 @@ function openMileSheet(gid,mid){
   });
 }
 
-/* ============================================================ flight plan（ChatGPTが書く・アプリは読むと昇格だけ） */
+/* ============================================================ flight plan（読むと昇格だけ。書くのはAI） */
 function emptyPlan(){return{route:[],cargo:[],alt:[]}}
 function planOf(g){if(!g.plan||typeof g.plan!=='object')g.plan=emptyPlan();
   ['route','cargo','alt'].forEach(k=>{if(!Array.isArray(g.plan[k]))g.plan[k]=[]});return g.plan}
@@ -1464,14 +1080,14 @@ function openPlanSheet(gid){
       body.innerHTML=`
         <div class="sh-kicker">FLIGHT PLAN</div>
         <div class="sh-title">${esc(g.title)}</div>
-        <div class="pl-lead">着くまでに何が起きるかを、先に一周見ておく層。<br>書くのはChatGPT（data.jsonのplan）。ここではタップで昇格だけ。</div>
+        <div class="pl-lead">着くまでに何が起きるかを先に一周見ておく層。書くのはAI（data.jsonのplan）。ここではタップで昇格だけ。</div>
 
         <div class="sh-sec">ROUTE ／ 通る道</div>
         <div id="plR">${p.route.length?p.route.map((r,i)=>`
           <div class="pl-row" data-i="${i}"><div class="n">${i+1}</div><div class="t">${esc(r.title)}</div>
           ${r.when?`<div class="w">${esc(r.when)}</div>`:''}
           <button class="go${r.m?' off':''}" data-act="mile" data-i="${i}">${r.m?'済':'中の目標に'}</button></div>`).join('')
-          :'<div class="pl-empty">まだ無い。ChatGPTに「plan.routeを書いて」。</div>'}
+          :'<div class="pl-empty">まだ無い。AIに「plan.routeを書いて」。</div>'}
         </div>
 
         <div class="sh-sec">CARGO ／ 要る人・要るモノ</div>
@@ -1508,62 +1124,6 @@ function openPlanSheet(gid){
   });
 }
 
-/* ============================================================ goal form（声で埋める） */
-function openGoalForm(gid){
-  const g=gid?S.goals.find(x=>x.id===gid):null;
-  let draft={title:g?g.title:'',deadline:g&&g.deadline?g.deadline:'',note:g?(g.note||''):'',cat:g?g.cat:null};
-  openSheet(body=>{
-    const draw=()=>{
-      body.innerHTML=`
-        <div class="sh-title" style="margin-top:6px">${g?'ゴールを編集':'新しいゴール'}</div>
-        <div class="sh-sec">ゴール</div>
-        <button class="field${draft.title?'':' ph'}" id="gfT">${draft.title?esc(draft.title):'（未入力）'}</button>
-        <button class="micline" id="gfTMic">${MICSVG}声で言う</button>
-        <div class="sh-sec">期限</div>
-        <input type="date" class="field" id="gfD" value="${draft.deadline}">
-        <div class="sh-sec">カテゴリ</div>
-        <div class="v-opts">${S.cats.map(c=>`<button class="v-opt${draft.cat===c.id?' on':''}" data-cat="${c.id}">${esc(c.name)}</button>`).join('')}
-          <button class="v-opt${draft.cat?'':' on'}" data-cat="">未分類</button></div>
-        <div class="sh-sec">メモ</div>
-        <button class="field${draft.note?'':' ph'}" id="gfN" style="min-height:56px;line-height:1.7">${draft.note?esc(draft.note):'（なし）'}</button>
-        <div class="sh-actions">
-          <button class="btn plain" id="gfC">やめる</button>
-          <button class="btn primary" id="gfS">保存</button>
-        </div>`;
-      const swap=(btn,key,ph)=>onTap(btn,()=>{
-        const inp=document.createElement('input');
-        inp.className='field';inp.value=draft[key];inp.placeholder=ph;
-        btn.replaceWith(inp);inp.focus();
-        inp.addEventListener('blur',()=>{draft[key]=inp.value.trim();draw()});
-        inp.addEventListener('keydown',e=>{if(e.key==='Enter')inp.blur()});
-      });
-      swap(body.querySelector('#gfT'),'title','ゴール');
-      swap(body.querySelector('#gfN'),'note','メモ');
-      body.querySelector('#gfTMic').onclick=()=>{
-        closeSheet();
-        setTimeout(()=>{
-          openVoice({});
-          vCtx.onText=v=>{draft.title=v};
-        },260);
-      };
-      body.querySelector('#gfD').onchange=e=>{draft.deadline=e.target.value};
-      body.querySelectorAll('.v-opt[data-cat]').forEach(b=>onTap(b,()=>{
-        draft.cat=b.dataset.cat||null;
-        body.querySelectorAll('.v-opt[data-cat]').forEach(x=>x.classList.toggle('on',x===b));
-      }));
-      body.querySelector('#gfC').onclick=()=>closeSheet();
-      body.querySelector('#gfS').onclick=()=>{
-        if(!draft.title){toast('ゴール名を入れて');return}
-        if(g)Object.assign(g,{title:draft.title,deadline:draft.deadline||null,note:draft.note,cat:draft.cat,u:Date.now()});
-        else{const ng={id:uid('g_'),title:draft.title,deadline:draft.deadline||null,note:draft.note,cat:draft.cat,
-          miles:[],plan:emptyPlan(),u:Date.now()};S.goals.push(ng);expandedGoal=ng.id}
-        closeSheet();save();
-      };
-    };
-    draw();
-  });
-}
-onTap(document.getElementById('btnAddGoal'),()=>openGoalForm(null));
 onLongPress(document.getElementById('homeTitle'),()=>{
   openSheet(body=>{const n=document.getElementById('setNode');n.style.display='block';body.appendChild(n)});
 },600);
@@ -1601,7 +1161,7 @@ function renderCal(slideDir){
   const dls=S.goals.filter(g=>g.deadline===calSel), ts=S.tasks.filter(t=>t.date===calSel);
   det.innerHTML=`<div class="sec-sub">${d.getMonth()+1}月${d.getDate()}日 ${WDJ[d.getDay()]}曜日</div>`
     +dls.map(g=>`<div class="cal-dl"><div class="f"></div><span>${esc(g.title)}</span><small>期限</small></div>`).join('')
-    +(ts.length?ts.map(t=>taskChip(t)).join(''):(dls.length?'':'<div class="empty" style="padding:18px 0">予定はない</div>'));
+    +(ts.length?`<div class="m-inner">${ts.map(t=>taskChip(t)).join('')}</div>`:(dls.length?'':'<div class="empty" style="padding:18px 0">予定はない</div>'));
   bindTasks(det);
   renderInspector();
 }
@@ -1669,7 +1229,7 @@ document.getElementById('btnSyncNow').onclick=async()=>{
 
 /* ============================================================ export / import */
 document.getElementById('btnExport').onclick=async()=>{
-  const p=`あなたは目標達成のコーチです。私は「Purpose」で、カテゴリ → ゴール → 中の目標（マトリョーシカ） → タスク の入れ子で管理しています。
+  const p=`あなたは目標達成のコーチです。私は「Purpose」で、カテゴリ → ゴール → 中の目標 → タスク の入れ子で管理しています。
 
 現在の全データ（PURPOSE_JSON）：
 \`\`\`json
@@ -1687,7 +1247,7 @@ ${JSON.stringify(S,null,2)}
 2. まとまったら、変更・追加分だけを {"cats":[...],"goals":[...],"tasks":[...]} のjsonコードブロックで出力。
 
 今日は${TODAY}。では現在地の要約と最初の質問から。`;
-  try{await navigator.clipboard.writeText(p);toast('コピーした。ChatGPTへ')}
+  try{await navigator.clipboard.writeText(p);toast('コピーした。AIへ')}
   catch(e){document.getElementById('pasteArea').value=p;toast('下の欄からコピーして')}
 };
 document.getElementById('btnImport').onclick=()=>{
