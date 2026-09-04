@@ -38,12 +38,12 @@
    "deadline": "2026-10-16",
    "cat": "c_shukatsu",
    "note": "28卒早期選考。夏IS クリエイティブ篇の実績（入浴剤1位／ドライクリスタル2位）が軸。MyPage=axol.jp（ID d7a1255629）。",
-   "u": 1788425089000,
+   "u": 1788501090875,
    "miles": [
     {
      "id": "m_hs_entry",
      "title": "早期選考エントリーを出す（9/4 12:00）",
-     "done": false
+     "done": true
     },
     {
      "id": "m_hs_fes",
@@ -359,28 +359,28 @@
    "id": "t_hb_shibou",
    "title": "志望動機書PDFを作る（A4上限2枚）",
    "date": "2026-09-03",
-   "done": false,
+   "done": true,
    "goalId": "g_hakuhodo_souki",
    "mileId": "m_hs_entry",
-   "u": 1788425089000
+   "u": 1788501090875
   },
   {
    "id": "t_hb_shokushu",
    "title": "希望職種 第1〜3希望＋理由を書く（300/100/100字）",
    "date": "2026-09-03",
-   "done": false,
+   "done": true,
    "goalId": "g_hakuhodo_souki",
    "mileId": "m_hs_entry",
-   "u": 1788425089000
+   "u": 1788501090875
   },
   {
    "id": "t_hb_submit",
    "title": "MyPageから提出する（9/4 12:00 厳守）",
    "date": "2026-09-04",
-   "done": false,
+   "done": true,
    "goalId": "g_hakuhodo_souki",
    "mileId": "m_hs_entry",
-   "u": 1788425089000
+   "u": 1788501090875
   },
   {
    "id": "t_hb_test",
@@ -395,10 +395,10 @@
    "id": "t_hb_geidai",
    "title": "藝大の学校アカウントで学内の博報堂告知を確認する",
    "date": "2026-09-03",
-   "done": false,
+   "done": true,
    "goalId": "g_hakuhodo_souki",
    "mileId": "m_hs_entry",
-   "u": 1788425089000
+   "u": 1788501090875
   },
   {
    "id": "t_hb_fes",
