@@ -226,6 +226,116 @@
      "done": false
     }
    ]
+  },
+  {
+   "id": "g_dentsu_pf_b3",
+   "title": "電通ポートフォリオを製本まで完成させる",
+   "deadline": "2026-10-31",
+   "cat": "c_shukatsu",
+   "note": "B3ヨコ・穴あけ＋中央金具留め・折りたたみ式。プロ雑誌級の定量トンマナ（書体/級数/行間/色/粗密）をClaude Codeで固定し、作品12点を組む。10月中に印刷・製本まで。",
+   "u": 1788532582742,
+   "miles": [
+    {
+     "id": "m_pf_tonmana",
+     "title": "トンマナを1案に確定する（比較ページ→採用）",
+     "done": false
+    },
+    {
+     "id": "m_pf_genko",
+     "title": "全作品の原稿・写真を揃える",
+     "done": false
+    },
+    {
+     "id": "m_pf_kumihan",
+     "title": "全ページの組版を終える（B3ヨコ）",
+     "done": false
+    },
+    {
+     "id": "m_pf_seihon",
+     "title": "印刷・穴あけ・金具で製本して完成",
+     "done": false
+    }
+   ],
+   "plan": {
+    "route": [
+     {
+      "id": "r_pf_1",
+      "title": "定量リサーチ＋比較ページで1案採用",
+      "when": "2026-09 上旬",
+      "m": true
+     },
+     {
+      "id": "r_pf_2",
+      "title": "スペックシート固定（書体/サイズ/行間/色/グリッド）",
+      "when": "2026-09 中旬",
+      "m": false
+     },
+     {
+      "id": "r_pf_3",
+      "title": "12作品の原稿・写真を揃える（撮り直し含む）",
+      "when": "2026-09 下旬",
+      "m": true
+     },
+     {
+      "id": "r_pf_4",
+      "title": "全ページ組版→B4仮出力で折り・穴位置を検証",
+      "when": "2026-10 前半",
+      "m": true
+     },
+     {
+      "id": "r_pf_5",
+      "title": "入稿→印刷→穴あけ→金具留め→折りテスト",
+      "when": "2026-10 後半",
+      "m": true
+     }
+    ],
+    "cargo": [
+     {
+      "id": "c_pf_1",
+      "title": "B3対応の印刷所を決める（350dpi・塗り足し3mm）",
+      "due": "2026-10-10",
+      "t": false
+     },
+     {
+      "id": "c_pf_2",
+      "title": "金具（スクリューポスト）と穴あけパンチ（B3対応・2穴80mm）を買う",
+      "due": "2026-10-15",
+      "t": false
+     },
+     {
+      "id": "c_pf_3",
+      "title": "用紙を決める（折りに耐える坪量・マット系）",
+      "due": "2026-10-10",
+      "t": false
+     },
+     {
+      "id": "c_pf_4",
+      "title": "印刷＋製本の予算を確保する",
+      "due": "2026-10-10",
+      "t": false
+     }
+    ],
+    "alt": [
+     {
+      "id": "a_pf_1",
+      "cond": "印刷所がB3の折り加工に対応しない",
+      "risk": "折りたたみ式が成立しない",
+      "hedge": "折りは手作業（スジ入れ）にし、印刷はB3フラットで発注する"
+     },
+     {
+      "id": "a_pf_2",
+      "cond": "10月に電通冬選考の準備が重なる",
+      "risk": "製本が11月にずれる",
+      "hedge": "12作品中8作品版を先に製本し、残りは差し替え式で後から足す"
+     },
+     {
+      "id": "a_pf_3",
+      "cond": "写真の撮り直しが間に合わない",
+      "risk": "ページの品質が揃わない",
+      "hedge": "既存写真＋図解ページで構成し、撮影は最終週に集約する"
+     }
+    ]
+   }
   }
  ],
  "tasks": [
@@ -426,6 +536,96 @@
    "goalId": "g_hakuhodo_souki",
    "mileId": "m_hs_final",
    "u": 1788425089000
+  },
+  {
+   "id": "t_pf_compare",
+   "title": "比較ページ（同一作品×4トンマナ）を見て採用案を決める",
+   "date": "2026-09-06",
+   "done": false,
+   "goalId": "g_dentsu_pf_b3",
+   "mileId": "m_pf_tonmana",
+   "u": 1788532582742
+  },
+  {
+   "id": "t_pf_spec",
+   "title": "定量スペックシートを固定する（書体/級数/行間/字間/色/グリッド）",
+   "date": "2026-09-10",
+   "done": false,
+   "goalId": "g_dentsu_pf_b3",
+   "mileId": "m_pf_tonmana",
+   "u": 1788532582742
+  },
+  {
+   "id": "t_pf_list",
+   "title": "12作品の原稿と写真の不足リストを作る",
+   "date": "2026-09-14",
+   "done": false,
+   "goalId": "g_dentsu_pf_b3",
+   "mileId": "m_pf_genko",
+   "u": 1788532582742
+  },
+  {
+   "id": "t_pf_shoot",
+   "title": "不足写真を撮る／撮り直す",
+   "date": "2026-09-28",
+   "done": false,
+   "goalId": "g_dentsu_pf_b3",
+   "mileId": "m_pf_genko",
+   "u": 1788532582742
+  },
+  {
+   "id": "t_pf_half",
+   "title": "前半6作品を組む",
+   "date": "2026-10-05",
+   "done": false,
+   "goalId": "g_dentsu_pf_b3",
+   "mileId": "m_pf_kumihan",
+   "u": 1788532582742
+  },
+  {
+   "id": "t_pf_full",
+   "title": "後半6作品＋扉・目次・プロフィールを組む",
+   "date": "2026-10-14",
+   "done": false,
+   "goalId": "g_dentsu_pf_b3",
+   "mileId": "m_pf_kumihan",
+   "u": 1788532582742
+  },
+  {
+   "id": "t_pf_proof",
+   "title": "B4で仮出力し、折り・穴位置・文字サイズを実物で確認する",
+   "date": "2026-10-16",
+   "done": false,
+   "goalId": "g_dentsu_pf_b3",
+   "mileId": "m_pf_kumihan",
+   "u": 1788532582742
+  },
+  {
+   "id": "t_pf_order",
+   "title": "印刷所へ入稿する（B3・350dpi・塗り足し3mm）",
+   "date": "2026-10-20",
+   "done": false,
+   "goalId": "g_dentsu_pf_b3",
+   "mileId": "m_pf_seihon",
+   "u": 1788532582742
+  },
+  {
+   "id": "t_pf_bind",
+   "title": "穴あけ＋スクリューポストで製本し、折りテストをする",
+   "date": "2026-10-28",
+   "done": false,
+   "goalId": "g_dentsu_pf_b3",
+   "mileId": "m_pf_seihon",
+   "u": 1788532582742
+  },
+  {
+   "id": "t_pf_done",
+   "title": "完成（面接用に2冊）",
+   "date": "2026-10-31",
+   "done": false,
+   "goalId": "g_dentsu_pf_b3",
+   "mileId": "m_pf_seihon",
+   "u": 1788532582742
   }
  ],
  "del": {}
