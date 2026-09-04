@@ -429,7 +429,15 @@ nav.mini #lens{width:60px}
   #inspector::-webkit-scrollbar{display:none}
   .ins-empty{color:var(--gray3);font-size:13px;text-align:center;margin-top:36vh;line-height:2}
   .cal-detail{display:none}
-  .g-head:hover{background:var(--fill)}
+  .chips,.catsec{display:none}
+  .goal .g-nest{grid-template-rows:1fr}
+  .m-nest{display:none}
+  .mile.on .m-chev{transform:none}
+  .m-head{padding:13px 12px;margin:0 -12px;border-radius:12px;transition:background .3s var(--ease)}
+  .m-head.sel{background:var(--fill)}
+  .m-head.sel .m-title{color:var(--ink);font-weight:600}
+  .g-head{cursor:default}
+  .g-head:hover{background:none}
   .m-head:hover .m-title{color:var(--ink)}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -776,7 +784,7 @@ function renderSidebar(){
   }).join('');
   sb.querySelectorAll('.sb-goal').forEach(b=>b.onclick=()=>{
     expandedGoal=b.dataset.gid;
-    if(curTab!=='home')setTab('home');else{renderHome();renderSidebar()}
+    if(curTab!=='home')setTab('home');else{renderHome();renderSidebar();renderInspector()}
     const el=document.querySelector(`.goal[data-gid="${b.dataset.gid}"]`);
     if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
   });
@@ -809,6 +817,19 @@ function renderHome(){
   if(!gs.length){wrap.innerHTML='<div class="empty">このカテゴリにはまだゴールがない。</div>';return}
   if(expandedGoal===null||!gs.some(g=>g.id===expandedGoal))expandedGoal=gs[0].id;
 
+  if(isDesk()){
+    const g=gs.find(x=>x.id===expandedGoal)||gs[0];
+    expandedGoal=g.id;
+    if(selMile&&selMile.gid!==g.id)selMile=null;
+    wrap.innerHTML=goalCard(g);
+    bindHome(wrap);
+    const sel=inspectorMile();
+    if(sel){selMile={gid:sel.g.id,mid:sel.m.id};
+      const mh=wrap.querySelector(`.mile[data-mid="${sel.m.id}"] .m-head`);
+      if(mh)mh.classList.add('sel')}
+    return;
+  }
+
   const groups=curCat==='all'?groupGoals(gs):[{cat:null,name:'',hue:220,list:gs}];
   wrap.innerHTML=groups.map(gr=>{
     const head=curCat==='all'&&gr.name
@@ -821,7 +842,7 @@ function renderHome(){
 function goalCard(g){
   const ms=g.miles||[], doneN=ms.filter(m=>m.done).length, next=ms.find(m=>!m.done);
   const isOpen=expandedGoal===g.id;
-  const h=hueOf(g), c=catOf(g);
+  const h=hueOf(g);
   let route='';
   if(ms.length){
     const n=ms.length, pos=i=>n===1?50:(i/(n-1))*100;
@@ -854,8 +875,7 @@ function goalCard(g){
 
   return `<article class="goal${isOpen?' open':''}" data-gid="${g.id}" style="--h:${h}">
     <div class="g-head">
-      <div class="g-kick">${c?'<i></i>'+esc(c.name):'<i style="background:var(--gray3)"></i>未分類'}
-        <em class="${g.deadline&&dleft(g.deadline)<0?'over':''}">${dLabel(g)}</em></div>
+      <div class="g-kick"><em class="${g.deadline&&dleft(g.deadline)<0?'over':''}">${dLabel(g)}</em></div>
       <div class="g-title">${esc(g.title)}</div>
       ${route}
     </div>
@@ -884,6 +904,7 @@ function bindHome(wrap){
   wrap.querySelectorAll('.goal').forEach(el=>{
     const gid=el.dataset.gid;
     onTap(el.querySelector('.g-head'),()=>{
+      if(isDesk())return;
       expandedGoal=expandedGoal===gid?null:gid;
       wrap.querySelectorAll('.goal').forEach(x=>x.classList.toggle('open',x.dataset.gid===expandedGoal));
       renderSidebar();
@@ -891,9 +912,14 @@ function bindHome(wrap){
     el.querySelectorAll('.mile').forEach(mel=>{
       onTap(mel.querySelector('.m-head'),()=>{
         const mid=mel.dataset.mid;
+        if(isDesk()){
+          selMile={gid,mid};
+          el.querySelectorAll('.m-head').forEach(x=>x.classList.toggle('sel',x.parentElement.dataset.mid===mid));
+          renderInspector();
+          return;
+        }
         openMile=openMile===mid?'__none__':mid;
         el.querySelectorAll('.mile').forEach(x=>x.classList.toggle('on',x.dataset.mid===openMile));
-        if(isDesk()){selMile={gid,mid};renderInspector()}
       });
       onLongPress(mel.querySelector('.m-head'),()=>openMileSheet(gid,mel.dataset.mid),520);
     });
