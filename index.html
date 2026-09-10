@@ -13,7 +13,7 @@
 <title>Purpose</title>
 <style>
 /* ============================================================
-   Purpose v15 — 白ベースLiquid Glass ＋ AIの作業場（ゴール×現在地）
+   Purpose v16 — 白ベースLiquid Glass ＋ 壁打ち特化（ゴール→中の目標→タスク、書くのはAI）
    28作品から抽出した原則:
    1. 背景こそ主役（風景級のグラデ＋粒子）。フラット地は禁止
    2. ガラス＝背景を透かした暗色パネル × 白文字（高コントラスト）
@@ -244,23 +244,23 @@ nav{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 14px
     inset 0 0 0 .5px rgba(0,0,0,.05),
     inset 0 1px 0 rgba(255,255,255,.9);
   transition:padding .45s var(--spring)}
-.tab{width:84px;padding:9px 0 8px;border-radius:999px;border:none;background:none;color:var(--gray);
+.tab{width:92px;padding:9px 0 8px;border-radius:999px;border:none;background:none;color:var(--gray);
   font-size:10px;font-weight:600;cursor:pointer;
   display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;z-index:4;
   transition:color .3s var(--ease),width .45s var(--spring)}
 .tab svg{width:23px;height:23px}
 .tab b{font-weight:600;max-height:14px;overflow:hidden;transition:max-height .4s var(--ease),opacity .3s}
 .tab.active{color:var(--ink)}
-nav.mini .tab{width:56px}
+nav.mini .tab{width:60px}
 nav.mini .tab b{max-height:0;opacity:0}
-#lens{position:absolute;z-index:1;top:5px;left:5px;width:84px;height:calc(100% - 10px);border-radius:999px;
+#lens{position:absolute;z-index:1;top:5px;left:5px;width:92px;height:calc(100% - 10px);border-radius:999px;
   background:rgba(255,255,255,.5);
   backdrop-filter:blur(3px) saturate(190%) brightness(1.06);-webkit-backdrop-filter:blur(3px) saturate(190%) brightness(1.06);
   box-shadow:0 4px 14px rgba(0,0,0,.12),
     inset 0 0 0 .5px rgba(255,255,255,.7),inset 0 1.5px 1.5px rgba(255,255,255,.95),
     inset 0 -1.5px 2px rgba(0,0,0,.07),inset 2px 0 3px -1px rgba(255,255,255,.5),inset -2px 0 3px -1px rgba(255,255,255,.5);
   transition:transform .55s var(--spring),scale .35s var(--spring),width .45s var(--spring);will-change:transform}
-nav.mini #lens{width:56px}
+nav.mini #lens{width:60px}
 #lens::before{content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;opacity:.5;
   background:conic-gradient(from 210deg,rgba(255,180,120,.3),rgba(140,180,255,.26) 30%,transparent 45%,rgba(140,220,255,.22) 62%,rgba(255,170,140,.24) 82%,rgba(255,180,120,.3));
   -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2.5px),#000);mask:radial-gradient(farthest-side,transparent calc(100% - 2.5px),#000)}
@@ -442,7 +442,7 @@ nav.mini #lens{width:56px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
-/* ============ v15 作業場（ゴール×現在地） ============ */
+/* ============ v16 壁打ち特化（ゴール→中の目標→タスク、書くのはAI） ============ */
 .card{position:relative;border-radius:var(--r1);margin-bottom:14px;overflow:hidden;padding:14px var(--p1) 12px;
   background:var(--glass-grad);
   backdrop-filter:blur(26px) saturate(170%) brightness(1.06);-webkit-backdrop-filter:blur(26px) saturate(170%) brightness(1.06);
@@ -460,9 +460,6 @@ nav.mini #lens{width:56px}
 .fl-acts button{border:none;background:var(--fill);color:var(--ink2);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer}
 .fl-acts button.dng{color:var(--red)}
 .tk-s{flex:none;font-size:10.5px;color:var(--gray3);font-variant-numeric:tabular-nums}
-.tk-w{flex:none;font-size:10px;padding:2px 7px;border-radius:999px;background:var(--fill);color:var(--gray)}
-
-/* overview */
 .ov{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:.5px solid var(--sep);cursor:pointer}
 .ov:first-of-type{border-top:none}
 .ov:active{opacity:.5}
@@ -473,50 +470,13 @@ nav.mini #lens{width:56px}
 .ov .bar{width:54px;height:3px;background:rgba(0,0,0,.08);border-radius:2px;overflow:hidden;flex:none}
 .ov .bar i{display:block;height:100%;background:var(--ink)}
 .ov .n{flex:none;font-size:11.5px;color:var(--gray3);font-variant-numeric:tabular-nums;min-width:18px;text-align:right}
-
-/* 作業場 list */
-.mrow{display:flex;align-items:center;gap:12px;padding:12px 2px;border-top:.5px solid var(--sep);cursor:pointer;transition:opacity .3s}
-.mrow:first-of-type{border-top:none}
-.mrow:active{opacity:.5;transition:opacity .06s}
-.mrow .ic{flex:none;width:30px;height:30px;border-radius:9px;background:var(--fill);display:grid;place-items:center;color:var(--ink2)}
-.mrow .ic svg{width:17px;height:17px}
-.mrow .t{flex:1;min-width:0}
-.mrow .t b{display:block;font-size:15px;font-weight:550;letter-spacing:-.01em}
-.mrow .t small{display:block;font-size:11.5px;color:var(--gray);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mrow .bd{flex:none;min-width:18px;height:18px;padding:0 6px;border-radius:9px;background:var(--red);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center;font-variant-numeric:tabular-nums}
-.mrow .ch{flex:none;width:12px;color:var(--gray3)}
-.ph{display:flex;align-items:center;gap:8px;margin:0 0 14px}
-.ph button{border:none;background:var(--fill);color:var(--ink);width:34px;height:34px;border-radius:50%;cursor:pointer;display:grid;place-items:center;font-size:18px;flex:none}
-.ph .t{flex:1;font-size:22px;font-weight:700;letter-spacing:-.02em;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ph #phAct{display:flex;gap:6px;flex:none}
-.ph .add{width:auto;padding:0 14px;border-radius:999px;font-size:13px;font-weight:600;background:var(--pill);color:#fff;height:34px}
-
-/* rows */
-.li{display:flex;align-items:center;gap:11px;padding:11px 2px;border-top:.5px solid var(--sep);cursor:pointer;font-size:14.5px}
-.li:first-of-type{border-top:none}
-.li:active{opacity:.5}
-.li .t{flex:1;min-width:0}
-.li .t b{display:block;font-weight:550;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:-.01em}
-.li .t small{display:block;font-size:11.5px;color:var(--gray);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.li .r{flex:none;font-size:11.5px;color:var(--gray3);font-variant-numeric:tabular-nums;text-align:right;max-width:40%}
-.li .r.bad{color:var(--red)}
-.pill{display:inline-block;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;background:var(--fill);color:var(--ink2);white-space:nowrap}
-.pill.on{background:var(--pill);color:#fff}
-.pill.red{background:rgba(255,59,48,.12);color:var(--red)}
-.av{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff;background:hsl(var(--h,220) 70% 55%)}
-
-/* inputs */
 .field{width:100%;border:none;background:var(--fill);border-radius:13px;font-family:inherit;font-size:16px;padding:12px 13px;outline:none;color:var(--ink);margin:6px 0;display:block}
 textarea.field{min-height:84px;resize:vertical;line-height:1.6}
 .frow{display:flex;gap:6px;align-items:center;margin:6px 0}
 .frow .field{flex:1;margin:0}
 .ib{flex:none;width:42px;height:42px;border-radius:50%;border:none;background:var(--fill);color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:20px;font-weight:300}
-.ib svg{width:19px;height:19px}
-.ib.on{background:var(--red);color:#fff;box-shadow:0 0 12px rgba(255,59,48,.6)}
-.ib.pri{background:var(--pill);color:#fff}
+.ib.pri{background:var(--pill);color:#fff;box-shadow:0 10px 22px -8px rgba(20,25,40,.35)}
 .opt input[type=date]{border:none;background:none;font-family:inherit;font-size:12.5px;color:inherit;outline:none;width:118px}
-
-/* timeline */
 .tl{padding:6px 0 0}
 .tl>div{position:relative;padding:4px 0 9px 16px;font-size:13.5px;line-height:1.6;color:var(--ink2);white-space:pre-wrap;word-break:break-word}
 .tl>div::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--gray3)}
@@ -524,86 +484,28 @@ textarea.field{min-height:84px;resize:vertical;line-height:1.6}
 .tl small{display:block;font-size:11px;color:var(--gray3);font-variant-numeric:tabular-nums}
 .steps .row{padding:9px 10px}
 [contenteditable]:focus{outline:none;background:var(--well);border-radius:8px}
-
-/* chat */
-.msgs{display:flex;flex-direction:column;gap:8px;padding:6px 0 12px}
-.msg{max-width:84%;padding:9px 13px;border-radius:18px;font-size:14.5px;line-height:1.5;background:#fdfdfe;box-shadow:var(--rim-line);align-self:flex-start;word-break:break-word;white-space:pre-wrap}
-.msg.me{align-self:flex-end;background:var(--pill);color:#fff}
-.msg small{display:block;font-size:10.5px;opacity:.55;margin-top:3px;font-variant-numeric:tabular-nums}
-.msg.ai{background:hsl(222 90% 96%)}
-
-/* metrics */
-.kpi{display:flex;align-items:center;gap:10px;padding:10px 2px;border-top:.5px solid var(--sep);cursor:pointer}
-.kpi:first-of-type{border-top:none}
-.kpi:active{opacity:.5}
-.kpi .t{flex:1;min-width:0}
-.kpi .t b{display:block;font-size:14px;font-weight:550;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.kpi .t small{font-size:11px;color:var(--gray)}
-.kpi .v{flex:none;text-align:right;font-variant-numeric:tabular-nums}
-.kpi .v b{display:block;font-size:20px;font-weight:300;letter-spacing:-.02em}
-.kpi .v small{font-size:11px;color:var(--gray3)}
-.kpi .v small.up{color:#34c759}.kpi .v small.dn{color:var(--red)}
-.kpi svg{flex:none;color:var(--ink2)}
-.dash{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-.dash .card{margin:0;padding:12px 14px 10px;cursor:pointer}
-.dash .card b.big{display:block;font-size:28px;font-weight:200;letter-spacing:-.02em;line-height:1.1;font-variant-numeric:tabular-nums;margin-top:4px}
-.dash .card small{font-size:11px;color:var(--gray);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dash .card svg{color:var(--ink2);margin-top:6px}
-.chart{width:100%;height:160px;margin:10px 0;display:block;color:var(--ink)}
-
-/* mindmap */
-.mm{overflow:auto;border-radius:var(--r2);background:var(--well);padding:12px;margin:10px 0;max-height:62vh;-webkit-overflow-scrolling:touch}
-.mm svg{display:block}
-.mm .nd{cursor:pointer}
-.mm .nd rect{fill:#fdfdfe;stroke:rgba(20,25,35,.12)}
-.mm .nd.root rect{fill:var(--pill);stroke:none}
-.mm .nd text{font-size:13px;fill:var(--ink);font-family:var(--font)}
-.mm .nd.root text{fill:#fff;font-weight:600}
-.mm path{fill:none;stroke:rgba(60,60,67,.3);stroke-width:1.5}
-
-/* setup */
-.chk{display:flex;align-items:flex-start;gap:12px;padding:12px 2px;border-top:.5px solid var(--sep)}
-.chk:first-of-type{border-top:none}
-.chk .c{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1.5px var(--gray3);margin-top:1px;cursor:pointer;transition:.3s}
-.chk.done .c{background:var(--ink);box-shadow:none}
-.chk .c svg{opacity:0;transform:scale(.4);transition:.3s var(--spring)}
-.chk.done .c svg{opacity:1;transform:scale(1)}
-.chk .t{flex:1;min-width:0}
-.chk .t b{display:block;font-size:15px;font-weight:550}
-.chk.done .t b{color:var(--gray)}
-.chk .t p{font-size:12.5px;color:var(--gray);line-height:1.6;margin:3px 0 6px}
-.chk .opts{margin-top:4px}
-.ring{width:56px;height:56px;flex:none}
 .cmd{font-family:ui-monospace,SFMono-Regular,monospace;font-size:12px;background:var(--well);border-radius:10px;padding:9px 11px;margin:6px 0;white-space:pre-wrap;word-break:break-all;color:var(--ink2);max-height:130px;overflow:auto;line-height:1.5}
-
-/* recording */
-#recbar{position:fixed;top:calc(env(safe-area-inset-top) + 12px);left:50%;transform:translateX(-50%);z-index:40;display:none;align-items:center;gap:8px;
-  padding:8px 10px 8px 16px;border-radius:999px;background:rgba(20,20,26,.88);color:#fff;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 12px 32px rgba(0,0,0,.35)}
-#recbar.show{display:flex}
-#recbar i{width:9px;height:9px;border-radius:50%;background:var(--red);box-shadow:0 0 8px rgba(255,59,48,.9);animation:blink 1.2s infinite}
-@keyframes blink{50%{opacity:.3}}
-#recbar button{border:none;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;background:rgba(255,255,255,.14);color:#fff}
-#recbar button.stop{background:var(--red)}
-#recbar button.on{background:#fff;color:#111}
-#draw{position:fixed;inset:0;z-index:35;display:none;touch-action:none;cursor:crosshair}
-#draw.on{display:block}
-#cam{position:fixed;right:18px;bottom:110px;width:120px;height:120px;border-radius:50%;object-fit:cover;z-index:36;display:none;
-  box-shadow:0 12px 32px rgba(0,0,0,.3),0 0 0 3px #fff;transform:scaleX(-1)}
-#cam.show{display:block}
-.rec-live{font-size:13px;color:var(--ink2);line-height:1.7;max-height:160px;overflow:auto;background:var(--well);border-radius:12px;padding:10px 12px;margin-top:8px;white-space:pre-wrap}
-video.play,audio.play{width:100%;border-radius:14px;background:#000;margin:10px 0;display:block}
 .sh-actions.col{flex-direction:column}
 .sh-actions.col .btn{width:100%}
-.tab .nb{position:absolute;top:7px;right:26px;width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:0 0 6px rgba(255,59,48,.8);display:none}
-.tab.has .nb{display:block}
+.agent{display:flex;align-items:center;gap:12px;padding:13px 4px;border-top:.5px solid var(--sep);cursor:pointer;transition:opacity .3s}
+.agent:first-of-type{border-top:none}
+.agent:active{opacity:.5;transition:opacity .06s}
+.agent .ic{flex:none;width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-size:13px;font-weight:700;color:#fff;background:var(--pill)}
+.agent .ic.soft{background:var(--fill);color:var(--ink2)}
+.agent .t{flex:1;min-width:0}
+.agent .t b{display:block;font-size:15px;font-weight:600;letter-spacing:-.01em}
+.agent .t small{display:block;font-size:11.5px;color:var(--gray);margin-top:1px}
+.agent .ch{flex:none;width:12px;color:var(--gray3)}
 .ins-sum{font-size:13.5px;line-height:1.8;color:var(--ink2)}
 .ins-sum b{display:block;font-size:11px;letter-spacing:.12em;color:var(--gray);margin:16px 0 4px}
 .ins-sum .big{font-size:30px;font-weight:200;color:var(--ink);letter-spacing:-.02em;line-height:1.1;margin-bottom:6px}
-@media (min-width:960px){
-  #scr-more .screen{max-width:700px}
-  .dash{grid-template-columns:1fr 1fr 1fr}
-}
+.newgoal{display:flex;align-items:center;gap:12px;padding:15px var(--p1);cursor:pointer;margin-bottom:14px;border-radius:var(--r1);
+  background:var(--pill);color:#fff;box-shadow:0 14px 30px -12px rgba(20,25,40,.45),inset 0 1px 0 rgba(255,255,255,.18);
+  transition:transform .4s var(--spring)}
+.newgoal:active{transform:scale(.97);transition:transform .07s}
+.newgoal .plus{flex:none;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.14);display:grid;place-items:center;font-size:20px;font-weight:300}
+.newgoal b{display:block;font-size:15.5px;font-weight:600;letter-spacing:-.01em}
+.newgoal small{display:block;font-size:11.5px;opacity:.6;margin-top:1px}
 </style>
 </head>
 <body>
@@ -622,8 +524,8 @@ video.play,audio.play{width:100%;border-radius:14px;background:#000;margin:10px 
   <button class="sb-item" data-tab="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.5l2.3 2.3L15.8 9.6"/></svg>今日</button>
   <button class="sb-item" data-tab="cal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="4"/><path d="M3.5 9.5h17M8 2.8v3.4M16 2.8v3.4"/></svg>カレンダー</button>
   <div id="sbGoals"></div>
-  <div class="sb-sec" style="margin-top:8px">作業場</div>
-  <div id="sbPanels"></div>
+  <div class="sb-sec" style="margin-top:8px">AI</div>
+  <button class="sb-item" id="sbNew"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>新しいゴールを壁打ち</button>
 </aside>
 
 <div id="content">
@@ -631,9 +533,9 @@ video.play,audio.play{width:100%;border-radius:14px;background:#000;margin:10px 
 <main id="main">
 
   <section class="screen active" id="scr-today">
-    <div class="navrow" style="display:flex;align-items:flex-end;gap:10px">
-      <div style="flex:1;min-width:0"><div class="caption" id="todayCap"></div><h1 class="large-title">今日</h1></div>
-      <button class="ib pri" id="btnQuick" aria-label="追加" style="margin-bottom:4px">＋</button>
+    <div class="navrow">
+      <div class="caption" id="todayCap"></div>
+      <h1 class="large-title" id="todayTitle">今日</h1>
     </div>
     <div id="todayBody"></div>
   </section>
@@ -662,10 +564,6 @@ video.play,audio.play{width:100%;border-radius:14px;background:#000;margin:10px 
     <div class="cal-detail" id="calDetail"></div>
   </section>
 
-  <section class="screen" id="scr-more">
-    <div id="moreBody"></div>
-  </section>
-
 </main>
 <aside id="inspector"></aside>
 </div>
@@ -680,11 +578,9 @@ video.play,audio.play{width:100%;border-radius:14px;background:#000;margin:10px 
   <div class="sh-title" style="margin-top:4px">設定</div>
   <p>正データは GitHub の <b>data.json</b>。AIが書き、全端末に自動反映。このアプリからの書き戻しにはトークンを一度だけ保存。</p>
   <input type="password" id="tokenInput" placeholder="GitHub token（Contents: Read/Write）">
-  <button class="btn primary" id="btnSyncNow">保存して同期</button>
-  <p style="margin-top:14px">作業場（リポジトリ）のパス。AIを開くコマンドに使う。</p>
+  <p style="margin-top:14px">作業場（リポジトリ）のパス。Claude Code／Codex を開く時に使う。</p>
   <input type="text" id="repoInput" placeholder="~/Downloads/claude box/_作業ファイル/purpose">
-  <p style="margin-top:14px">自分は誰か（この端末）</p>
-  <div class="opts" id="meOpts" style="margin-bottom:12px"></div>
+  <button class="btn primary" id="btnSyncNow">保存して同期</button>
   <button class="btn plain" id="btnExport">壁打ちプロンプトをコピー</button>
   <textarea id="pasteArea" placeholder="AIのJSONを貼って取り込み"></textarea>
   <button class="btn plain" id="btnImport">取り込む</button>
@@ -698,22 +594,16 @@ video.play,audio.play{width:100%;border-radius:14px;background:#000;margin:10px 
     <button class="tab active" data-scr="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.5l2.3 2.3L15.8 9.6"/></svg><b>今日</b></button>
     <button class="tab" data-scr="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2.6" y="2.6" width="18.8" height="18.8" rx="6.2"/><rect x="6.6" y="6.6" width="10.8" height="10.8" rx="3.6"/><rect x="10.3" y="10.3" width="3.4" height="3.4" rx="1.2" fill="currentColor"/></svg><b>ゴール</b></button>
     <button class="tab" data-scr="cal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="4"/><path d="M3.5 9.5h17M8 2.8v3.4M16 2.8v3.4"/></svg><b>カレンダー</b></button>
-    <button class="tab" data-scr="more"><i class="nb"></i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7.5" height="7.5" rx="2.4"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2.4"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2.4"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2.4"/></svg><b>作業場</b></button>
   </div>
 </nav>
 
 <div id="toast"></div>
-<div id="recbar"><i></i><span id="recTime">00:00</span><button id="recPen">ペン</button><button id="recCam">顔</button><button class="stop" id="recStop">停止</button></div>
-<canvas id="draw"></canvas>
-<video id="cam" autoplay muted playsinline></video>
-<input type="file" id="fileIn" style="display:none">
 </div>
 
 <script>
 /* ============================================================ state */
 const KEY='purpose.v2';
 const REPO='gjnzqqf8dq-coder/purpose', PATH='data.json', BRANCH='main';
-const RAW=`https://raw.githubusercontent.com/${REPO}/${BRANCH}/`;
 const APPURL='https://gjnzqqf8dq-coder.github.io/purpose/';
 const DEFCATS=[
   {id:'c_shukatsu',name:'就活',  hue:222,u:1},
@@ -722,10 +612,8 @@ const DEFCATS=[
   {id:'c_manabi',  name:'学び',  hue:272,u:1},
   {id:'c_kurashi', name:'くらし',hue:35, u:1}
 ];
-const COLS=['cats','goals','tasks','members','routines','manuals','crm','metrics','mindmaps','drive','transfers','recordings','chat','notifs','inbox'];
-const STATUS={todo:'未着手',doing:'進行中',review:'レビュー',done:'完了'};
-const STAGES=['リスト入り','アプローチ中','商談日程調整','初回商談','2次商談','提案中','成約','失注'];
-const emptyState=()=>{const s={del:{}};COLS.forEach(k=>s[k]=[]);return s};
+const COLS=['cats','goals','tasks'];
+const emptyState=()=>({cats:[],goals:[],tasks:[],del:{}});
 let S=load(), sha=null, pushT=null, lastPull=0;
 
 function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.goals)return norm(Object.assign(emptyState(),d))}catch(e){}
@@ -735,35 +623,16 @@ function norm(s){
   if(!s.del||typeof s.del!=='object')s.del={};
   DEFCATS.forEach(c=>{if(!s.cats.some(x=>x.id===c.id))s.cats.push({...c})});
   s.cats.forEach(c=>{if(typeof c.hue!=='number')c.hue=220});
-  s.goals.forEach(g=>{if(!Array.isArray(g.miles))g.miles=[];if(!('cat'in g))g.cat=null;planOf(g);
-    if(typeof g.criteria!=='string')g.criteria='';if(!('owner'in g))g.owner=null});
+  s.goals.forEach(g=>{if(!Array.isArray(g.miles))g.miles=[];if(!('cat'in g))g.cat=null;planOf(g);if(typeof g.criteria!=='string')g.criteria=''});
   s.tasks.forEach(t=>{if(!t.date)t.date=null;if(typeof t.criteria!=='string')t.criteria='';
-    if(!Array.isArray(t.steps))t.steps=[];if(!Array.isArray(t.log))t.log=[];
-    if(!('assignee'in t))t.assignee=null;if(!STATUS[t.status])t.status=t.done?'done':'todo';if(!('rid'in t))t.rid=null});
-  if(!s.members.length)s.members.push({id:'u_me',name:'桑田航希',role:'オーナー',hue:222,u:1});
-  s.crm.forEach(c=>{if(!Array.isArray(c.log))c.log=[];if(!STAGES.includes(c.stage))c.stage=STAGES[0]});
-  s.metrics.forEach(m=>{if(!Array.isArray(m.series))m.series=[];if(!m.src)m.src='manual'});
-  s.mindmaps.forEach(mm=>{if(!mm.root||typeof mm.root!=='object')mm.root={id:uid('n_'),t:mm.title||'中心',c:[]};mmWalk(mm.root,n=>{if(!n.id)n.id=uid('n_');if(!Array.isArray(n.c))n.c=[]})});
+    if(!Array.isArray(t.steps))t.steps=[];if(!Array.isArray(t.log))t.log=[]});
   return s;
 }
 function persist(){localStorage.setItem(KEY,JSON.stringify(S))}
 function save(){persist();schedulePush();render()}
 function saveQuiet(){persist();schedulePush()}
 const uid=p=>(p||'x')+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36);
-
-/* me / members */
-const ME=()=>{const id=localStorage.getItem('purpose.me');return S.members.some(m=>m.id===id)?id:S.members[0].id};
-const memOf=id=>S.members.find(m=>m.id===id)||null;
-const memName=id=>id==='ai'?'AI':(memOf(id)?memOf(id).name:'');
 const repoPath=()=>localStorage.getItem('purpose.repo')||'~/Downloads/claude box/_作業ファイル/purpose';
-
-/* notifs */
-function notify(text,ref,who){
-  S.notifs.push({id:uid('n_'),t:Date.now(),who:who||ME(),text,ref:ref||null,u:Date.now()});
-  if(S.notifs.length>400)S.notifs=S.notifs.slice(-400);
-}
-const seenT=()=>+localStorage.getItem('purpose.seen')||0;
-const unreadN=()=>S.notifs.filter(n=>n.t>seenT()&&n.who!==ME()).length;
 
 /* ============================================================ dates */
 const pad=n=>String(n).padStart(2,'0');
@@ -773,9 +642,6 @@ const WDJ=['日','月','火','水','木','金','土'];
 const dleft=dl=>Math.round((new Date(dl+'T00:00:00')-new Date(TODAY+'T00:00:00'))/864e5);
 const addDays=n=>{const d=new Date(TODAY+'T00:00:00');d.setDate(d.getDate()+n);return fmt(d)};
 const fmtT=ms=>{const d=new Date(ms);return`${d.getMonth()+1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}`};
-const ago=ms=>{const s=(Date.now()-ms)/1000;if(s<60)return'いま';if(s<3600)return`${Math.floor(s/60)}分前`;if(s<86400)return`${Math.floor(s/3600)}時間前`;return`${Math.floor(s/86400)}日前`};
-const mmss=s=>`${pad(Math.floor(s/60))}:${pad(Math.floor(s%60))}`;
-const kb=n=>n<1e6?`${Math.round(n/1e3)}KB`:`${(n/1e6).toFixed(1)}MB`;
 let calY=now.getFullYear(), calM=now.getMonth(), calSel=TODAY;
 
 /* ============================================================ physics */
@@ -798,7 +664,6 @@ function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&l
 const CK=s=>`<svg viewBox="0 0 24 24" width="${s||11}" height="${s||11}" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" style="color:var(--ckc)"><path d="M4 12.5l5 5L20 6.5"/></svg>`;
 const CHEV='<svg class="m-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>';
 const CH2='<svg class="ch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>';
-const MIC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M9 21h6"/></svg>';
 async function copyText(s){try{await navigator.clipboard.writeText(s);return true}catch(e){
   const ta=document.createElement('textarea');ta.value=s;ta.style.position='fixed';ta.style.opacity=0;document.body.appendChild(ta);ta.select();
   let ok=false;try{ok=document.execCommand('copy')}catch(_){}ta.remove();return ok}}
@@ -818,25 +683,6 @@ const catOf=g=>S.cats.find(c=>c.id===g.cat)||null;
 const hueOf=g=>{const c=catOf(g);return c?c.hue:222};
 const goalOf=id=>S.goals.find(g=>g.id===id)||null;
 const taskOf=id=>S.tasks.find(t=>t.id===id)||null;
-
-/* voice（端末の音声認識。Safari は端末内処理） */
-function attachMic(btn,input){
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR||!btn){if(btn)btn.style.display='none';return}
-  btn.innerHTML=MIC;let rec=null;
-  btn.onclick=()=>{
-    if(rec){rec.stop();return}
-    rec=new SR();rec.lang='ja-JP';rec.continuous=true;rec.interimResults=true;
-    let base=input.value;
-    rec.onresult=e=>{let fin='',inter='';
-      for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)fin+=r[0].transcript;else inter+=r[0].transcript}
-      if(fin){base=base+fin;input.value=base}else input.value=base+inter;
-      input.dispatchEvent(new Event('input'))};
-    rec.onend=()=>{rec=null;btn.classList.remove('on')};
-    rec.onerror=()=>{};
-    try{rec.start();btn.classList.add('on')}catch(e){toast('音声入力を開始できない')}
-  };
-}
 
 /* ============================================================ sheet */
 const sheet=document.getElementById('sheet'), sheetBody=document.getElementById('sheetBody'), dim=document.getElementById('dim');
@@ -894,10 +740,10 @@ sheet.addEventListener('pointerup',shEnd);
 sheet.addEventListener('pointercancel',shEnd);
 
 /* ============================================================ tab bar */
-const TABS=['today','home','cal','more'], TABTITLE={today:'今日',home:'ゴール',cal:'カレンダー',more:'作業場'};
+const TABS=['today','home','cal'], TABTITLE={today:'今日',home:'ゴール',cal:'カレンダー'};
 let curTab='today';
 const lens=document.getElementById('lens'), tabbar=document.getElementById('tabbar'), navbar=document.getElementById('navbar');
-const tabW=()=>navbar.classList.contains('mini')?56:84;
+const tabW=()=>navbar.classList.contains('mini')?60:92;
 function lensX(x){lens.style.transform=`translateX(${x}px)`;lens.style.setProperty('--lx',(-x*.38)+'px')}
 function lensTo(i){lensX(i*tabW())}
 function setTab(name){
@@ -913,7 +759,7 @@ function setTab(name){
   });
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('scr-'+name).classList.add('active');
-  document.getElementById('topTitle').textContent=name==='more'&&curPanel?PANELS[curPanel].t:TABTITLE[name];
+  document.getElementById('topTitle').textContent=TABTITLE[name];
   lensTo(TABS.indexOf(name));
   render();mainEl.scrollTo({top:0});syncEdge();
 }
@@ -988,8 +834,7 @@ mainEl.addEventListener('scroll',syncEdge,{passive:true});
 
 /* ============================================================ render */
 let expandedGoal=null, openMile=null, curCat='all';
-function render(){renderChips();renderSidebar();renderToday();renderHome();renderCal();renderMore();renderInspector();renderBadge()}
-function renderBadge(){document.querySelector('.tab[data-scr="more"]').classList.toggle('has',unreadN()>0||S.inbox.some(i=>!i.handled))}
+function render(){renderChips();renderSidebar();renderToday();renderHome();renderCal();renderInspector()}
 const sortedGoals=()=>[...S.goals].sort((a,b)=>(a.deadline||'9999')<(b.deadline||'9999')?-1:1);
 const goalTasks=g=>S.tasks.filter(t=>t.goalId===g.id);
 const mileTasks=m=>S.tasks.filter(t=>t.mileId===m.id).sort((a,b)=>(a.date||'9999')<(b.date||'9999')?-1:1);
@@ -1037,11 +882,9 @@ function renderSidebar(){
     if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
   });
   document.querySelectorAll('#sidebar .sb-item[data-tab]').forEach(b=>b.classList.toggle('on',curTab===b.dataset.tab));
-  const sp=document.getElementById('sbPanels');
-  sp.innerHTML=Object.keys(PANELS).map(k=>`<button class="sb-item${curTab==='more'&&curPanel===k?' on':''}" data-p="${k}">${ICON[PANELS[k].ic]||''}${esc(PANELS[k].t)}</button>`).join('');
-  sp.querySelectorAll('.sb-item').forEach(b=>b.onclick=()=>openPanel(b.dataset.p));
 }
 document.querySelectorAll('#sidebar .sb-item[data-tab]').forEach(b=>b.onclick=()=>goTab(b.dataset.tab));
+document.getElementById('sbNew').onclick=()=>openNewGoal();
 
 function groupGoals(list){
   const out=[];
@@ -1063,7 +906,7 @@ function renderHome(){
   else if(curCat!=='all')gs=gs.filter(g=>g.cat===curCat);
 
   if(!S.goals.length){
-    wrap.innerHTML='<div class="empty">作業場のセットアップを始めると<br>AIがゴールをここに置く。</div>';
+    wrap.innerHTML='<div class="empty">ゴールはAIとの壁打ちで決める。<br>「今日」の一番上から始める。</div>';
     return;
   }
   if(!gs.length){wrap.innerHTML='<div class="empty">このカテゴリにはまだゴールがない。</div>';return}
@@ -1105,7 +948,7 @@ function goalCard(g){
     </div>
     <div class="g-sum"><em>${next?'いま：'+esc(next.title):'ぜんぶ達成 🎉'}</em><span>${doneN}/${ms.length}</span></div>`;
   }else{
-    route=`<div class="g-sum" style="padding-top:10px"><em>中の目標がまだ無い — AIに分解してもらう</em></div>`;
+    route=`<div class="g-sum" style="padding-top:10px"><em>中の目標がまだ無い — 壁打ちで分解する</em></div>`;
   }
 
   const miles=ms.map((m,i)=>{
@@ -1135,7 +978,7 @@ function goalCard(g){
       <div class="g-inner">${ms.length?miles:''}</div>
       <div class="g-foot">
         <button class="plan${planCount(g)?'':' todo'}" data-act="plan">${planCount(g)?'フライトプラン':'プラン未記入'}</button>
-        <button data-act="ai">AIに依頼</button>
+        <button data-act="ai">AIと進める</button>
         <button data-act="open">くわしく</button>
       </div>
     </div></div>
@@ -1145,13 +988,12 @@ function goalCard(g){
 function taskChip(t){
   const over=t.date&&t.date<TODAY&&!t.done;
   const st=t.steps.length?`<span class="tk-s">${t.steps.filter(s=>s.done).length}/${t.steps.length}</span>`:'';
-  const who=t.assignee&&t.assignee!==ME()?`<span class="tk-w">${esc(memName(t.assignee))}</span>`:'';
   return `<div class="tk${t.done?' done':''}" data-tid="${t.id}">
     <button class="tk-del">削除</button>
     <div class="tk-slide">
       <div class="tk-c">${CK(10)}</div>
       <div class="tk-t">${esc(t.title)}</div>
-      ${who}${st}
+      ${st}
       <div class="tk-d${over?' over':''}">${t.date?t.date.slice(5).replace('-','/'):'未定'}</div>
     </div></div>`;
 }
@@ -1181,7 +1023,7 @@ function bindHome(wrap){
     });
     el.querySelectorAll('.g-foot button').forEach(b=>onTap(b,()=>{
       if(b.dataset.act==='plan')openPlanSheet(gid);
-      else if(b.dataset.act==='ai'){const g=goalOf(gid);openAISheet(g.title,promptForGoal(g))}
+      else if(b.dataset.act==='ai')openAgentSheet('goal',goalOf(gid));
       else openGoalSheet(gid);
     }));
     bindTasks(el);
@@ -1214,7 +1056,8 @@ function renderInspector(){
       ${!ts.length&&!dls.length?'<div class="ins-empty">この日の予定はない</div>':''}`;
     bindTasks(box);return;
   }
-  if(curTab==='today'||curTab==='more'){box.innerHTML=currentPositionHTML();bindTasks(box);return}
+  if(curTab==='today'){box.innerHTML=currentPositionHTML();bindTasks(box);
+    const b=box.querySelector('#insNew');if(b)b.onclick=()=>openNewGoal();return}
   const sel=inspectorMile();
   if(!sel){box.innerHTML='<div class="ins-empty">中の目標を選ぶ</div>';return}
   const{g,m}=sel, ts=mileTasks(m);
@@ -1222,13 +1065,15 @@ function renderInspector(){
     <div class="sh-kicker">${esc(g.title)}</div>
     <div class="sh-title" style="margin-top:6px">${esc(m.title)}</div>
     <div class="sh-sec">タスク</div>
-    <div class="m-inner" id="insTasks" style="margin:0">${ts.length?ts.map(t=>taskChip(t)).join(''):'<div class="m-none">まだ無い — AIに頼む</div>'}</div>
-    <div class="sh-actions">
-      <button class="btn ${m.done?'plain':'primary'}" id="insDone">${m.done?'未達成に戻す':'達成にする'}</button>
-      <button class="btn dangerous" id="insDel">削除</button>
+    <div class="m-inner" id="insTasks" style="margin:0">${ts.length?ts.map(t=>taskChip(t)).join(''):'<div class="m-none">まだ無い — 壁打ちで足す</div>'}</div>
+    <div class="sh-actions col">
+      <button class="btn primary" id="insAI">この中の目標をAIと進める</button>
+      <div style="display:flex;gap:8px"><button class="btn plain" id="insDone">${m.done?'未達成に戻す':'達成にする'}</button>
+      <button class="btn dangerous" id="insDel">削除</button></div>
     </div>`;
   bindTasks(box);
-  box.querySelector('#insDone').onclick=()=>{m.done=!m.done;g.u=Date.now();if(m.done)notify(`「${m.title}」を達成`,{type:'goal',id:g.id});save();renderInspector();if(m.done)toast('達成')};
+  box.querySelector('#insAI').onclick=()=>openAgentSheet('mile',{g,m});
+  box.querySelector('#insDone').onclick=()=>{m.done=!m.done;g.u=Date.now();save();renderInspector();if(m.done)toast('達成')};
   const del=box.querySelector('#insDel');
   del.onclick=()=>{
     if(!del.classList.contains('arm')){del.classList.add('arm');del.textContent='本当に削除する';
@@ -1242,11 +1087,10 @@ function renderInspector(){
 /* ============================================================ swipe tasks */
 let openRow=null;
 function toggleTask(t,el){
-  t.done=!t.done;t.status=t.done?'done':(t.status==='done'?'todo':t.status);t.u=Date.now();
-  if(t.done)notify(`「${t.title}」を完了`,{type:'task',id:t.id});
+  t.done=!t.done;t.u=Date.now();
   if(el){el.classList.toggle('done',t.done);
     if(t.done)el.querySelector('.tk-c').animate([{transform:'scale(1)'},{transform:'scale(1.3)'},{transform:'scale(1)'}],{duration:420,easing:'cubic-bezier(.32,1.6,.45,1)'})}
-  saveQuiet();renderBadge();
+  saveQuiet();
 }
 function bindTasks(root){
   root.querySelectorAll('.tk').forEach(el=>{
@@ -1324,44 +1168,30 @@ function openGoalSheet(gid){
     body.innerHTML=`
       <div class="sh-kicker">ゴール</div>
       <div class="sh-title">${esc(g.title)}</div>
-      <div class="sh-date">${g.deadline?g.deadline.replace(/-/g,'/')+'　'+dLabel(g).replace(/<\/?b[^>]*>/g,''):'期限なし'}${g.owner?'　担当 '+esc(memName(g.owner)):''}</div>
+      <div class="sh-date">${g.deadline?g.deadline.replace(/-/g,'/')+'　'+dLabel(g).replace(/<\/?b[^>]*>/g,''):'期限なし'}</div>
       ${g.note?`<div class="sh-note">${esc(g.note)}</div>`:''}
       <div class="sh-sec">完了の基準</div>
-      <div class="frow"><textarea class="field" id="gCrit" placeholder="何が起きたら達成か。空ならAIが対話で決めて書く">${esc(g.criteria)}</textarea><button class="ib" id="gCritMic"></button></div>
+      <div class="sh-note" style="margin-top:4px;${g.criteria?'':'color:var(--gray3)'}">${g.criteria?esc(g.criteria):'まだ無い — 壁打ちで決める'}</div>
       <div class="sh-sec">カテゴリ</div>
       <div class="opts">${S.cats.map(x=>`<button class="opt${g.cat===x.id?' on':''}" data-cat="${x.id}">${esc(x.name)}</button>`).join('')}
         <button class="opt${g.cat?'':' on'}" data-cat="">未分類</button></div>
-      <div class="sh-sec">担当</div>
-      <div class="opts">${S.members.map(x=>`<button class="opt${g.owner===x.id?' on':''}" data-own="${x.id}">${esc(x.name)}</button>`).join('')}</div>
       <div class="sh-sec">中の目標</div>
       <div id="shMiles">${ms.length?ms.map(m=>`
-        <div class="row${m.done?' done':''}" data-mid="${m.id}"><div class="c">${CK(10)}</div><span>${esc(m.title)}</span><small>${mileTasks(m).filter(t=>t.done).length}/${mileTasks(m).length}</small></div>`).join(''):'<div class="pl-empty">まだ無い — AIに分解してもらう</div>'}
+        <div class="row${m.done?' done':''}" data-mid="${m.id}"><div class="c">${CK(10)}</div><span>${esc(m.title)}</span><small>${mileTasks(m).filter(t=>t.done).length}/${mileTasks(m).length}</small></div>`).join(''):'<div class="pl-empty">まだ無い — 壁打ちで分解する</div>'}
       </div>
-      <div class="frow"><input class="field" id="gMileIn" placeholder="中の目標を足す"><button class="ib" id="gMileAdd">＋</button></div>
       ${untied.length?`<div class="sh-sec">紐づいていないタスク</div><div class="m-inner" id="shUntied" style="margin:0">${untied.map(t=>taskChip(t)).join('')}</div>`:''}
       <div class="sh-actions col">
-        <button class="btn primary" id="shAI">AIに依頼する</button>
-        <div style="display:flex;gap:8px"><button class="btn plain" id="shMeet">ミーティング</button><button class="btn plain" id="shChat">チャット</button></div>
+        <button class="btn primary" id="shAI">このゴールをAIと進める</button>
         <button class="btn dangerous" id="shDel">ゴールを削除</button>
       </div>`;
-    const crit=body.querySelector('#gCrit');attachMic(body.querySelector('#gCritMic'),crit);
-    crit.onblur=()=>{if(crit.value!==g.criteria){g.criteria=crit.value;g.u=Date.now();saveQuiet()}};
     body.querySelectorAll('.opt[data-cat]').forEach(b=>onTap(b,()=>{
       g.cat=b.dataset.cat||null;g.u=Date.now();
       body.querySelectorAll('.opt[data-cat]').forEach(x=>x.classList.toggle('on',x===b));
       save();
     }));
-    body.querySelectorAll('.opt[data-own]').forEach(b=>onTap(b,()=>{
-      g.owner=g.owner===b.dataset.own?null:b.dataset.own;g.u=Date.now();
-      body.querySelectorAll('.opt[data-own]').forEach(x=>x.classList.toggle('on',x.dataset.own===g.owner));saveQuiet();
-    }));
     body.querySelectorAll('#shMiles .row').forEach(row=>onTap(row,()=>openMileSheet(g.id,row.dataset.mid)));
     bindTasks(body);
-    body.querySelector('#gMileAdd').onclick=()=>{const v=body.querySelector('#gMileIn').value.trim();if(!v)return;
-      g.miles.push({id:uid('m_'),title:v,done:false});g.u=Date.now();save();openGoalSheet(g.id);toast('足した')};
-    body.querySelector('#shAI').onclick=()=>openAISheet(g.title,promptForGoal(g));
-    body.querySelector('#shMeet').onclick=()=>startMinutes({goalId:g.id,title:g.title+' のミーティング'});
-    body.querySelector('#shChat').onclick=()=>{closeSheet();chatFilter=g.id;openPanel('chat')};
+    body.querySelector('#shAI').onclick=()=>openAgentSheet('goal',g);
     const del=body.querySelector('#shDel');
     del.onclick=()=>{
       if(!del.classList.contains('arm')){del.classList.add('arm');del.textContent='本当に削除する';
@@ -1383,17 +1213,15 @@ function openMileSheet(gid,mid){
       <div class="sh-kicker">${esc(g.title)}</div>
       <div class="sh-title">${esc(m.title)}</div>
       <div class="sh-sec">タスク</div>
-      <div class="m-inner" id="shMT" style="margin:0">${ts.length?ts.map(t=>taskChip(t)).join(''):'<div class="m-none">まだ無い — AIに頼む</div>'}</div>
-      <div class="frow"><input class="field" id="mTaskIn" placeholder="タスクを足す"><button class="ib" id="mTaskMic"></button><button class="ib" id="mTaskAdd">＋</button></div>
-      <div class="sh-actions">
-        <button class="btn ${m.done?'plain':'primary'}" id="shMDone">${m.done?'未達成に戻す':'達成にする'}</button>
-        <button class="btn dangerous" id="shMDel">削除</button>
+      <div class="m-inner" id="shMT" style="margin:0">${ts.length?ts.map(t=>taskChip(t)).join(''):'<div class="m-none">まだ無い — 壁打ちで足す</div>'}</div>
+      <div class="sh-actions col">
+        <button class="btn primary" id="shMAI">この中の目標をAIと進める</button>
+        <div style="display:flex;gap:8px"><button class="btn plain" id="shMDone">${m.done?'未達成に戻す':'達成にする'}</button>
+        <button class="btn dangerous" id="shMDel">削除</button></div>
       </div>`;
     bindTasks(body);
-    const inp=body.querySelector('#mTaskIn');attachMic(body.querySelector('#mTaskMic'),inp);
-    body.querySelector('#mTaskAdd').onclick=()=>{const v=inp.value.trim();if(!v)return;
-      S.tasks.push(newTask({title:v,date:null,goalId:g.id,mileId:m.id}));save();openMileSheet(gid,mid);toast('足した')};
-    body.querySelector('#shMDone').onclick=()=>{m.done=!m.done;g.u=Date.now();if(m.done)notify(`「${m.title}」を達成`,{type:'goal',id:g.id});save();closeSheet();if(m.done)toast('達成')};
+    body.querySelector('#shMAI').onclick=()=>openAgentSheet('mile',{g,m});
+    body.querySelector('#shMDone').onclick=()=>{m.done=!m.done;g.u=Date.now();save();closeSheet();if(m.done)toast('達成')};
     const del=body.querySelector('#shMDel');
     del.onclick=()=>{
       if(!del.classList.contains('arm')){del.classList.add('arm');del.textContent='本当に削除する';
@@ -1404,7 +1232,7 @@ function openMileSheet(gid,mid){
     };
   });
 }
-function newTask(o){return Object.assign({id:uid('t_'),title:'',date:null,done:false,goalId:null,mileId:null,criteria:'',steps:[],log:[],assignee:null,status:'todo',rid:null,u:Date.now()},o)}
+function newTask(o){return Object.assign({id:uid('t_'),title:'',date:null,done:false,goalId:null,mileId:null,criteria:'',steps:[],log:[],u:Date.now()},o)}
 
 /* ============================================================ flight plan（読むと昇格だけ。書くのはAI） */
 function emptyPlan(){return{route:[],cargo:[],alt:[]}}
@@ -1420,14 +1248,14 @@ function openPlanSheet(gid){
       body.innerHTML=`
         <div class="sh-kicker">FLIGHT PLAN</div>
         <div class="sh-title">${esc(g.title)}</div>
-        <div class="pl-lead">着くまでに何が起きるかを先に一周見ておく層。書くのはAI（data.jsonのplan）。ここではタップで昇格だけ。</div>
+        <div class="pl-lead">着くまでに何が起きるかを先に一周見ておく層。書くのはAI。ここではタップで昇格だけ。</div>
 
         <div class="sh-sec">ROUTE ／ 通る道</div>
         <div id="plR">${p.route.length?p.route.map((r,i)=>`
           <div class="pl-row" data-i="${i}"><div class="n">${i+1}</div><div class="t">${esc(r.title)}</div>
           ${r.when?`<div class="w">${esc(r.when)}</div>`:''}
           <button class="go${r.m?' off':''}" data-act="mile" data-i="${i}">${r.m?'済':'中の目標に'}</button></div>`).join('')
-          :'<div class="pl-empty">まだ無い。AIに「plan.routeを書いて」。</div>'}
+          :'<div class="pl-empty">まだ無い。</div>'}
         </div>
 
         <div class="sh-sec">CARGO ／ 要る人・要るモノ</div>
@@ -1459,13 +1287,16 @@ function openPlanSheet(gid){
         c.t=true;touch();render();draw();toast('タスクにした');
       });
       body.querySelector('#plBack').onclick=()=>openGoalSheet(g.id);
-      body.querySelector('#plAI').onclick=()=>openAISheet('フライトプラン：'+g.title,promptForGoal(g,'このゴールの plan（route／cargo／alt）を書いて data.json に入れて。route は必ず通る工程を順に、cargo は要る人・モノ・お金と期限、alt は分岐と両張りの一手。'));
+      body.querySelector('#plAI').onclick=()=>openAgentSheet('plan',g);
     };
     draw();
   });
 }
 
-onLongPress(document.getElementById('homeTitle'),()=>openPanel('settings'),600);
+onLongPress(document.getElementById('homeTitle'),()=>openSettings(),600);
+onLongPress(document.getElementById('todayTitle'),()=>openSettings(),600);
+function openSettings(){openSheet(body=>{const n=document.getElementById('setNode');n.style.display='block';
+  document.getElementById('repoInput').value=localStorage.getItem('purpose.repo')||'';body.appendChild(n)})}
 
 /* ============================================================ calendar */
 document.getElementById('calPrev').onclick=()=>{calM--;if(calM<0){calM=11;calY--}renderCal(-1)};
@@ -1554,35 +1385,11 @@ async function push(){
 }
 function schedulePush(){if(!tok())return;clearTimeout(pushT);pushT=setTimeout(push,3500)}
 function setStat(m){const el=document.getElementById('syncStat');if(el)el.textContent=m||''}
-const blobB64=b=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(',')[1]);r.onerror=rej;r.readAsDataURL(b)});
-async function ghUpload(path,blob,msg){
-  if(!tok())throw new Error('token');
-  if(blob.size>95e6)throw new Error('big');
-  const enc=path.split('/').map(encodeURIComponent).join('/');
-  const ex=await gh(`contents/${enc}?ref=${BRANCH}`);
-  const body={message:msg||'upload from Purpose',content:await blobB64(blob),branch:BRANCH};
-  if(ex&&ex.sha)body.sha=ex.sha;
-  const j=await gh(`contents/${enc}`,{method:'PUT',body:JSON.stringify(body)});
-  if(!j||!j.content)throw new Error('upload');
-  return RAW+enc;
-}
-async function ghDelete(path){
-  const enc=path.split('/').map(encodeURIComponent).join('/');
-  const ex=await gh(`contents/${enc}?ref=${BRANCH}`);if(!ex)return;
-  await gh(`contents/${enc}`,{method:'DELETE',body:JSON.stringify({message:'expire from Purpose',sha:ex.sha,branch:BRANCH})});
-}
-async function ghPutText(path,text,msg){
-  const enc=path.split('/').map(encodeURIComponent).join('/');
-  const ex=await gh(`contents/${enc}?ref=${BRANCH}`);
-  const body={message:msg||'update from Purpose',content:b64e(text),branch:BRANCH};
-  if(ex&&ex.sha)body.sha=ex.sha;
-  return gh(`contents/${enc}`,{method:'PUT',body:JSON.stringify(body)});
-}
 document.getElementById('btnSyncNow').onclick=async()=>{
   const v=document.getElementById('tokenInput').value.trim();
   if(v)localStorage.setItem('purpose.token',v);
   const rp=document.getElementById('repoInput').value.trim();if(rp)localStorage.setItem('purpose.repo',rp);
-  if(!tok()){toast('トークンを入れて');return}
+  if(!tok()){toast(rp?'パスを保存した':'トークンを入れて');return}
   document.getElementById('tokenInput').value='';setStat('同期中…');
   try{await pull();await push();toast('同期した')}
   catch(e){setStat('接続できない — トークンを確認');toast('同期に失敗')}
@@ -1590,7 +1397,7 @@ document.getElementById('btnSyncNow').onclick=async()=>{
 
 /* ============================================================ export / import */
 document.getElementById('btnExport').onclick=async()=>{
-  const p=promptAll('現在地を読んで壁打ちして（質問は一度に2つまで）。まとまったら変更・追加分だけを {"goals":[...],"tasks":[...]} のjsonコードブロックで出力。');
+  const p=webPrompt('new',null);
   if(await copyText(p))toast('コピーした。AIへ');else{document.getElementById('pasteArea').value=p;toast('下の欄からコピーして')}
 };
 document.getElementById('btnImport').onclick=()=>{
@@ -1600,10 +1407,12 @@ document.getElementById('btnImport').onclick=()=>{
   let j;try{j=JSON.parse(raw)}catch(e){toast('JSONとして読めなかった');return}
   if(Array.isArray(j))j={tasks:j};
   const inc=emptyState();
-  COLS.forEach(k=>{inc[k]=(j[k]||[]).filter(e=>e&&typeof e==='object').map(e=>({...e,id:e.id||uid(k[0]+'_'),u:e.u||Date.now()}))});
-  inc.goals=inc.goals.map(g=>({...g,title:String(g.title||''),deadline:g.deadline||null,note:g.note||'',cat:g.cat||null,plan:g.plan||emptyPlan(),
-    miles:Array.isArray(g.miles)?g.miles.map(mm=>({id:mm.id||uid('m_'),title:String(mm.title||''),done:!!mm.done})).filter(mm=>mm.title):[]})).filter(g=>g.title);
-  inc.tasks=inc.tasks.map(t=>newTask({...t,title:String(t.title||''),date:t.date||null,done:!!t.done})).filter(t=>t.title);
+  inc.cats=(j.cats||[]).map(c=>({id:c.id||uid('c_'),name:String(c.name||''),hue:+c.hue||220,u:c.u||Date.now()})).filter(c=>c.name);
+  inc.goals=(j.goals||[]).map(g=>({id:g.id||uid('g_'),title:String(g.title||''),deadline:g.deadline||null,
+    note:g.note||'',criteria:g.criteria||'',cat:g.cat||null,plan:g.plan||emptyPlan(),
+    miles:Array.isArray(g.miles)?g.miles.map(mm=>({id:mm.id||uid('m_'),title:String(mm.title||''),done:!!mm.done})).filter(mm=>mm.title):[],
+    u:g.u||Date.now()})).filter(g=>g.title);
+  inc.tasks=(j.tasks||[]).map(t=>newTask({...t,id:t.id||uid('t_'),title:String(t.title||''),date:t.date||null,done:!!t.done,u:t.u||Date.now()})).filter(t=>t.title);
   const before=JSON.stringify(S);
   S=mergeState(S,inc);
   if(JSON.stringify(S)===before){toast('変更なし');return}
@@ -1616,70 +1425,18 @@ document.getElementById('btnBackup').onclick=()=>{
 };
 
 /* ============================================================
-   v15  AIの作業場 ＝ ゴール × 現在地
+   v16  壁打ち特化 — 新しいゴールは Claude Code と決める。書くのはAI、私はこなすだけ
    ============================================================ */
-const ICON={
-  setup:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 12h16M4 6h16M4 18h10"/></svg>',
-  ai:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 3l1.8 4.6L18.5 9l-4.7 1.4L12 15l-1.8-4.6L5.5 9l4.7-1.4z"/><path d="M5 17l.8 2 2 .8-2 .8L5 22l-.8-1.4-2-.8 2-.8z"/></svg>',
-  chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 6.5A3.5 3.5 0 0 1 7.5 3h9A3.5 3.5 0 0 1 20 6.5v6a3.5 3.5 0 0 1-3.5 3.5H10l-5 4v-4A3.5 3.5 0 0 1 4 12.5z"/></svg>',
-  bell:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 21h4"/></svg>',
-  people:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M15.5 4.6a3.5 3.5 0 0 1 0 6.8M17 13.5a6.5 6.5 0 0 1 4.5 6.5"/></svg>',
-  loop:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7M20 3v5h-5"/></svg>',
-  book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5zM4 20.5V5.5M8 7h8M8 11h6"/></svg>',
-  crm:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 10h18M9 10v10"/></svg>',
-  chart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 19V5M4 19h16M8 15l4-5 3 3 5-6"/></svg>',
-  map:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><circle cx="4.5" cy="6" r="2"/><circle cx="19.5" cy="6" r="2"/><circle cx="4.5" cy="18" r="2"/><circle cx="19.5" cy="18" r="2"/><path d="M9.5 10.5L6 7.5M14.5 10.5L18 7.5M9.5 13.5L6 16.5M14.5 13.5L18 16.5"/></svg>',
-  drive:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3 8.5A2.5 2.5 0 0 1 5.5 6h4l2 2h7A2.5 2.5 0 0 1 21 10.5v6A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5z"/></svg>',
-  send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>',
-  rec:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="6" width="13" height="12" rx="3"/><path d="M16 10l5-2.5v9L16 14"/></svg>',
-  inbox:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3 13l2.5-8h13L21 13v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 13h5l1.5 2.5h5L16 13h5"/></svg>',
-  gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg>'
-};
-const PANELS={
-  setup:{t:'セットアップ',s:'AIの作業場を9手でつくる',ic:'setup'},
-  ai:{t:'AIに依頼',s:'今日の現在地を丸ごと渡す',ic:'ai'},
-  chat:{t:'チャット',s:'ここで話すとAIが覚える',ic:'chat'},
-  notifs:{t:'通知',s:'誰がどこで何をしたか',ic:'bell'},
-  members:{t:'メンバー',s:'みんなの現在地',ic:'people'},
-  routines:{t:'ルーティン',s:'毎日のタスクを自動で置く',ic:'loop'},
-  manuals:{t:'マニュアル',s:'この仕事はこの手順で',ic:'book'},
-  crm:{t:'顧客',s:'どの相手がどの段階か',ic:'crm'},
-  metrics:{t:'数値',s:'アナリティクス・KPIツリー',ic:'chart'},
-  mindmaps:{t:'マインドマップ',s:'考えを広げる',ic:'map'},
-  drive:{t:'ドライブ',s:'ナレッジ・スキル・素材',ic:'drive'},
-  transfers:{t:'ファイル便',s:'いつ誰に何を送ったか',ic:'send'},
-  recordings:{t:'録画・議事録',s:'画面録画／ミーティング／文字起こし',ic:'rec'},
-  inbox:{t:'受信箱',s:'LINE・メールを貼って渡す',ic:'inbox'},
-  settings:{t:'設定',s:'同期・自分・作業場のパス',ic:'gear'}
-};
-let curPanel=null, chatFilter='all', crmFilter='all', driveFilter='all';
 
-/* ============================================================ 今日 */
-const routineDue=(r,d)=>{const dow=new Date(d+'T00:00:00').getDay();
-  if(r.freq==='weekdays')return dow>=1&&dow<=5;
-  if(r.freq==='weekly')return(r.dow||[]).includes(dow);
-  return true};
-function ensureRoutines(){
-  let ch=false;
-  S.routines.forEach(r=>{
-    if(!routineDue(r,TODAY))return;
-    const id=`t_r_${r.id}_${TODAY}`;
-    if(S.del[id]||S.tasks.some(t=>t.id===id||(t.rid===r.id&&t.date===TODAY)))return;
-    S.tasks.push(newTask({id,title:r.title,date:TODAY,goalId:r.goalId||null,mileId:r.mileId||null,rid:r.id,assignee:r.assignee||null,
-      steps:(r.steps||[]).map(s=>({id:uid('s_'),title:s,done:false}))}));ch=true;
-  });
-  if(ch){persist();schedulePush()}
-}
+/* ---- 今日 ---- */
 function renderToday(){
-  document.getElementById('todayCap').textContent=`${now.getMonth()+1}月${now.getDate()}日 ${WDJ[now.getDay()]}曜日 · ${memName(ME())}`;
-  ensureRoutines();
-  const me=ME(), mine=t=>!t.assignee||t.assignee===me;
-  const due=S.tasks.filter(t=>!t.done&&t.date&&t.date<=TODAY&&mine(t)).sort((a,b)=>a.date<b.date?-1:1);
-  const fl=S.tasks.filter(t=>!t.done&&!t.date&&mine(t));
-  const doneT=S.tasks.filter(t=>t.done&&t.date===TODAY&&mine(t));
-  const doing=S.tasks.filter(t=>!t.done&&t.status==='doing'&&mine(t));
-  let h=`<div class="card"><div class="sec-h">今日やる<span class="num${due.length?'':' zero'}">${due.length}</span></div>
-    ${due.length||doneT.length?`<div class="m-inner">${due.map(taskChip).join('')}${doneT.map(taskChip).join('')}</div>`:'<div class="hint">今日のタスクは無い。ふわついているものを今日に入れるか、AIに頼む。</div>'}
+  document.getElementById('todayCap').textContent=`${now.getMonth()+1}月${now.getDate()}日 ${WDJ[now.getDay()]}曜日`;
+  const due=S.tasks.filter(t=>!t.done&&t.date&&t.date<=TODAY).sort((a,b)=>a.date<b.date?-1:1);
+  const fl=S.tasks.filter(t=>!t.done&&!t.date);
+  const doneT=S.tasks.filter(t=>t.done&&t.date===TODAY);
+  let h=`<div class="newgoal" id="btnNew"><div class="plus">＋</div><div><b>新しいゴールを壁打ちする</b><small>Claude Code が解像度100%まで聞いてから、ここに入れ子で置く</small></div></div>`;
+  h+=`<div class="card"><div class="sec-h">今日やる<span class="num${due.length?'':' zero'}">${due.length}</span></div>
+    ${due.length||doneT.length?`<div class="m-inner">${due.map(taskChip).join('')}${doneT.map(taskChip).join('')}</div>`:'<div class="hint">今日のタスクは無い。</div>'}
   </div>`;
   if(fl.length)h+=`<div class="card"><div class="sec-h">ふわついている<span>${fl.length}</span></div>
     <div class="hint" style="padding-top:0">期日を決めるか、今日やるか、消すか。</div>
@@ -1689,10 +1446,10 @@ function renderToday(){
     ${gs.length?gs.map(g=>{const ms=g.miles||[],dn=ms.filter(m=>m.done).length,next=ms.find(m=>!m.done);
       const open=S.tasks.filter(t=>t.goalId===g.id&&!t.done).length, dl=g.deadline?dleft(g.deadline):null;
       return `<div class="ov" data-gid="${g.id}" style="--h:${hueOf(g)}"><i class="c"></i><div class="t"><b>${esc(g.title)}</b><small>${next?'いま：'+esc(next.title):(ms.length?'ぜんぶ達成':'中の目標なし')}${dl!==null?'　'+(dl<0?`${-dl}日超過`:`あと${dl}日`):''}</small></div><div class="bar"><i style="width:${ms.length?dn/ms.length*100:0}%"></i></div><div class="n">${open}</div></div>`}).join('')
-      :'<div class="hint">ゴールがまだ無い。セットアップでAIに聞き出してもらう。</div>'}
+      :'<div class="hint">ゴールがまだ無い。上から壁打ちを始める。</div>'}
   </div>`;
-  if(doing.length)h+=`<div class="card"><div class="sec-h">進行中<span>${doing.length}</span></div><div class="m-inner">${doing.map(taskChip).join('')}</div></div>`;
   const wrap=document.getElementById('todayBody');wrap.innerHTML=h;bindTasks(wrap);
+  onTap(wrap.querySelector('#btnNew'),()=>openNewGoal());
   wrap.querySelectorAll('.fl-acts button').forEach(b=>onTap(b,()=>{
     const t=taskOf(b.parentElement.dataset.tid);if(!t)return;
     if(b.dataset.a==='today'){t.date=TODAY;t.u=Date.now();save();toast('今日に入れた')}
@@ -1701,53 +1458,40 @@ function renderToday(){
   }));
   wrap.querySelectorAll('.ov').forEach(el=>onTap(el,()=>{expandedGoal=el.dataset.gid;openMile=null;goTab('home')}));
 }
-document.getElementById('btnQuick').onclick=()=>openQuickAdd();
-function openQuickAdd(pre){
-  openSheet(body=>{
-    let when=TODAY, gid=pre&&pre.goalId||null;
-    body.innerHTML=`<div class="sh-kicker">追加</div>
-      <div class="frow" style="margin-top:8px"><input class="field" id="qaT" placeholder="やること" value="${esc(pre&&pre.title||'')}"><button class="ib" id="qaMic"></button></div>
-      <div class="sh-sec">いつ</div><div class="opts" id="qaWhen"><button class="opt on" data-w="${TODAY}">今日</button><button class="opt" data-w="${addDays(1)}">明日</button><button class="opt" data-w="">未定（ふわっと）</button></div>
-      <div class="sh-sec">ゴール</div><div class="opts" id="qaGoal"><button class="opt${gid?'':' on'}" data-g="">なし</button>${sortedGoals().map(g=>`<button class="opt${gid===g.id?' on':''}" data-g="${g.id}">${esc(g.title)}</button>`).join('')}</div>
-      <div class="sh-actions"><button class="btn primary" id="qaAdd">追加</button></div>`;
-    const inp=body.querySelector('#qaT');attachMic(body.querySelector('#qaMic'),inp);setTimeout(()=>inp.focus(),300);
-    body.querySelectorAll('#qaWhen .opt').forEach(b=>onTap(b,()=>{when=b.dataset.w||null;body.querySelectorAll('#qaWhen .opt').forEach(x=>x.classList.toggle('on',x===b))}));
-    body.querySelectorAll('#qaGoal .opt').forEach(b=>onTap(b,()=>{gid=b.dataset.g||null;body.querySelectorAll('#qaGoal .opt').forEach(x=>x.classList.toggle('on',x===b))}));
-    const add=()=>{const v=inp.value.trim();if(!v){toast('やることを入れて');return}
-      const t=newTask({title:v,date:when,goalId:gid,assignee:ME()});S.tasks.push(t);closeSheet();save();toast('置いた')};
-    body.querySelector('#qaAdd').onclick=add;inp.onkeydown=e=>{if(e.key==='Enter')add()};
-  });
+function currentPositionHTML(){
+  const due=S.tasks.filter(t=>!t.done&&t.date&&t.date<=TODAY).length, fl=S.tasks.filter(t=>!t.done&&!t.date).length;
+  const gs=sortedGoals().filter(g=>!g.criteria||!(g.miles||[]).length);
+  return `<div class="sh-kicker">現在地</div><div class="sh-title">${TODAY.replace(/-/g,'/')}</div><div class="ins-sum">
+    <b>今日やる</b><div class="big">${due}</div>
+    <b>ふわついている</b><div>${fl||'なし'}</div>
+    <b>壁打ちが足りないゴール</b>${gs.length?gs.map(g=>`<div>・${esc(g.title)}</div>`).join(''):'<div>なし</div>'}
+    <div class="sh-actions"><button class="btn primary" id="insNew">新しいゴールを壁打ち</button></div></div>`;
 }
 
-/* ============================================================ タスク詳細（完了の基準・ステップ・ログ） */
+/* ---- タスク詳細（完了の基準・ステップ・ログ） ---- */
 function openTaskSheet(tid){
   const t=taskOf(tid);if(!t)return;
   openSheet(body=>{
     const g=goalOf(t.goalId), m=g&&(g.miles||[]).find(x=>x.id===t.mileId);
     const sd=t.steps.filter(s=>s.done).length;
     body.innerHTML=`
-      <div class="sh-kicker">${g?esc(g.title):'ゴールなし'}${m?' › '+esc(m.title):''}${t.rid?'　<span class="pill">ルーティン</span>':''}</div>
+      <div class="sh-kicker">${g?esc(g.title):'ゴールなし'}${m?' › '+esc(m.title):''}</div>
       <div class="sh-title" id="tsTitle" contenteditable="true" spellcheck="false">${esc(t.title)}</div>
       <div class="sh-sec">いつ</div>
       <div class="opts" id="tsWhen">${[['今日',TODAY],['明日',addDays(1)],['来週',addDays(7)],['未定',null]].map(([l,v])=>`<button class="opt${t.date===v?' on':''}" data-w="${v||''}">${l}</button>`).join('')}<label class="opt${t.date&&![TODAY,addDays(1),addDays(7)].includes(t.date)?' on':''}"><input type="date" id="tsDate" value="${t.date||''}"></label></div>
-      <div class="sh-sec">ゴール</div>
-      <div class="opts" id="tsGoal"><button class="opt${t.goalId?'':' on'}" data-g="">なし</button>${sortedGoals().map(x=>`<button class="opt${t.goalId===x.id?' on':''}" data-g="${x.id}">${esc(x.title)}</button>`).join('')}</div>
+      ${S.goals.length?`<div class="sh-sec">ゴール</div><div class="opts" id="tsGoal"><button class="opt${t.goalId?'':' on'}" data-g="">なし</button>${sortedGoals().map(x=>`<button class="opt${t.goalId===x.id?' on':''}" data-g="${x.id}">${esc(x.title)}</button>`).join('')}</div>`:''}
       ${g&&(g.miles||[]).length?`<div class="sh-sec">中の目標</div><div class="opts" id="tsMile"><button class="opt${t.mileId?'':' on'}" data-m="">なし</button>${g.miles.map(x=>`<button class="opt${t.mileId===x.id?' on':''}" data-m="${x.id}">${esc(x.title)}</button>`).join('')}</div>`:''}
-      <div class="sh-sec">担当</div>
-      <div class="opts" id="tsWho">${S.members.map(x=>`<button class="opt${t.assignee===x.id?' on':''}" data-u="${x.id}">${esc(x.name)}</button>`).join('')}</div>
-      <div class="sh-sec">状態</div>
-      <div class="opts" id="tsSt">${Object.entries(STATUS).map(([k,l])=>`<button class="opt${t.status===k?' on':''}" data-s="${k}">${l}</button>`).join('')}</div>
       <div class="sh-sec">完了の基準</div>
-      <div class="frow"><textarea class="field" id="tsCrit" placeholder="何ができたら完了か。空ならAIが対話で決めて書く">${esc(t.criteria)}</textarea><button class="ib" id="tsCritMic"></button></div>
+      <textarea class="field" id="tsCrit" placeholder="何ができたら完了か。空なら壁打ちで決める">${esc(t.criteria)}</textarea>
       <div class="sh-sec">ステップ <span style="float:right;font-variant-numeric:tabular-nums">${sd}/${t.steps.length}</span></div>
-      <div class="steps" id="tsSteps">${t.steps.map(s=>`<div class="row${s.done?' done':''}" data-sid="${s.id}"><div class="c">${CK(10)}</div><span>${esc(s.title)}</span></div>`).join('')||'<div class="pl-empty">まだ無い。AIに3〜5個に分けてもらう。</div>'}</div>
+      <div class="steps" id="tsSteps">${t.steps.map(s=>`<div class="row${s.done?' done':''}" data-sid="${s.id}"><div class="c">${CK(10)}</div><span>${esc(s.title)}</span></div>`).join('')||'<div class="pl-empty">まだ無い</div>'}</div>
       <div class="frow"><input class="field" id="tsStepIn" placeholder="ステップを足す"><button class="ib" id="tsStepAdd">＋</button></div>
-      <div class="sh-sec">ログ（何が起きたか）</div>
-      <div class="tl" id="tsLog">${t.log.slice().reverse().map(l=>`<div class="${l.who==='ai'?'ai':''}"><small>${fmtT(l.t)} · ${esc(memName(l.who)||l.who)}</small>${esc(l.text)}</div>`).join('')||'<div class="pl-empty">まだ無い</div>'}</div>
-      <div class="frow"><input class="field" id="tsLogIn" placeholder="いま何が起きたか"><button class="ib" id="tsLogMic"></button><button class="ib" id="tsLogAdd">＋</button></div>
+      <div class="sh-sec">ログ</div>
+      <div class="tl" id="tsLog">${t.log.slice().reverse().map(l=>`<div class="${l.who==='ai'?'ai':''}"><small>${fmtT(l.t)}${l.who==='ai'?' · AI':''}</small>${esc(l.text)}</div>`).join('')||'<div class="pl-empty">まだ無い</div>'}</div>
+      <div class="frow"><input class="field" id="tsLogIn" placeholder="いま何が起きたか"><button class="ib" id="tsLogAdd">＋</button></div>
       <div class="sh-actions col">
-        <button class="btn primary" id="tsAI">AIに依頼する</button>
-        <div style="display:flex;gap:8px"><button class="btn ${t.done?'plain':'plain'}" id="tsDone">${t.done?'未完了に戻す':'完了にする'}</button><button class="btn dangerous" id="tsDel">削除</button></div>
+        <button class="btn primary" id="tsAI">AIと一緒にこなす</button>
+        <div style="display:flex;gap:8px"><button class="btn plain" id="tsDone">${t.done?'未完了に戻す':'完了にする'}</button><button class="btn dangerous" id="tsDel">削除</button></div>
       </div>`;
     const touch=()=>{t.u=Date.now();saveQuiet()};
     const title=body.querySelector('#tsTitle');
@@ -1760,24 +1504,15 @@ function openTaskSheet(tid){
     body.querySelectorAll('#tsGoal .opt').forEach(b=>onTap(b,()=>{t.goalId=b.dataset.g||null;t.mileId=null;touch();render();openTaskSheet(tid)}));
     body.querySelectorAll('#tsMile .opt').forEach(b=>onTap(b,()=>{t.mileId=b.dataset.m||null;touch();render();
       body.querySelectorAll('#tsMile .opt').forEach(x=>x.classList.toggle('on',x===b))}));
-    body.querySelectorAll('#tsWho .opt').forEach(b=>onTap(b,()=>{const prev=t.assignee;t.assignee=t.assignee===b.dataset.u?null:b.dataset.u;
-      if(t.assignee&&t.assignee!==prev&&t.assignee!==ME())notify(`${memName(t.assignee)}に「${t.title}」を任せた`,{type:'task',id:t.id});
-      touch();render();body.querySelectorAll('#tsWho .opt').forEach(x=>x.classList.toggle('on',x.dataset.u===t.assignee))}));
-    body.querySelectorAll('#tsSt .opt').forEach(b=>onTap(b,()=>{t.status=b.dataset.s;t.done=t.status==='done';
-      if(t.done)notify(`「${t.title}」を完了`,{type:'task',id:t.id});touch();render();
-      body.querySelectorAll('#tsSt .opt').forEach(x=>x.classList.toggle('on',x===b))}));
-    const crit=body.querySelector('#tsCrit');attachMic(body.querySelector('#tsCritMic'),crit);
-    crit.onblur=()=>{if(crit.value!==t.criteria){t.criteria=crit.value;touch()}};
-    body.querySelectorAll('#tsSteps .row').forEach(r=>onTap(r,()=>{const s=t.steps.find(x=>x.id===r.dataset.sid);if(!s)return;s.done=!s.done;r.classList.toggle('done',s.done);
-      if(s.done&&t.status==='todo')t.status='doing';touch();render()}));
+    const crit=body.querySelector('#tsCrit');crit.onblur=()=>{if(crit.value!==t.criteria){t.criteria=crit.value;touch()}};
+    body.querySelectorAll('#tsSteps .row').forEach(r=>onTap(r,()=>{const s=t.steps.find(x=>x.id===r.dataset.sid);if(!s)return;s.done=!s.done;r.classList.toggle('done',s.done);touch();render()}));
     const si=body.querySelector('#tsStepIn');
     const addStep=()=>{const v=si.value.trim();if(!v)return;t.steps.push({id:uid('s_'),title:v,done:false});touch();openTaskSheet(tid)};
-    body.querySelector('#tsStepAdd').onclick=addStep;si.onkeydown=e=>{if(e.key==='Enter')addStep()};
-    const li=body.querySelector('#tsLogIn');attachMic(body.querySelector('#tsLogMic'),li);
-    const addLog=()=>{const v=li.value.trim();if(!v)return;t.log.push({t:Date.now(),who:ME(),text:v});if(t.status==='todo')t.status='doing';
-      notify(`「${t.title}」：${v}`,{type:'task',id:t.id});touch();render();openTaskSheet(tid)};
-    body.querySelector('#tsLogAdd').onclick=addLog;li.onkeydown=e=>{if(e.key==='Enter')addLog()};
-    body.querySelector('#tsAI').onclick=()=>openAISheet(t.title,promptForTask(t));
+    body.querySelector('#tsStepAdd').onclick=addStep;si.onkeydown=e=>{if(e.key==='Enter'&&!e.isComposing)addStep()};
+    const li=body.querySelector('#tsLogIn');
+    const addLog=()=>{const v=li.value.trim();if(!v)return;t.log.push({t:Date.now(),who:'me',text:v});touch();render();openTaskSheet(tid)};
+    body.querySelector('#tsLogAdd').onclick=addLog;li.onkeydown=e=>{if(e.key==='Enter'&&!e.isComposing)addLog()};
+    body.querySelector('#tsAI').onclick=()=>openAgentSheet('task',t);
     body.querySelector('#tsDone').onclick=()=>{toggleTask(t);render();closeSheet();if(t.done)toast('完了')};
     const del=body.querySelector('#tsDel');
     del.onclick=()=>{
@@ -1788,706 +1523,159 @@ function openTaskSheet(tid){
   });
 }
 
-/* ============================================================ AIに依頼（ゴール＋現在地を丸ごと渡す） */
-const WORKSPACE_DOC="# Purpose — AIの作業場（ゴール × 現在地）\n\nこのリポジトリは桑田航希の「AIの作業場」。あなた（Claude Code / Codex / ChatGPT / Claude）が起きた瞬間に、\n**どこへ行くのか（ゴール）** と **いまどこにいるのか（現在地＝コンテキスト）** をここから読み取る。\n言葉で毎回説明しなくても、ここを読めば分かる状態を保つのがあなたの仕事。\n\n- 正データ：`data.json`（このファイルだけが真実。アプリ https://gjnzqqf8dq-coder.github.io/purpose/ はこれを表示する）\n- アプリは読むための道具。書くのは主にあなた。編集したら必ず `git add data.json && git commit -m \"…\" && git push`\n- 反映はアプリを開いた時と復帰時（60秒以上経過で自動）\n\n## 最初の言葉が「セットアップを始めてください」だったら\n\nヒアリングして data.json を整える。質問は一度に2つまで。答えを聞いたら即書く。順番：\n1. 名前と役割（members[0] を直す）\n2. いま追いかけているゴール（3〜7個。期限・カテゴリ・完了の基準を聞く → goals）\n3. それぞれのゴールの中の目標（3〜5個 → goals[].miles）\n4. 今日やること（→ tasks、date は今日）\n5. 毎日／毎週やること（→ routines）\n6. 追っている数字があれば（→ metrics、取り方が分からなければ src:\"pending\"）\n最後に「セットアップ完了」と notifs に1行入れ、push する。\n\n## 「AIに依頼する」で来たプロンプトの扱い\n\nアプリの「AIに依頼」は、ゴール・タスク・完了の基準・ステップ・ログ・チャット・受信箱・数値を丸ごと貼ってくる。\n1. **着手前**：完了の基準（criteria）が空なら、私に質問して決めてから書く。曖昧なまま走らない\n2. **分解**：steps が無ければ3〜5個に分けて書く\n3. **進行中**：やったことを `tasks[].log` に `{\"t\":<epoch_ms>,\"who\":\"ai\",\"text\":\"…\"}` で追記。steps の done を更新。status を doing → review → done\n4. **終了**：done:true、notifs に1行、commit & push。私への報告は3行以内（何をした／何が残った／確認が要ること）\n5. 分からない時は data.json 全体を読んでから聞く。既に作ってあるものを二度作らない\n\n## data.json の構造\n\n```\ncats        {id,name,hue,u}                                   カテゴリ（色相 hue 0-360）\ngoals       {id,title,deadline,cat,note,criteria,owner,miles:[{id,title,done}],plan:{route,cargo,alt},u}\ntasks       {id,title,date|null,done,goalId,mileId,assignee,status,criteria,steps:[{id,title,done}],log:[{t,who,text}],rid,u}\nmembers     {id,name,role,hue,u}                              who に使う id。\"ai\" はあなた\nroutines    {id,title,freq:\"daily\"|\"weekdays\"|\"weekly\",dow:[0-6],goalId,steps:[…],assignee,u}   毎日タスクを自動生成\nmanuals     {id,title,steps:[…],note,u}                       この仕事はこの手順で\ncrm         {id,name,person,stage,owner,next,nextDate,log:[{t,who,text,src}],u}\n              stage は リスト入り→アプローチ中→商談日程調整→初回商談→2次商談→提案中→成約／失注\nmetrics     {id,name,unit,parentId,goalId,owner,src:\"manual\"|\"pending\"|\"connected\",series:[{d,v}],target,pin,note,u}\nmindmaps    {id,title,root:{id,t,c:[…]},u}\ndrive       {id,name,kind:\"note\"|\"link\"|\"file\",tag,goalId,body,url,u}   ナレッジ・スキル・素材\ntransfers   {id,name,size,url,to,note,t,expires,path,u}       ファイル便（7日で消す）\nrecordings  {id,kind:\"screen\"|\"minutes\",title,t,dur,transcript,summary,goalId,attendees,scope,url,u}\nchat        {id,t,who,text,goalId,u}                          ここで話した内容はあなたが読む。返信は who:\"ai\"\nnotifs      {id,t,who,text,ref:{type,id},u}                   誰がどこで何をしたか\ninbox       {id,t,src,text,handled,u}                         LINE・メールの貼り付け。対応したら handled:true\ndel         {\"<id>\": epoch_ms}                                削除は消さずにここへ\n```\n\n- `date` / `deadline` / `d` は `YYYY-MM-DD`、`t` は epoch ms\n- `id` は一意。新規は接頭辞 `g_ m_ t_ s_ c_ u_ r_ mn_ cr_ k_ mm_ n_ d_ f_ rec_ ch_ n_ ib_`\n- **`u` は必ず編集時点の epoch ms**（新しい方が同期で勝つ）。既存を消さない。消す時は del\n- tasks.date が null ＝「ふわついている」（期日未定）。今日やるなら今日の日付\n- 進捗の状態は tasks.status（todo / doing / review / done）と steps の done で表す\n\n## フライトプラン（goals[].plan）\n\nゴールに向かう前に「着くまでに何が起きるか」を一周見ておく層。書くのはあなただけ。\n- route：必ず通る工程を順に `{id,title,when,m:false}`（m:true は中の目標に昇格済み）\n- cargo：要る人・モノ・お金と期限 `{id,title,due,t:false}`（t:true はタスク化済み）\n- alt：分岐 `{id,cond,risk,hedge}`（もし〜なら／何が起きる／どちらに転んでも損しない一手）\n\n## 現在地を守るために、あなたがやること\n\n- タスクを進めたら log に残す。やらないと「今どこか」が消える\n- 相手とのやり取り（メール・カレンダー）が読めるなら crm[].log に足す。4日以上動きが無い相手はリマインドのタスクを作る\n- metrics の src:\"pending\" は「取りに行ってほしい数字」。何を指すか確かめ、取得元と接続方法を調べて取ってきて series に入れ、src:\"connected\" にする\n- 議事録（recordings[].transcript）から決まったこと・やることを拾って tasks に入れ、summary に要約を書く\n- inbox の未対応は、返信の下書きを chat に who:\"ai\" で置き、handled:true にする\n- ルーティンの登録・マニュアルの追加も頼まれたらここに書く\n- 迷ったら現在地（tasks / chat / inbox / metrics / crm / recordings）を全部読んでから、質問は2つまで\n\n## 文体\n\n日本語。名詞句の見出し、事実文、数字先行。コピー調・詩的表現・二人称の呼びかけは使わない。返答は短く。\n";
-function ctxHeader(){return `# 作業場：Purpose
-今日：${TODAY}／私：${memName(ME())}
-リポジトリ：${repoPath()}（正データ data.json／公開 ${APPURL}）
-まずリポジトリの CLAUDE.md（＝AGENTS.md）を読む。そこに作業場のルールと data.json の構造がある。`}
-function goalBlock(g){if(!g)return'';const ms=g.miles||[];
-  return `## ゴール（id ${g.id}）
-- ${g.title}／期限 ${g.deadline||'なし'}／担当 ${memName(g.owner)||'未定'}
-- 完了の基準：${g.criteria||'（未定）'}
-- 中の目標：${ms.length?ms.map((m,i)=>`${i+1}.${m.done?'✓':'○'}${m.title}`).join(' ／ '):'なし'}${g.note?'\n- メモ：'+g.note:''}`}
-function taskBlock(t){
-  return `## タスク（id ${t.id}）
-- ${t.title}／期日 ${t.date||'未定'}／状態 ${STATUS[t.status]}／担当 ${memName(t.assignee)||'未定'}
-- 完了の基準：${t.criteria||'（未定 → まず私に質問して決め、data.json に書いてから着手）'}
-- ステップ：${t.steps.length?t.steps.map((s,i)=>`${i+1}.${s.done?'✓':'○'}${s.title}`).join(' ／ '):'なし（3〜5個に分けて書く）'}
-- ログ（新しい順）：${t.log.length?'\n  '+t.log.slice(-8).reverse().map(l=>`[${fmtT(l.t)} ${memName(l.who)||l.who}] ${l.text}`).join('\n  '):'なし'}`}
-function ctxBlock(goalId){
-  const out=[];
-  const ch=S.chat.filter(c=>!goalId||c.goalId===goalId||!c.goalId).slice(-8);
-  if(ch.length)out.push('- 最近のチャット：\n  '+ch.map(c=>`[${fmtT(c.t)} ${memName(c.who)||c.who}] ${c.text}`).join('\n  '));
-  const ib=S.inbox.filter(i=>!i.handled).slice(-3);
-  if(ib.length)out.push('- 未対応の受信箱：\n  '+ib.map(i=>`[${i.src}] ${i.text.slice(0,140).replace(/\n/g,' ')}`).join('\n  '));
-  const ms=S.metrics.filter(m=>!goalId||m.goalId===goalId);
-  if(ms.length)out.push('- 数値：'+ms.map(m=>`${m.name} ${latestV(m)===null?'—':latestV(m)+(m.unit||'')}${m.src==='pending'?'（接続待ち）':''}`).join('／'));
-  const dr=S.drive.filter(d=>!goalId||d.goalId===goalId);
-  if(dr.length)out.push('- ドライブ：'+dr.slice(0,8).map(d=>`${d.name}${d.url?'（'+d.url+'）':''}`).join('／'));
-  const rec=S.recordings.filter(r=>r.transcript&&(!goalId||r.goalId===goalId)).slice(-2);
-  if(rec.length)out.push('- 最近の議事録／録画：'+rec.map(r=>`${r.title}（${fmtT(r.t)}）`).join('／')+'（全文は data.json の recordings）');
-  const stale=S.crm.filter(c=>crmStale(c)>=4&&!['成約','失注'].includes(c.stage));
-  if(stale.length)out.push('- 顧客で止まっている：'+stale.map(c=>`${c.name}（${crmStale(c)}日）`).join('／'));
-  return out.length?'## 現在地（コンテキスト）\n'+out.join('\n'):'';
-}
-function rulesBlock(){return `## 作業場の約束
-1. 着手前：完了の基準が空なら私に質問して決め（一度に2つまで）、data.json に書いてから始める
-2. 進行中：tasks[].steps の done を更新し、tasks[].log に {"t":epoch_ms,"who":"ai","text":"何をしたか"} を追記。status を doing／review／done に
-3. 既存を消さない。u は必ず現在時刻の epoch ms。削除は del に {"id":epoch_ms}
-4. 終わったら notifs に1行（who:"ai"）を足し、git add data.json && git commit -m "…" && git push で反映
-5. 今どこか分からない時は data.json 全体（tasks／chat／inbox／metrics／crm／recordings）を読んでから聞く`}
-function promptForTask(t){const g=goalOf(t.goalId);
-  return [ctxHeader(),goalBlock(g),taskBlock(t),ctxBlock(t.goalId),rulesBlock(),'## 依頼\nこのタスクをゴール達成の方向で進めて。完了の基準を満たしたら done にして、何をしたか log に残して報告。'].filter(Boolean).join('\n\n')}
-function promptForGoal(g,ask){const ts=goalTasks(g).filter(t=>!t.done);
-  return [ctxHeader(),goalBlock(g),ts.length?'## 未完了のタスク\n'+ts.map(t=>`- ${t.title}（${t.date||'未定'}／${STATUS[t.status]}${t.criteria?'／基準:'+t.criteria:''}）`).join('\n'):'',ctxBlock(g.id),rulesBlock(),
-    '## 依頼\n'+(ask||'このゴールの現在地を読み、次に進める一手を決めて実行して。中の目標やタスクが足りなければ data.json に足す（miles は3〜5個、tasks は日付つき）。')].filter(Boolean).join('\n\n')}
-function promptAll(ask){
-  const due=S.tasks.filter(t=>!t.done&&t.date&&t.date<=TODAY), fl=S.tasks.filter(t=>!t.done&&!t.date);
-  return [ctxHeader(),
-    '## ゴール一覧\n'+(sortedGoals().map(g=>{const ms=g.miles||[];return `- ${g.title}（${g.deadline||'期限なし'}／${ms.filter(m=>m.done).length}/${ms.length}／id ${g.id}）${ms.find(m=>!m.done)?' いま：'+ms.find(m=>!m.done).title:''}`}).join('\n')||'なし'),
-    '## 今日やる\n'+(due.map(t=>`- ${t.title}（${t.date}／${STATUS[t.status]}）`).join('\n')||'なし'),
-    fl.length?'## ふわついている\n'+fl.map(t=>`- ${t.title}`).join('\n'):'',
-    ctxBlock(null),rulesBlock(),'## 依頼\n'+(ask||'現在地を読んで、今日いちばん効く一手を決めて実行して。ふわついているタスクは期日を提案して。')].filter(Boolean).join('\n\n')}
-const cliCmd=(bin,p)=>`cd "${repoPath()}" && ${bin} "$(cat <<'PURPOSE_EOF'\n${p}\nPURPOSE_EOF\n)"`;
-function openAISheet(title,prompt){
-  openSheet(body=>{
-    body.innerHTML=`<div class="sh-kicker">AIに依頼する</div><div class="sh-title">${esc(title)}</div>
-      <div class="pl-lead">ゴールと現在地を丸ごと渡す。AIは data.json を更新して返す。起きた瞬間に「どこへ・いまどこ」が伝わる。</div>
-      <div class="cmd">${esc(prompt.slice(0,700))}${prompt.length>700?'\n…（全文 '+prompt.length+' 字）':''}</div>
-      <div class="sh-actions col">
-        <button class="btn primary" data-a="claude">Claude Code で開く</button>
-        <button class="btn plain" data-a="codex">Codex で開く</button>
-        <div style="display:flex;gap:8px"><button class="btn plain" data-a="claudeai">claude.ai</button><button class="btn plain" data-a="chatgpt">ChatGPT</button></div>
-        <button class="btn plain" data-a="copy">プロンプトだけコピー</button>
-      </div>
-      <div class="hint" style="text-align:center">Claude Code／Codex はターミナルに貼るコマンドをコピーする。</div>`;
-    body.querySelectorAll('[data-a]').forEach(b=>b.onclick=async()=>{
-      const a=b.dataset.a;
-      if(a==='claude'||a==='codex'){if(await copyText(cliCmd(a==='claude'?'claude':'codex',prompt)))toast('コマンドをコピーした。ターミナルに貼る');else toast('コピーできない')}
-      else if(a==='claudeai')window.open('https://claude.ai/new?q='+encodeURIComponent(prompt),'_blank');
-      else if(a==='chatgpt')window.open('https://chatgpt.com/?q='+encodeURIComponent(prompt),'_blank');
-      else{if(await copyText(prompt))toast('コピーした');else toast('コピーできない')}
-    });
-  });
-}
-
-/* ============================================================ 作業場（more） */
-function openPanel(name){
-  curPanel=name;
-  if(name==='ai'){curPanel=null;if(curTab!=='more')setTab('more');openAISheet('今日の現在地',promptAll());return}
-  if(curTab!=='more')setTab('more');else{renderMore();renderSidebar();mainEl.scrollTo({top:0})}
-  document.getElementById('topTitle').textContent=PANELS[name].t;
-}
-function closePanel(){curPanel=null;returnSettingsNode();renderMore();renderSidebar();document.getElementById('topTitle').textContent='作業場';mainEl.scrollTo({top:0})}
-function renderMore(){
-  const box=document.getElementById('moreBody');if(!box)return;
-  if(curTab!=='more')return;
-  if(!curPanel){
-    const bd={notifs:unreadN(),inbox:S.inbox.filter(i=>!i.handled).length,crm:S.crm.filter(c=>crmStale(c)>=4&&!['成約','失注'].includes(c.stage)).length,metrics:S.metrics.filter(m=>m.src==='pending').length};
-    const sub={setup:setupDone()+'/'+SETUP.length+' 済',chat:S.chat.length?ago(S.chat[S.chat.length-1].t)+'：'+S.chat[S.chat.length-1].text.slice(0,30):null,members:S.members.length+'人',routines:S.routines.length?S.routines.length+'本':null,manuals:S.manuals.length?S.manuals.length+'本':null,crm:S.crm.length?S.crm.length+'社':null,metrics:S.metrics.length?S.metrics.length+'指標':null,mindmaps:S.mindmaps.length?S.mindmaps.length+'枚':null,drive:S.drive.length?S.drive.length+'件':null,transfers:S.transfers.length?S.transfers.length+'件':null,recordings:S.recordings.length?S.recordings.length+'本':null};
-    box.innerHTML=`<div class="navrow"><div class="caption">ゴール × 現在地</div><h1 class="large-title">作業場</h1></div>
-      <div class="card">${Object.keys(PANELS).map(k=>`<div class="mrow" data-p="${k}"><div class="ic">${ICON[PANELS[k].ic]}</div><div class="t"><b>${esc(PANELS[k].t)}</b><small>${esc(sub[k]||PANELS[k].s)}</small></div>${bd[k]?`<div class="bd">${bd[k]}</div>`:''}${CH2}</div>`).join('')}</div>`;
-    box.querySelectorAll('.mrow').forEach(r=>onTap(r,()=>openPanel(r.dataset.p)));
-    return;
+/* ============================================================ AIへの手渡し（Addness方式：短い指示＋作業場のCLAUDE.mdが規律を持つ） */
+const WORKSPACE_DOC="# Purpose — 作業場（ゴール × 現在地）\n\nこのリポジトリは桑田航希の「作業場」。あなた（Claude Code / Codex / claude.ai / ChatGPT）は、起きた瞬間にここから\n**どこへ行くのか（ゴール・完了の基準）** と **いまどこにいるのか（現在地）** を読み取る。\n\n- 正データ：`data.json`。アプリ https://gjnzqqf8dq-coder.github.io/purpose/ はこれを表示するだけ\n- 書くのはあなた。編集したら必ず `git add data.json && git commit -m \"…\" && git push`（アプリは開いた時と復帰時に読む）\n- 本人は「こなすだけ」。アプリからは、チェック・スワイプ削除・期日の3択・完了の基準とステップとログの追記しかしない\n\n## 最初の言葉が「セットアップを始めてください」だったら\n\n下の「壁打ちプロトコル」で、いま追いかけているゴールを1つずつ立てる（3〜7個）。終わるごとに data.json に書いて push。\n\n## 壁打ちプロトコル（新しいゴール／曖昧なゴール）\n\n目的：ユーザーの「いちばん達成したい状態」から「今日の一歩」までを、一本の因果でつながった入れ子（ゴール → 中の目標 → タスク）にする。\n**解像度が100%になるまで終わらない。** 100% ＝ 次の8つが埋まり、かつ末端の「次にやること」が **AIがそのまま実行できる粒度**（誰が読んでも同じ行動になる1文）になっている。\n\n1. 何が起きたら達成か（完了の基準。成果物で書く。時間や努力量で書かない）\n2. いつまでに（期限）\n3. なぜそれが要るのか（上位の目的。これが大きい目標を見失わないための錨）\n4. いまどこにいるか（現状・持っているもの・過去に試したこと）\n5. 何が止めているか（ボトルネックを1つ）\n6. 通る道（工程3〜5。中の目標になる）\n7. 要る人・モノ・お金と期限（cargo）\n8. 今日の一歩（1つ。完了条件は成果物）\n\n### 会話の規律\n- 質問は毎ターン**1つだけ**。答えやすいように例を2〜5個添える\n- 各ターンの型：相手の発言の言い換え → data.json の既存ゴールを参照した結果を一言（重複や関連があれば言う）→ 次の質問\n- 「最短」「すべて」「約4回」など未確定の数字や断定は、事実に合わせた言い換えを提案する\n- 資料・事例を大量に貼られたら、それを「型」（工程と評価基準）に統合して返す\n- 相手の方針が妥当なら肯定し、修正は「3点だけ」のように絞る\n- 8つのうち埋まった数を「材料 n/8」として毎ターン末尾に示す\n- 材料がそろったら聞き続けず、ドラフトを出して「どうですか？」と1回だけ確認する\n\n### ドラフトの形（そのまま data.json の形）\n```json\n{\"goals\":[{\"id\":\"g_…\",\"title\":\"動詞で終わる1文\",\"deadline\":\"YYYY-MM-DD\",\"cat\":\"c_shukatsu\",\"note\":\"背景・方針・注意（2〜4文）\",\n  \"criteria\":\"何が起きたら達成か（成果物）\",\n  \"miles\":[{\"id\":\"m_…\",\"title\":\"工程1\",\"done\":false}],\n  \"plan\":{\"route\":[{\"id\":\"r_1\",\"title\":\"…\",\"when\":\"2026-10\",\"m\":true}],\"cargo\":[{\"id\":\"c_1\",\"title\":\"…\",\"due\":\"YYYY-MM-DD\",\"t\":false}],\"alt\":[{\"id\":\"a_1\",\"cond\":\"もし…\",\"risk\":\"…\",\"hedge\":\"…\"}]},\n  \"u\":1788000000000}],\n \"tasks\":[{\"id\":\"t_…\",\"title\":\"今日、…する\",\"date\":\"YYYY-MM-DD\",\"done\":false,\"goalId\":\"g_…\",\"mileId\":\"m_…\",\n  \"criteria\":\"成果物で書いた完了条件\",\"steps\":[{\"id\":\"s_1\",\"title\":\"…\",\"done\":false}],\"log\":[],\"u\":1788000000000}]}\n```\n- miles は3〜5個、順番＝通る順。tasks は最初の中の目標に2〜4個、日付つき。「今日、〜する」を1つ入れる\n- 確認が取れたら data.json にマージして push。本人には3行で報告（何を置いた／今日の一歩／次に聞くこと）\n\n## 並走の規律（どの層で呼ばれても）\n\n- アプリの「AIと進める／AIと一緒にこなす」は、ゴール・中の目標・タスクのどの層にもある。**本人がどの層を押したかが、今回の作業の粒度**。抽象度が高いほど精度が落ちるので、押された層より上には広げない\n- 渡された文脈（上位ゴールからそのノードまで）は全部読んだ前提で始める。前段階を聞き直さない\n- 自分で実行できることは実行する。調べる・下書く・作る・ファイルを開く・Notion を見る・ブラウザを使う。手段は自分で選ぶ\n- 本人の判断が要る所だけ、逆質問で取る（「良いアイデアの条件は？」「AとBならどっち？」）。質問は1つずつ\n- 「めんどくさい」を本人に残さない。前提の説明・分解・型づくり・候補出しは AI 側の仕事\n- 完了の基準に届いたら done:true にして push。アプリのチェックはそれで付く。本人がチェックを押す必要は無い\n\n## 「〜を進めてください」で来たら（ゴール／中の目標／タスク）\n\n1. data.json から対象の文脈を読む（criteria・note・miles・tasks・plan・log）\n2. criteria が空か曖昧なら、上のプロトコルで擦り合わせてから書く。曖昧なまま走らない\n3. 理想（criteria）と現在地の差分から次の一手を決める。中の目標・タスクが足りなければ足す（タスクは日付つき、steps は3〜5個）\n4. 進めたら `tasks[].log` に `{\"t\":<epoch_ms>,\"who\":\"ai\",\"text\":\"…\"}`、steps の done を更新。完了の基準に届いたら done:true\n5. 分かったこと・決めたことは goals[].note に書き足す。push。報告は3行以内。迷ったら質問（1つ）\n\n## data.json の構造\n\n```\ncats   {id,name,hue,u}                       カテゴリ。就活=c_shukatsu／藝大=c_seisaku／筋トレ=c_karada／学び=c_manabi／くらし=c_kurashi\ngoals  {id,title,deadline,cat,note,criteria,miles:[{id,title,done}],plan:{route,cargo,alt},u}\ntasks  {id,title,date|null,done,goalId,mileId,criteria,steps:[{id,title,done}],log:[{t,who,text}],u}\ndel    {\"<id>\": epoch_ms}                    削除は消さずにここへ\n```\n- `date` / `deadline` は `YYYY-MM-DD`、`t`/`u` は epoch ms。**`u` は必ず編集時点の時刻**（新しい方が同期で勝つ）\n- id は一意。新規は `g_ m_ t_ s_ r_ c_ a_` 接頭辞。既存は消さない\n- tasks.date が null ＝「ふわついている」（期日未定）。本人がアプリで「今日やる／期日／消す」を選ぶ\n\n## 文体\n日本語。名詞句の見出し、事実文、数字先行。コピー調・詩的表現・呼びかけは使わない。返答は短く。\n";
+function chain(kind,obj){
+  // 上位ゴールからそのノードまでの文脈を全部書く（前段階の説明を私がしなくて済むように）
+  const g=kind==='goal'||kind==='plan'?obj:kind==='mile'?obj.g:goalOf(obj.goalId);
+  if(!g)return '';
+  const ms=g.miles||[];
+  const lines=[`## ゴール「${g.title}」（id ${g.id}）`,
+    `- 期限 ${g.deadline||'なし'}／カテゴリ ${catOf(g)?catOf(g).name:'未分類'}`,
+    `- 完了の基準：${g.criteria||'（未定）'}`,
+    g.note?`- メモ：${g.note}`:'',
+    `- 中の目標：${ms.length?ms.map((m,i)=>`${i+1}.${m.done?'✓':'○'}${m.title}`).join(' ／ '):'なし'}`];
+  const p=planOf(g);
+  if(p.route.length)lines.push(`- 通る道：${p.route.map(r=>r.title+(r.when?'（'+r.when+'）':'')).join(' → ')}`);
+  if(p.cargo.length)lines.push(`- 要るもの：${p.cargo.map(c=>c.title+(c.due?'（'+c.due+'）':'')).join('／')}`);
+  if(p.alt.length)lines.push(`- 分かれ道：${p.alt.map(a=>`もし${a.cond}なら${a.risk}→${a.hedge}`).join('／')}`);
+  const tline=t=>`  - ${t.done?'✓':'○'}${t.title}（${t.date||'未定'}）${t.criteria?' 基準:'+t.criteria:''}${t.steps.length?' 手順:'+t.steps.map(x=>(x.done?'✓':'○')+x.title).join('/'):''}${t.log.length?' 直近:'+t.log[t.log.length-1].text:''}`;
+  if(kind==='goal'||kind==='plan'){
+    lines.push('- タスク：');ms.forEach(m=>{const ts=mileTasks(m);if(ts.length)lines.push(`  ▸ ${m.title}`,...ts.map(tline))});
+    const un=goalTasks(g).filter(t=>!t.mileId);if(un.length)lines.push('  ▸ 紐づけなし',...un.map(tline));
   }
-  const P=PANELS[curPanel];
-  const keep={};box.querySelectorAll('input,textarea').forEach(i=>{if(i.id&&i.value)keep[i.id]=i.value});
-  box.innerHTML=`<div class="ph"><button id="phBack">‹</button><div class="t">${esc(P.t)}</div><span id="phAct"></span></div><div id="pBody"></div>`;
-  box.querySelector('#phBack').onclick=closePanel;
-  const R={setup:renderSetup,chat:renderChat,notifs:renderNotifs,members:renderMembers,routines:renderRoutines,manuals:renderManuals,crm:renderCRM,metrics:renderMetrics,mindmaps:renderMindmaps,drive:renderDrive,transfers:renderTransfers,recordings:renderRecordings,inbox:renderInbox,settings:renderSettings};
-  R[curPanel](box.querySelector('#pBody'),box.querySelector('#phAct'));
-  Object.entries(keep).forEach(([id,v])=>{const el=box.querySelector('#'+id);if(el&&!el.value)el.value=v});
+  if(kind==='mile'){const m=obj.m;lines.push(`\n## 中の目標「${m.title}」（id ${m.id}）${m.done?'（達成済）':''}`,'- タスク：',...(mileTasks(m).map(tline)||[]));
+    if(!mileTasks(m).length)lines.push('  （まだ無い）')}
+  if(kind==='task'){const t=obj,m=ms.find(x=>x.id===t.mileId);
+    if(m)lines.push(`\n## 中の目標「${m.title}」（id ${m.id}）`,'- 同じ中の目標のタスク：',...mileTasks(m).map(tline));
+    lines.push(`\n## タスク「${t.title}」（id ${t.id}）`,`- 期日 ${t.date||'未定'}／${t.done?'完了':'未完了'}`,`- 完了の基準：${t.criteria||'（未定 → まず私と決めて書く）'}`,
+      `- ステップ：${t.steps.length?t.steps.map((x,i)=>`${i+1}.${x.done?'✓':'○'}${x.title}`).join(' ／ '):'なし（3〜5個に分ける）'}`,
+      `- ログ（新しい順）：${t.log.length?'\n  '+t.log.slice(-8).reverse().map(l=>`[${fmtT(l.t)}${l.who==='ai'?' AI':''}] ${l.text}`).join('\n  '):'なし'}`)}
+  const others=sortedGoals().filter(x=>x.id!==g.id);
+  if(others.length)lines.push(`\n## 他のゴール（参考）\n${others.map(x=>`- ${x.title}（${x.deadline||'期限なし'}）`).join('\n')}`);
+  return lines.filter(Boolean).join('\n');
 }
-const addBtn=(act,label,fn)=>{act.innerHTML=`<button class="add">${label}</button>`;act.querySelector('button').onclick=fn};
-const card=h=>`<div class="card">${h}</div>`;
+function agentPrompt(kind,obj,seed){
+  const ws=`作業場：${repoPath()}（正データ data.json）。まず CLAUDE.md を読み、その規律に従う。`;
+  if(kind==='new')return `Purpose で新しいゴールを立てたい。${seed?'ひとこと：「'+seed+'」':''}
+${ws}
+${S.goals.length?'\n## いまあるゴール\n'+sortedGoals().map(x=>`- ${x.title}（${x.deadline||'期限なし'}／${(x.miles||[]).filter(m=>m.done).length}/${(x.miles||[]).length}）`).join('\n')+'\n':''}
+進め方
+1. すぐに逆質問から始める。CLAUDE.md の「壁打ちプロトコル」に従い、質問は一度に1つ。解像度が100%になるまで終わらない
+   100% ＝ 目標の構造が分解され、定量的な達成条件が決まり、末端の「次にやること」が AI がそのまま実行できる粒度まで書けている状態
+2. 100%になったら、ゴール → 中の目標（3〜5）→ 日付つきタスク（完了の基準・ステップつき）→ フライトプラン を data.json に入れ子で書く
+3. git add data.json && git commit && git push で反映。私はアプリでこなすだけ`;
+  if(kind==='goal')return `Purpose のゴール「${obj.title}」を、私と一緒に進めてください。
+${ws}
 
-/* ---- 現在地サマリー（デスクトップ右） ---- */
-function currentPositionHTML(){
-  const due=S.tasks.filter(t=>!t.done&&t.date&&t.date<=TODAY).length, doing=S.tasks.filter(t=>!t.done&&t.status==='doing');
-  const stale=S.crm.filter(c=>crmStale(c)>=4&&!['成約','失注'].includes(c.stage)), pend=S.metrics.filter(m=>m.src==='pending');
-  const last=S.notifs.slice(-5).reverse();
-  return `<div class="sh-kicker">現在地</div><div class="sh-title">${memName(ME())}</div><div class="ins-sum">
-    <b>今日やる</b><div class="big">${due}</div>
-    <b>進行中</b>${doing.length?doing.map(t=>`<div>・${esc(t.title)}</div>`).join(''):'<div>なし</div>'}
-    <b>止まっている</b><div>${stale.length?'顧客 '+stale.length+'社が4日以上':'なし'}${pend.length?'<br>数値 '+pend.length+'件が接続待ち':''}</div>
-    <b>最近の動き</b>${last.length?last.map(n=>`<div><small style="color:var(--gray3)">${fmtT(n.t)} ${esc(memName(n.who)||n.who)}</small><br>${esc(n.text)}</div>`).join(''):'<div>なし</div>'}
-    <div class="sh-actions"><button class="btn primary" onclick="openPanel('ai')">AIに依頼</button></div></div>`;
+${chain('goal',obj)}
+
+進め方
+1. 上の文脈は全部読んだ前提で始める（私に前段階を聞き直さない）。足りない情報だけ data.json を読む
+2. 完了の基準が曖昧なら、CLAUDE.md の「壁打ちプロトコル」で私と擦り合わせてから書く
+3. 理想（完了の基準）と現在地の差分から次の一手を決め、末端が「AIがそのまま実行できる粒度」になるまで中の目標・タスクを足す（タスクは日付つき）
+4. 実行できることは自分で実行する（調べる・下書く・作る・ファイルを開く）。めんどうな所は逆質問で私の判断だけを取る
+5. 進めたら tasks[].log と steps の done を更新、完了の基準に届いたものは done:true。note に決めたことを足し、push。報告は3行`;
+  if(kind==='mile')return `Purpose のゴール「${obj.g.title}」の中の目標「${obj.m.title}」を、私と一緒に進めてください。
+${ws}
+
+${chain('mile',obj)}
+
+進め方
+1. 上の文脈は全部読んだ前提で始める。足りない情報だけ data.json を読む
+2. この中の目標の完了の基準を確認し、タスクが無ければ「AIがそのまま実行できる粒度」で2〜4個に分けて data.json に書く（日付つき・完了の基準つき）
+3. 実行できるタスクは自分で実行し、私の判断が要る所だけ逆質問する（質問は1つずつ）
+4. 進めたら tasks[].log と steps を更新、完了したタスクは done:true、全部終わったら miles[].done を true にして push。報告は3行`;
+  if(kind==='plan')return `Purpose のゴール「${obj.title}」（id ${obj.id}）のフライトプラン（plan.route／cargo／alt）を書いてください。
+${ws}
+route＝必ず通る工程を順に、cargo＝要る人・モノ・お金と期限、alt＝分岐と両張りの一手。data.json に書いて push。`;
+  return `Purpose のタスク「${obj.title}」を、私と一緒にこなしてください。
+${ws}
+
+${chain('task',obj)}
+
+進め方
+1. 上の文脈は全部読んだ前提で始める（前段階を聞き直さない）。ゴールを見失わない
+2. 完了の基準が空なら、私と決めてから data.json に書く。ステップが無ければ「そのまま実行できる粒度」で3〜5個に分ける
+3. 自分で実行できることは実行する（調べる・下書く・作る・Notionやファイルを見る）。めんどうな所は「良い◯◯の条件は？」のように逆質問で私の判断だけを取る
+4. 進めたら steps の done と log（who:"ai"）を更新。完了の基準に届いたら done:true にして push（アプリのチェックが付く）。報告は3行`;
 }
+function webPrompt(kind,obj,seed){
+  const data=JSON.stringify({cats:S.cats,goals:S.goals,tasks:S.tasks},null,1);
+  const proto=WORKSPACE_DOC.split('## 壁打ちプロトコル')[1]?.split('\n## ')[0]||'';
+  const ask=kind==='new'?`新しいゴールを立てたい。${seed?'ひとこと：「'+seed+'」':''}下のプロトコルで壁打ちして（質問は一度に1つ）。解像度100%になったら、追加分だけを {"goals":[…],"tasks":[…]} のjsonコードブロックで出して。`
+    :kind==='goal'?`ゴール「${obj.title}」（id ${obj.id}）の完了の基準と現在地の差分から次の一手を決めて。足りない中の目標・タスクを {"goals":[…],"tasks":[…]} のjsonで出して。`
+    :kind==='plan'?`ゴール「${obj.title}」（id ${obj.id}）の plan（route／cargo／alt）を書いて、{"goals":[{id, plan}]} のjsonで出して。`
+    :kind==='mile'?`ゴール「${obj.g.title}」の中の目標「${obj.m.title}」（id ${obj.m.id}）を実行できる粒度のタスク2〜4個に分けて、{"tasks":[…]} のjsonで出して。`
+    :`タスク「${obj.title}」（id ${obj.id}）を進めたい。完了の基準とステップを決めて、{"tasks":[…]} のjsonで出して。`;
+  return `あなたは目的達成のコーチ。私は「Purpose」（ゴール → 中の目標 → タスク の入れ子）で管理している。今日は ${TODAY}。
 
-/* ============================================================ セットアップ（9手） */
-const SETUP=[
-  {k:'os',b:'パソコンを選ぶ',p:'',opts:[['mac','Mac'],['win','Windows']]},
-  {k:'agent',b:'AIを選ぶ',p:'',opts:[['claude','Claude Code'],['codex','Codex']]},
-  {k:'acct',b:'AIのアカウントがある',p:'Claude Code は Anthropic、Codex は ChatGPT のアカウント。',links:[['https://claude.ai','Claude'],['https://chatgpt.com','ChatGPT']]},
-  {k:'pwa',b:'Purposeをホーム画面に置く',p:'iPhone は共有 →「ホーム画面に追加」。Mac は Safari の「Dockに追加」。'},
-  {k:'dl',b:'AIアプリを入れる',p:'ターミナルに貼る。',cmd:s=>s.agent==='codex'?'npm i -g @openai/codex':'npm i -g @anthropic-ai/claude-code',links:[['https://claude.com/product/claude-code','Claude Code'],['https://chatgpt.com/codex','Codex']]},
-  {k:'login',b:'起動してサインインする',p:'',cmd:s=>s.agent==='codex'?'codex':'claude'},
-  {k:'ws',b:'作業場の元を手に入れる',p:'リポジトリに CLAUDE.md／AGENTS.md がある。無ければここから入れる。',cmd:()=>`git clone https://github.com/${REPO}.git "${repoPath()}"`,ws:true},
-  {k:'open',b:'作業場をAIで開く',p:'',cmd:s=>`cd "${repoPath()}" && ${s.agent==='codex'?'codex':'claude'}`},
-  {k:'first',b:'最初の言葉を送る',p:'AIがヒアリングして、ゴール・今日のタスク・ルーティンを data.json に置く。答えるだけ。',first:true}
+## 依頼
+${ask}
+
+## 壁打ちプロトコル
+${proto.trim()}
+
+## スキーマ
+goals: {id,title,deadline:"YYYY-MM-DD"|null,cat,note,criteria,miles:[{id,title,done}],plan:{route,cargo,alt},u}
+tasks: {id,title,date:"YYYY-MM-DD"|null,done,goalId,mileId,criteria,steps:[{id,title,done}],log:[{t,who,text}],u}
+新規idは g_/m_/t_/s_ 接頭辞。u は現在時刻の epoch ms。既存は消さない。
+
+## 現在の全データ
+\`\`\`json
+${data}
+\`\`\``;
+}
+function openAgent(target,kind,obj,seed){
+  const p=agentPrompt(kind,obj,seed);
+  if(target==='claude'||target==='codex'){
+    copyText(p);
+    location.href=(target==='claude'?'claude://code/new?q=':'codex://new?prompt=')+encodeURIComponent(p);
+    toast(target==='claude'?'Claude Code を開く（指示文もコピー済み）':'Codex を開く（指示文もコピー済み）');
+  }else if(target==='claudeai')window.open('https://claude.ai/new?q='+encodeURIComponent(webPrompt(kind,obj,seed)),'_blank');
+  else if(target==='chatgpt')window.open('https://chatgpt.com/?q='+encodeURIComponent(webPrompt(kind,obj,seed)),'_blank');
+  else copyText(p).then(ok=>toast(ok?'指示文をコピーした':'コピーできない'));
+}
+const AGENTS=[
+  ['claude','CC','Claude Code','作業場を開いて壁打ち。決まったら data.json に書く'],
+  ['codex','Cx','Codex','同じく。ChatGPT のアカウントで'],
+  ['claudeai','ai','claude.ai','ブラウザで。結果のJSONは設定から取り込む'],
+  ['chatgpt','GPT','ChatGPT','同上'],
+  ['copy','⧉','指示文をコピー','手で貼る']
 ];
-const setupS=()=>{try{return JSON.parse(localStorage.getItem('purpose.setup'))||{done:{}}}catch(e){return{done:{}}}};
-const setupSave=s=>localStorage.setItem('purpose.setup',JSON.stringify(s));
-const setupDone=()=>{const s=setupS();return SETUP.filter(x=>s.done[x.k]).length};
-function renderSetup(el){
-  const s=setupS();if(!s.done)s.done={};
-  const n=setupDone(), r=22, C=2*Math.PI*r;
-  el.innerHTML=card(`<div style="display:flex;align-items:center;gap:14px"><svg class="ring" viewBox="0 0 56 56"><circle cx="28" cy="28" r="${r}" fill="none" stroke="rgba(0,0,0,.08)" stroke-width="4"/><circle cx="28" cy="28" r="${r}" fill="none" stroke="var(--ink)" stroke-width="4" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-n/SETUP.length)}" transform="rotate(-90 28 28)"/><text x="28" y="32" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">${n}/${SETUP.length}</text></svg>
-    <div><div style="font-size:16px;font-weight:600">AIの作業場をつくる</div><div class="hint" style="padding:2px 0 0">ゴールと現在地を、起きた瞬間のAIに渡せる状態にする。9手で終わる。</div></div></div>`)
-  +card(SETUP.map(st=>{
-    const done=!!s.done[st.k];
-    let extra='';
-    if(st.opts)extra=`<div class="opts">${st.opts.map(([v,l])=>`<button class="opt${s[st.k]===v?' on':''}" data-k="${st.k}" data-v="${v}">${l}</button>`).join('')}</div>`;
-    if(st.cmd)extra+=`<div class="cmd">${esc(st.cmd(s))}</div><div class="opts"><button class="opt" data-copy="${st.k}">コマンドをコピー</button></div>`;
-    if(st.links)extra+=`<div class="opts" style="margin-top:6px">${st.links.map(([u,l])=>`<a class="opt" href="${u}" target="_blank" style="text-decoration:none">${l} ↗</a>`).join('')}</div>`;
-    if(st.ws)extra+=`<div class="opts" style="margin-top:6px"><button class="opt" data-ws="dl">CLAUDE.md をダウンロード</button><button class="opt" data-ws="copy">中身をコピー</button><button class="opt" data-ws="push">リポジトリに書き込む</button></div>`;
-    if(st.first)extra+=`<div class="cmd">セットアップを始めてください</div><div class="opts"><button class="opt" data-first="cmd">AIを開いて送るコマンドをコピー</button><button class="opt" data-first="txt">言葉だけコピー</button></div>`;
-    return `<div class="chk${done?' done':''}" data-k="${st.k}"><div class="c">${CK(11)}</div><div class="t"><b>${esc(st.b)}</b>${st.p?`<p>${esc(st.p)}</p>`:''}${extra}</div></div>`;
-  }).join(''));
-  el.querySelectorAll('.chk .c').forEach(c=>onTap(c,()=>{const k=c.parentElement.dataset.k;s.done[k]=!s.done[k];setupSave(s);renderMore()}));
-  el.querySelectorAll('.opt[data-k]').forEach(b=>onTap(b,()=>{s[b.dataset.k]=b.dataset.v;s.done[b.dataset.k]=true;setupSave(s);renderMore()}));
-  el.querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{const st=SETUP.find(x=>x.k===b.dataset.copy);if(await copyText(st.cmd(s)))toast('コピーした')});
-  el.querySelectorAll('[data-ws]').forEach(b=>b.onclick=async()=>{
-    const a=b.dataset.ws;
-    if(a==='dl'){const u=URL.createObjectURL(new Blob([WORKSPACE_DOC],{type:'text/markdown'}));const x=document.createElement('a');x.href=u;x.download='CLAUDE.md';x.click()}
-    else if(a==='copy'){if(await copyText(WORKSPACE_DOC))toast('コピーした')}
-    else{if(!tok()){toast('設定でトークンを保存してから');return}toast('書き込み中…');
-      try{await ghPutText('CLAUDE.md',WORKSPACE_DOC,'作業場の元を更新');await ghPutText('AGENTS.md',WORKSPACE_DOC,'作業場の元を更新');toast('リポジトリに書いた');s.done.ws=true;setupSave(s);renderMore()}catch(e){toast('書き込めない')}}
-  });
-  el.querySelectorAll('[data-first]').forEach(b=>b.onclick=async()=>{
-    const p='セットアップを始めてください';
-    if(b.dataset.first==='txt'){if(await copyText(p))toast('コピーした。AIに送る')}
-    else{if(await copyText(cliCmd(s.agent==='codex'?'codex':'claude',p)))toast('コピーした。ターミナルに貼る')}
-    s.done.first=true;setupSave(s);setTimeout(renderMore,600);
-  });
+function agentList(kind,obj,seedFn){
+  return `<div id="agents">${AGENTS.map(([k,ic,t,s])=>`<div class="agent" data-k="${k}"><div class="ic${k==='claude'?'':' soft'}">${ic}</div><div class="t"><b>${t}</b><small>${s}</small></div>${CH2}</div>`).join('')}</div>`;
 }
-
-/* ============================================================ チャット */
-function renderChat(el,act){
-  const gs=sortedGoals();
-  const list=S.chat.filter(c=>chatFilter==='all'||c.goalId===chatFilter).slice(-200);
-  el.innerHTML=`<div class="chips" style="padding-bottom:12px"><button class="chip${chatFilter==='all'?' on':''}" data-c="all">すべて</button>${gs.map(g=>`<button class="chip${chatFilter===g.id?' on':''}" data-c="${g.id}" style="--h:${hueOf(g)}"><i></i>${esc(g.title)}</button>`).join('')}</div>
-    ${card(`<div class="msgs" id="msgs">${list.length?list.map(c=>`<div class="msg${c.who===ME()?' me':''}${c.who==='ai'?' ai':''}">${esc(c.text)}<small>${c.who!==ME()?esc(memName(c.who)||c.who)+' · ':''}${fmtT(c.t)}${c.goalId&&chatFilter==='all'&&goalOf(c.goalId)?' · '+esc(goalOf(c.goalId).title):''}</small></div>`).join(''):'<div class="hint">ここで話した内容はAIが読む。変な場所で話すより、ここで。</div>'}</div>
-    <div class="frow"><input class="field" id="chatIn" placeholder="メッセージ"><button class="ib" id="chatMic"></button><button class="ib pri" id="chatSend">↑</button></div>`)}`;
-  el.querySelectorAll('.chip').forEach(b=>onTap(b,()=>{chatFilter=b.dataset.c;renderMore()}));
-  const inp=el.querySelector('#chatIn');attachMic(el.querySelector('#chatMic'),inp);
-  const send=()=>{const v=inp.value.trim();if(!v)return;
-    S.chat.push({id:uid('ch_'),t:Date.now(),who:ME(),text:v,goalId:chatFilter==='all'?null:chatFilter,u:Date.now()});
-    if(S.chat.length>1000)S.chat=S.chat.slice(-1000);
-    notify(`チャット：${v.slice(0,40)}`,{type:'chat',id:chatFilter});inp.value='';save();
-    const m=el.querySelector('#msgs');if(m)m.scrollTop=m.scrollHeight};
-  el.querySelector('#chatSend').onclick=send;inp.onkeydown=e=>{if(e.key==='Enter'&&!e.isComposing)send()};
-  addBtn(act,'AIに要約',()=>openAISheet('チャット',[ctxHeader(),'## チャット全文（'+(chatFilter==='all'?'すべて':goalOf(chatFilter)?.title)+'）\n'+list.map(c=>`[${fmtT(c.t)} ${memName(c.who)||c.who}] ${c.text}`).join('\n'),rulesBlock(),'## 依頼\nこのチャットから決まったこと・やること・未決を抜き出し、やることは tasks に日付つきで入れて。'].join('\n\n')));
-  const m=el.querySelector('#msgs');if(m)m.scrollTop=m.scrollHeight;
+function bindAgents(body,kind,obj,seedFn){
+  body.querySelectorAll('.agent').forEach(a=>onTap(a,()=>{openAgent(a.dataset.k,kind,obj,seedFn?seedFn():'');if(a.dataset.k!=='copy')closeSheet()}));
 }
-
-/* ============================================================ 通知 */
-function renderNotifs(el,act){
-  const list=S.notifs.slice().reverse().slice(0,150), seen=seenT();
-  el.innerHTML=card(list.length?list.map(n=>`<div class="li" data-id="${n.id}"><div class="av" style="--h:${memOf(n.who)?memOf(n.who).hue:222}">${n.who==='ai'?'AI':esc((memName(n.who)||'?').slice(0,1))}</div><div class="t"><b style="font-weight:${n.t>seen&&n.who!==ME()?'650':'450'}">${esc(n.text)}</b><small>${esc(memName(n.who)||n.who)} · ${fmtT(n.t)}</small></div>${n.t>seen&&n.who!==ME()?'<i style="width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:0 0 6px rgba(255,59,48,.8)"></i>':''}</div>`).join(''):'<div class="hint">まだ動きが無い。タスクを完了したり、チャットしたりすると、ここに残る。</div>');
-  el.querySelectorAll('.li').forEach(r=>onTap(r,()=>{const n=S.notifs.find(x=>x.id===r.dataset.id);if(!n||!n.ref)return;openRef(n.ref)}));
-  addBtn(act,'既読',()=>{localStorage.setItem('purpose.seen',String(Date.now()));renderMore();renderBadge()});
-  setTimeout(()=>{localStorage.setItem('purpose.seen',String(Date.now()));renderBadge()},1500);
-}
-function openRef(ref){
-  if(!ref)return;
-  if(ref.type==='task'&&taskOf(ref.id))openTaskSheet(ref.id);
-  else if(ref.type==='goal'&&goalOf(ref.id))openGoalSheet(ref.id);
-  else if(ref.type==='chat'){chatFilter=ref.id||'all';openPanel('chat')}
-  else if(ref.type==='crm')openCRMSheet(ref.id);
-  else if(ref.type==='metric')openMetricSheet(ref.id);
-  else if(ref.type==='rec')openRecSheet(ref.id);
-  else if(ref.type==='transfer')openPanel('transfers');
-  else if(ref.type==='inbox')openPanel('inbox');
-}
-
-/* ============================================================ メンバー */
-function lastActive(id){let t=0;S.notifs.forEach(n=>{if(n.who===id&&n.t>t)t=n.t});S.chat.forEach(c=>{if(c.who===id&&c.t>t)t=c.t});
-  S.tasks.forEach(x=>x.log.forEach(l=>{if(l.who===id&&l.t>t)t=l.t}));return t}
-function renderMembers(el,act){
-  el.innerHTML=card(S.members.map(m=>{
-    const doing=S.tasks.filter(t=>!t.done&&t.assignee===m.id&&t.status==='doing'), open=S.tasks.filter(t=>!t.done&&t.assignee===m.id), la=lastActive(m.id);
-    return `<div class="li" data-id="${m.id}"><div class="av" style="--h:${m.hue}">${esc(m.name.slice(0,1))}</div><div class="t"><b>${esc(m.name)}${m.id===ME()?' <span class="pill">自分</span>':''}${m.role?` <small style="display:inline">${esc(m.role)}</small>`:''}</b><small>${doing.length?'いま：'+esc(doing[0].title)+(doing.length>1?' ほか'+(doing.length-1):''):'進行中なし'}</small></div><div class="r">${open.length} 件<br>${la?ago(la):'—'}</div></div>`}).join(''))
-  +card(`<div class="sec-h">招待</div><div class="hint" style="padding-top:0">同じ data.json を見る人がメンバー。招待リンクと、設定で使う GitHub トークンを渡す。</div><div class="opts"><button class="opt" id="mInv">招待リンクをコピー</button></div>`);
-  el.querySelectorAll('.li').forEach(r=>onTap(r,()=>openMemberSheet(r.dataset.id)));
-  el.querySelector('#mInv').onclick=async()=>{if(await copyText(`${APPURL}\n\nPurpose のメンバーに招待します。開いたら 設定 → 自分の名前を選び、GitHub トークンを保存してください。`))toast('コピーした')};
-  addBtn(act,'＋ メンバー',()=>openSheet(body=>{
-    body.innerHTML=`<div class="sh-kicker">メンバーを追加</div><input class="field" id="mN" placeholder="名前" style="margin-top:10px"><input class="field" id="mR" placeholder="役割（任意）"><div class="sh-actions"><button class="btn primary" id="mAdd">追加</button></div>`;
-    body.querySelector('#mAdd').onclick=()=>{const n=body.querySelector('#mN').value.trim();if(!n)return;
-      S.members.push({id:uid('u_'),name:n,role:body.querySelector('#mR').value.trim(),hue:Math.floor(Math.random()*360),u:Date.now()});closeSheet();save();toast('追加した')};
-  }));
-}
-function openMemberSheet(id){const m=memOf(id);if(!m)return;
+function openNewGoal(){
   openSheet(body=>{
-    const ts=S.tasks.filter(t=>t.assignee===id&&!t.done).sort((a,b)=>(a.date||'9999')<(b.date||'9999')?-1:1);
-    const acts=[...S.notifs.filter(n=>n.who===id).slice(-10).reverse()];
-    body.innerHTML=`<div class="sh-kicker">メンバー</div><div class="sh-title">${esc(m.name)}</div><div class="sh-date">${esc(m.role||'')}${lastActive(id)?'　最後の動き '+ago(lastActive(id)):''}</div>
-      <div class="sh-sec">やっていること</div><div class="m-inner" style="margin:0">${ts.length?ts.map(taskChip).join(''):'<div class="m-none">なし</div>'}</div>
-      <div class="sh-sec">最近の動き</div><div class="tl">${acts.length?acts.map(n=>`<div><small>${fmtT(n.t)}</small>${esc(n.text)}</div>`).join(''):'<div class="pl-empty">なし</div>'}</div>
-      <div class="sh-actions col"><button class="btn primary" id="mbMe">この人として使う</button><button class="btn plain" id="mbTask">タスクを振る</button>${S.members.length>1?'<button class="btn dangerous" id="mbDel">外す</button>':''}</div>`;
-    bindTasks(body);
-    body.querySelector('#mbMe').onclick=()=>{localStorage.setItem('purpose.me',id);closeSheet();render();toast(m.name+'として使う')};
-    body.querySelector('#mbTask').onclick=()=>openSheet(b2=>{
-      b2.innerHTML=`<div class="sh-kicker">${esc(m.name)}に任せる</div><div class="frow" style="margin-top:10px"><input class="field" id="atT" placeholder="やること"><button class="ib" id="atMic"></button></div><div class="sh-actions"><button class="btn primary" id="atAdd">振る</button></div>`;
-      const i=b2.querySelector('#atT');attachMic(b2.querySelector('#atMic'),i);
-      b2.querySelector('#atAdd').onclick=()=>{const v=i.value.trim();if(!v)return;const t=newTask({title:v,date:TODAY,assignee:id});S.tasks.push(t);
-        notify(`${m.name}に「${v}」を任せた`,{type:'task',id:t.id});closeSheet();save();toast('振った')};
-    });
-    const del=body.querySelector('#mbDel');if(del)del.onclick=()=>{S.del[id]=Date.now();S.members=S.members.filter(x=>x.id!==id);closeSheet();save()};
+    body.innerHTML=`<div class="sh-kicker">新しいゴール</div><div class="sh-title">AIと壁打ちして決める</div>
+      <div class="pl-lead">解像度が100%になるまで質問される。決まったら、ゴール → 中の目標 → タスクの入れ子でここに現れる。私はこなすだけ。</div>
+      <input class="field" id="ngSeed" placeholder="ひとことで（任意）　例：電通に受かりたい" style="margin-top:8px">
+      <div class="sh-sec">どのAIで</div>${agentList('new')}`;
+    bindAgents(body,'new',null,()=>body.querySelector('#ngSeed').value.trim());
   });
 }
-
-/* ============================================================ ルーティン */
-const FREQ={daily:'毎日',weekdays:'平日',weekly:'週'};
-function renderRoutines(el,act){
-  el.innerHTML=card(S.routines.length?S.routines.map(r=>`<div class="li" data-id="${r.id}"><div class="t"><b>${esc(r.title)}</b><small>${FREQ[r.freq]||'毎日'}${r.freq==='weekly'?'（'+(r.dow||[]).map(d=>WDJ[d]).join('')+'）':''}${r.goalId&&goalOf(r.goalId)?' · '+esc(goalOf(r.goalId).title):''}</small></div><div class="r">${routineDue(r,TODAY)?'今日':''}</div></div>`).join(''):'<div class="hint">毎日同じタスクはここに登録すると、朝「今日やる」に自動で入る。</div>');
-  el.querySelectorAll('.li').forEach(x=>onTap(x,()=>openRoutineSheet(x.dataset.id)));
-  addBtn(act,'＋ ルーティン',()=>openRoutineSheet(null));
-}
-function openRoutineSheet(id){
-  const r=id?S.routines.find(x=>x.id===id):{id:uid('r_'),title:'',freq:'daily',dow:[1,2,3,4,5],goalId:null,steps:[],u:0};
-  if(!r)return;
+function openAgentSheet(kind,obj){
+  const title=kind==='plan'?'フライトプランを書かせる':kind==='goal'?'このゴールをAIと進める':kind==='mile'?'この中の目標をAIと進める':'このタスクをAIと一緒にこなす';
   openSheet(body=>{
-    body.innerHTML=`<div class="sh-kicker">ルーティン</div>
-      <div class="frow" style="margin-top:10px"><input class="field" id="rT" placeholder="毎日やること" value="${esc(r.title)}"><button class="ib" id="rMic"></button></div>
-      <div class="sh-sec">頻度</div><div class="opts" id="rF">${Object.entries(FREQ).map(([k,l])=>`<button class="opt${r.freq===k?' on':''}" data-f="${k}">${l}</button>`).join('')}</div>
-      <div class="opts" id="rD" style="margin-top:8px;${r.freq==='weekly'?'':'display:none'}">${WDJ.map((w,i)=>`<button class="opt${(r.dow||[]).includes(i)?' on':''}" data-d="${i}">${w}</button>`).join('')}</div>
-      <div class="sh-sec">ゴール</div><div class="opts" id="rG"><button class="opt${r.goalId?'':' on'}" data-g="">なし</button>${sortedGoals().map(g=>`<button class="opt${r.goalId===g.id?' on':''}" data-g="${g.id}">${esc(g.title)}</button>`).join('')}</div>
-      <div class="sh-sec">ステップ（1行1つ・任意）</div><textarea class="field" id="rS" placeholder="例：\n受信箱を見る\n数値を入れる">${esc((r.steps||[]).join('\n'))}</textarea>
-      <div class="sh-actions"><button class="btn primary" id="rSave">${id?'保存':'登録'}</button>${id?'<button class="btn dangerous" id="rDel">削除</button>':''}</div>`;
-    attachMic(body.querySelector('#rMic'),body.querySelector('#rT'));
-    body.querySelectorAll('#rF .opt').forEach(b=>onTap(b,()=>{r.freq=b.dataset.f;body.querySelectorAll('#rF .opt').forEach(x=>x.classList.toggle('on',x===b));body.querySelector('#rD').style.display=r.freq==='weekly'?'':'none'}));
-    body.querySelectorAll('#rD .opt').forEach(b=>onTap(b,()=>{const d=+b.dataset.d;r.dow=r.dow||[];if(r.dow.includes(d))r.dow=r.dow.filter(x=>x!==d);else r.dow.push(d);b.classList.toggle('on')}));
-    body.querySelectorAll('#rG .opt').forEach(b=>onTap(b,()=>{r.goalId=b.dataset.g||null;body.querySelectorAll('#rG .opt').forEach(x=>x.classList.toggle('on',x===b))}));
-    body.querySelector('#rSave').onclick=()=>{r.title=body.querySelector('#rT').value.trim();if(!r.title){toast('内容を入れて');return}
-      r.steps=body.querySelector('#rS').value.split('\n').map(s=>s.trim()).filter(Boolean);r.u=Date.now();
-      if(!id)S.routines.push(r);closeSheet();save();toast(id?'保存した':'登録した')};
-    const del=body.querySelector('#rDel');if(del)del.onclick=()=>{S.del[r.id]=Date.now();S.routines=S.routines.filter(x=>x.id!==r.id);closeSheet();save()};
+    body.innerHTML=`<div class="sh-kicker">${esc(kind==='mile'?obj.m.title:obj.title)}</div><div class="sh-title">${title}</div>
+      <div class="pl-lead">上位ゴールからここまでの文脈を全部渡す。前段階の説明は要らない。終わったら AI が data.json に書き戻し、チェックが付く。</div>
+      <div class="sh-sec">どのAIで</div>${agentList(kind,obj)}`;
+    bindAgents(body,kind,obj);
   });
-}
-
-/* ============================================================ マニュアル */
-function renderManuals(el,act){
-  el.innerHTML=card(S.manuals.length?S.manuals.map(m=>`<div class="li" data-id="${m.id}"><div class="ic" style="width:30px;height:30px;border-radius:9px;background:var(--fill);display:grid;place-items:center;color:var(--ink2);flex:none">${ICON.book}</div><div class="t"><b>${esc(m.title)}</b><small>${(m.steps||[]).length}ステップ${m.note?' · '+esc(m.note.slice(0,40)):''}</small></div>${CH2}</div>`).join(''):'<div class="hint">「この仕事はこの手順で」を置く場所。AIはこれを読んで同じ順番で進める。ツリーに追加すると、その手順がタスクになる。</div>');
-  el.querySelectorAll('.li').forEach(x=>onTap(x,()=>openManualSheet(x.dataset.id)));
-  addBtn(act,'＋ マニュアル',()=>openManualSheet(null));
-}
-function openManualSheet(id){
-  const m=id?S.manuals.find(x=>x.id===id):null;
-  openSheet(body=>{
-    if(!m){body.innerHTML=`<div class="sh-kicker">マニュアル</div><input class="field" id="mnT" placeholder="仕事の名前" style="margin-top:10px"><textarea class="field" id="mnS" placeholder="手順を1行ずつ"></textarea><textarea class="field" id="mnN" placeholder="注意・コツ（任意）" style="min-height:60px"></textarea><div class="sh-actions"><button class="btn primary" id="mnAdd">置く</button></div>`;
-      body.querySelector('#mnAdd').onclick=()=>{const t=body.querySelector('#mnT').value.trim();if(!t)return;
-        S.manuals.push({id:uid('mn_'),title:t,steps:body.querySelector('#mnS').value.split('\n').map(s=>s.trim()).filter(Boolean),note:body.querySelector('#mnN').value.trim(),u:Date.now()});closeSheet();save();toast('置いた')};
-      return}
-    body.innerHTML=`<div class="sh-kicker">マニュアル</div><div class="sh-title">${esc(m.title)}</div>${m.note?`<div class="sh-note">${esc(m.note)}</div>`:''}
-      <div class="sh-sec">手順</div>${(m.steps||[]).map((s,i)=>`<div class="pl-row"><div class="n">${i+1}</div><div class="t" style="white-space:normal">${esc(s)}</div></div>`).join('')||'<div class="pl-empty">手順なし</div>'}
-      <div class="sh-sec">ツリーに追加</div><div class="opts" id="mnG"><button class="opt" data-g="">ゴールなし</button>${sortedGoals().map(g=>`<button class="opt" data-g="${g.id}">${esc(g.title)}</button>`).join('')}</div>
-      <div class="sh-actions col"><button class="btn primary" id="mnAI">この手順でAIに進めさせる</button><button class="btn dangerous" id="mnDel">削除</button></div>`;
-    body.querySelectorAll('#mnG .opt').forEach(b=>onTap(b,()=>{
-      const t=newTask({title:m.title,date:TODAY,goalId:b.dataset.g||null,criteria:m.note||'',steps:(m.steps||[]).map(s=>({id:uid('s_'),title:s,done:false})),assignee:ME()});
-      S.tasks.push(t);closeSheet();save();toast('今日のタスクにした');openTaskSheet(t.id)}));
-    body.querySelector('#mnAI').onclick=()=>openAISheet(m.title,[ctxHeader(),`## マニュアル：${m.title}\n${(m.steps||[]).map((s,i)=>`${i+1}. ${s}`).join('\n')}${m.note?'\n注意：'+m.note:''}`,ctxBlock(null),rulesBlock(),'## 依頼\nこのマニュアルの手順どおりに進めて。手順ごとに log を残す。'].join('\n\n'));
-    body.querySelector('#mnDel').onclick=()=>{S.del[m.id]=Date.now();S.manuals=S.manuals.filter(x=>x.id!==m.id);closeSheet();save()};
-  });
-}
-
-/* ============================================================ 顧客（CRM） */
-const crmLast=c=>c.log.length?Math.max(...c.log.map(l=>l.t)):(c.u||0);
-const crmStale=c=>Math.floor((Date.now()-crmLast(c))/864e5);
-function renderCRM(el,act){
-  const list=S.crm.filter(c=>crmFilter==='all'||c.stage===crmFilter).sort((a,b)=>crmStale(b)-crmStale(a));
-  el.innerHTML=`<div class="chips" style="padding-bottom:12px"><button class="chip${crmFilter==='all'?' on':''}" data-s="all">すべて<small>${S.crm.length}</small></button>${STAGES.map(s=>{const n=S.crm.filter(c=>c.stage===s).length;return n?`<button class="chip${crmFilter===s?' on':''}" data-s="${s}">${s}<small>${n}</small></button>`:''}).join('')}</div>`
-  +card(list.length?list.map(c=>{const st=crmStale(c),stop=st>=4&&!['成約','失注'].includes(c.stage);
-    return `<div class="li" data-id="${c.id}"><div class="t"><b>${esc(c.name)}${c.person?' <small style="display:inline">'+esc(c.person)+'</small>':''}</b><small><span class="pill${c.stage==='成約'?' on':''}${c.stage==='失注'?' red':''}">${esc(c.stage)}</span>　${c.next?'次：'+esc(c.next)+(c.nextDate?'（'+c.nextDate.slice(5).replace('-','/')+'）':''):'次の一手なし'}</small></div><div class="r${stop?' bad':''}">${stop?st+'日止まり':(c.log.length?ago(crmLast(c)):'')}</div></div>`}).join('')
-    :'<div class="hint">相手ごとに「いまどの段階か」「次に何をするか」「何を話したか」を残す。4日動きが無いと赤くなる。AIに「どこにアプローチすべき？」と聞ける。</div>');
-  el.querySelectorAll('.chip').forEach(b=>onTap(b,()=>{crmFilter=b.dataset.s;renderMore()}));
-  el.querySelectorAll('.li').forEach(x=>onTap(x,()=>openCRMSheet(x.dataset.id)));
-  act.innerHTML=`<button class="add" id="crmAI" style="background:var(--fill);color:var(--ink);margin-right:6px">AI</button><button class="add" id="crmAdd">＋</button>`;
-  act.querySelector('#crmAdd').onclick=()=>openSheet(body=>{
-    body.innerHTML=`<div class="sh-kicker">顧客を追加</div><input class="field" id="cN" placeholder="会社・相手の名前" style="margin-top:10px"><input class="field" id="cP" placeholder="担当者（任意）"><div class="sh-actions"><button class="btn primary" id="cAdd">追加</button></div>`;
-    body.querySelector('#cAdd').onclick=()=>{const n=body.querySelector('#cN').value.trim();if(!n)return;
-      S.crm.push({id:uid('cr_'),name:n,person:body.querySelector('#cP').value.trim(),stage:STAGES[0],owner:ME(),next:'',nextDate:null,log:[{t:Date.now(),who:ME(),text:'リスト入り'}],u:Date.now()});closeSheet();save()};
-  });
-  act.querySelector('#crmAI').onclick=()=>openAISheet('顧客',[ctxHeader(),'## 顧客一覧\n'+S.crm.map(c=>`- ${c.name}${c.person?'（'+c.person+'）':''}／${c.stage}／次：${c.next||'なし'}${c.nextDate?' '+c.nextDate:''}／最後の動き ${crmStale(c)}日前／担当 ${memName(c.owner)||'未定'}\n  ${c.log.slice(-3).map(l=>`[${fmtT(l.t)}] ${l.text}`).join(' ／ ')}`).join('\n'),rulesBlock(),'## 依頼\nどの相手に今日アプローチすべきか決めて、理由と一言目を書いて。4日以上止まっている相手にはリマインドのタスクを tasks に入れて（担当者つき）。カレンダーやメールが読めるなら、やり取りを crm[].log に足して。'].join('\n\n'));
-}
-function openCRMSheet(id){const c=S.crm.find(x=>x.id===id);if(!c)return;
-  openSheet(body=>{
-    body.innerHTML=`<div class="sh-kicker">顧客</div><div class="sh-title" id="cTitle" contenteditable="true">${esc(c.name)}</div><div class="sh-date">${esc(c.person||'')}${c.owner?'　担当 '+esc(memName(c.owner)):''}</div>
-      <div class="sh-sec">段階</div><div class="opts" id="cS">${STAGES.map(s=>`<button class="opt${c.stage===s?' on':''}" data-s="${s}">${s}</button>`).join('')}</div>
-      <div class="sh-sec">次の一手</div><div class="frow"><input class="field" id="cNext" placeholder="次に何をするか" value="${esc(c.next||'')}"><label class="opt"><input type="date" id="cND" value="${c.nextDate||''}"></label></div>
-      <div class="sh-sec">担当</div><div class="opts" id="cO">${S.members.map(m=>`<button class="opt${c.owner===m.id?' on':''}" data-u="${m.id}">${esc(m.name)}</button>`).join('')}</div>
-      <div class="sh-sec">やり取り</div><div class="tl">${c.log.slice().reverse().map(l=>`<div class="${l.who==='ai'?'ai':''}"><small>${fmtT(l.t)} · ${esc(memName(l.who)||l.who)}${l.src?' · '+esc(l.src):''}</small>${esc(l.text)}</div>`).join('')||'<div class="pl-empty">なし</div>'}</div>
-      <div class="frow"><input class="field" id="cL" placeholder="何を話したか"><button class="ib" id="cLMic"></button><button class="ib" id="cLAdd">＋</button></div>
-      <div class="sh-actions col"><button class="btn primary" id="cAI">AIに依頼する</button><div style="display:flex;gap:8px"><button class="btn plain" id="cTask">タスクにする</button><button class="btn dangerous" id="cDel">削除</button></div></div>`;
-    const touch=()=>{c.u=Date.now();saveQuiet()};
-    const ti=body.querySelector('#cTitle');ti.onblur=()=>{const v=ti.textContent.trim();if(v&&v!==c.name){c.name=v;touch();renderMore()}};
-    body.querySelectorAll('#cS .opt').forEach(b=>onTap(b,()=>{if(c.stage===b.dataset.s)return;c.stage=b.dataset.s;c.log.push({t:Date.now(),who:ME(),text:'段階 → '+c.stage});
-      notify(`${c.name}が「${c.stage}」に`,{type:'crm',id:c.id});touch();render();openCRMSheet(id)}));
-    const nx=body.querySelector('#cNext');nx.onblur=()=>{c.next=nx.value.trim();touch()};
-    body.querySelector('#cND').onchange=e=>{c.nextDate=e.target.value||null;touch()};
-    body.querySelectorAll('#cO .opt').forEach(b=>onTap(b,()=>{c.owner=b.dataset.u;touch();body.querySelectorAll('#cO .opt').forEach(x=>x.classList.toggle('on',x===b))}));
-    const li=body.querySelector('#cL');attachMic(body.querySelector('#cLMic'),li);
-    const add=()=>{const v=li.value.trim();if(!v)return;c.log.push({t:Date.now(),who:ME(),text:v});touch();render();openCRMSheet(id)};
-    body.querySelector('#cLAdd').onclick=add;li.onkeydown=e=>{if(e.key==='Enter')add()};
-    body.querySelector('#cAI').onclick=()=>openAISheet(c.name,[ctxHeader(),`## 顧客：${c.name}${c.person?'（'+c.person+'）':''}\n- 段階：${c.stage}／担当 ${memName(c.owner)||'未定'}\n- 次の一手：${c.next||'なし'}${c.nextDate?'（'+c.nextDate+'）':''}\n- やり取り：\n  ${c.log.slice(-10).map(l=>`[${fmtT(l.t)} ${memName(l.who)||l.who}] ${l.text}`).join('\n  ')}`,ctxBlock(null),rulesBlock(),'## 依頼\nこの相手を次の段階へ進める一手を決めて実行して（連絡文の下書き、日程候補、資料）。やったことは crm[].log に、必要なら tasks に入れて。'].join('\n\n'));
-    body.querySelector('#cTask').onclick=()=>{const t=newTask({title:`${c.name}：${c.next||'対応'}`,date:c.nextDate||TODAY,assignee:c.owner||ME()});S.tasks.push(t);closeSheet();save();openTaskSheet(t.id)};
-    body.querySelector('#cDel').onclick=()=>{S.del[c.id]=Date.now();S.crm=S.crm.filter(x=>x.id!==c.id);closeSheet();save()};
-  });
-}
-
-/* ============================================================ 数値（アナリティクス・KPIツリー） */
-const latestV=m=>m.series.length?m.series[m.series.length-1].v:null;
-const prevV=m=>m.series.length>1?m.series[m.series.length-2].v:null;
-const fmtV=v=>v===null||v===undefined?'—':(Math.abs(v)>=1e4?Math.round(v).toLocaleString('ja-JP'):+v.toFixed(2)+'');
-function spark(vals,w=64,h=22){if(vals.length<2)return`<svg width="${w}" height="${h}"></svg>`;const mn=Math.min(...vals),mx=Math.max(...vals);
-  const pts=vals.map((v,i)=>`${(i/(vals.length-1)*w).toFixed(1)},${(h-2-(mx===mn?h/2-2:(v-mn)/(mx-mn)*(h-4))).toFixed(1)}`).join(' ');
-  return`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polyline points="${pts}" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>`}
-function lineChart(series,target){
-  const W=320,H=150,px=8,py=16;if(!series.length)return'<div class="hint">まだ数値が無い</div>';
-  const vals=series.map(s=>s.v);let mn=Math.min(...vals,target??Infinity),mx=Math.max(...vals,target??-Infinity);if(mn===mx){mn-=1;mx+=1}
-  const X=i=>px+(series.length===1?W/2-px:i/(series.length-1)*(W-2*px)),Y=v=>H-py-(v-mn)/(mx-mn)*(H-2*py);
-  const d=series.map((s,i)=>`${i?'L':'M'}${X(i).toFixed(1)},${Y(s.v).toFixed(1)}`).join('');
-  return`<svg class="chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><path d="${d}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-    ${target!=null?`<line x1="${px}" x2="${W-px}" y1="${Y(target)}" y2="${Y(target)}" stroke="var(--red)" stroke-dasharray="3 4" stroke-width="1"/>`:''}
-    ${series.map((s,i)=>`<circle cx="${X(i)}" cy="${Y(s.v)}" r="2.5" fill="#fff" stroke="currentColor" stroke-width="1.5"/>`).join('')}
-    <text x="${px}" y="${H-2}" font-size="9" fill="rgba(60,60,67,.5)">${series[0].d.slice(5)}</text><text x="${W-px}" y="${H-2}" font-size="9" text-anchor="end" fill="rgba(60,60,67,.5)">${series[series.length-1].d.slice(5)}</text>
-    <text x="${px}" y="10" font-size="9" fill="rgba(60,60,67,.5)">${fmtV(mx)}</text></svg>`}
-function renderMetrics(el,act){
-  const pinned=S.metrics.filter(m=>m.pin);
-  let h='';
-  if(pinned.length)h+=`<div class="dash">${pinned.map(m=>{const v=latestV(m),p=prevV(m);return`<div class="card" data-id="${m.id}"><small>${esc(m.name)}</small><b class="big">${fmtV(v)}<span style="font-size:13px;font-weight:400;color:var(--gray)"> ${esc(m.unit||'')}</span></b>${spark(m.series.map(s=>s.v),120,26)}${p!==null&&v!==null?`<small class="${v>=p?'':''}" style="color:${v>=p?'#34c759':'var(--red)'}">${v>=p?'▲':'▼'} ${fmtV(Math.abs(v-p))}</small>`:''}</div>`}).join('')}</div>`;
-  const roots=S.metrics.filter(m=>!m.parentId||!S.metrics.some(x=>x.id===m.parentId));
-  const row=(m,d)=>{const v=latestV(m),p=prevV(m);
-    return`<div class="kpi" data-id="${m.id}" style="padding-left:${2+d*18}px"><div class="t"><b>${d?'└ ':''}${esc(m.name)}</b><small>${m.owner?esc(memName(m.owner))+' · ':''}${m.src==='pending'?'<span class="pill red">接続待ち</span>':m.src==='connected'?'<span class="pill">接続済み</span>':'手入力'}${m.goalId&&goalOf(m.goalId)?' · '+esc(goalOf(m.goalId).title):''}</small></div>${spark(m.series.map(s=>s.v))}<div class="v"><b>${fmtV(v)}<span style="font-size:11px;font-weight:400;color:var(--gray)"> ${esc(m.unit||'')}</span></b>${p!==null&&v!==null?`<small class="${v>=p?'up':'dn'}">${v>=p?'▲':'▼'}${fmtV(Math.abs(v-p))}</small>`:(m.target!=null?`<small>目標 ${fmtV(m.target)}</small>`:'')}</div></div>`
-    +S.metrics.filter(x=>x.parentId===m.id).map(x=>row(x,d+1)).join('')};
-  h+=card(`<div class="sec-h">KPIツリー<span>誰がどの数字を追うか</span></div>`+(roots.length?roots.map(m=>row(m,0)).join(''):'<div class="hint">売上から逆算した数値を置く。親子で結ぶとツリーになる。「接続待ち」にしておくと、AIが取りに行く。</div>'));
-  el.innerHTML=h;
-  el.querySelectorAll('[data-id]').forEach(x=>onTap(x,()=>openMetricSheet(x.dataset.id)));
-  act.innerHTML=`<button class="add" id="mtAI" style="background:var(--fill);color:var(--ink);margin-right:6px">AI</button><button class="add" id="mtAdd">＋</button>`;
-  act.querySelector('#mtAdd').onclick=()=>openMetricEdit(null);
-  act.querySelector('#mtAI').onclick=()=>openAISheet('数値',[ctxHeader(),'## 数値一覧\n'+(S.metrics.map(m=>`- ${m.name}（${m.unit||''}／id ${m.id}／親 ${m.parentId||'なし'}／${m.src}／担当 ${memName(m.owner)||'未定'}）最新 ${fmtV(latestV(m))}${m.target!=null?' 目標 '+fmtV(m.target):''}${m.note?' メモ:'+m.note:''}`).join('\n')||'なし'),'## ゴール\n'+sortedGoals().map(g=>`- ${g.title}（id ${g.id}）`).join('\n'),rulesBlock(),'## 依頼\n（1）数値が無ければ、ゴールから逆算した KPIツリーを metrics に作って（親子は parentId、担当は owner）。（2）src が pending のものは、何を指す数字か確かめ、取得元と接続方法を調べて実際に取ってきて series に {"d":"YYYY-MM-DD","v":数値} を入れ、src を connected に。（3）伸ばすためのゴール／タスクを提案して tasks に入れて。'].join('\n\n'));
-}
-function openMetricEdit(id){
-  const m=id?S.metrics.find(x=>x.id===id):{id:uid('k_'),name:'',unit:'',parentId:null,goalId:null,owner:ME(),src:'manual',series:[],target:null,pin:false,note:'',u:0};
-  openSheet(body=>{
-    body.innerHTML=`<div class="sh-kicker">数値</div><input class="field" id="kN" placeholder="名前（例：月間売上）" value="${esc(m.name)}" style="margin-top:10px"><input class="field" id="kU" placeholder="単位（円・件・%）" value="${esc(m.unit||'')}">
-      <div class="sh-sec">親の数値</div><div class="opts" id="kP"><button class="opt${m.parentId?'':' on'}" data-p="">なし</button>${S.metrics.filter(x=>x.id!==m.id).map(x=>`<button class="opt${m.parentId===x.id?' on':''}" data-p="${x.id}">${esc(x.name)}</button>`).join('')}</div>
-      <div class="sh-sec">ゴール</div><div class="opts" id="kG"><button class="opt${m.goalId?'':' on'}" data-g="">なし</button>${sortedGoals().map(g=>`<button class="opt${m.goalId===g.id?' on':''}" data-g="${g.id}">${esc(g.title)}</button>`).join('')}</div>
-      <div class="sh-sec">責任者</div><div class="opts" id="kO">${S.members.map(x=>`<button class="opt${m.owner===x.id?' on':''}" data-u="${x.id}">${esc(x.name)}</button>`).join('')}</div>
-      <div class="sh-sec">取得</div><div class="opts" id="kS">${[['manual','手入力'],['pending','接続待ち（AIが取りに行く）'],['connected','接続済み']].map(([k,l])=>`<button class="opt${m.src===k?' on':''}" data-s="${k}">${l}</button>`).join('')}</div>
-      <input class="field" id="kNote" placeholder="どこにある数字か（AIへのヒント・任意）" value="${esc(m.note||'')}">
-      <div class="sh-actions"><button class="btn primary" id="kSave">${id?'保存':'置く'}</button></div>`;
-    body.querySelectorAll('#kP .opt').forEach(b=>onTap(b,()=>{m.parentId=b.dataset.p||null;body.querySelectorAll('#kP .opt').forEach(x=>x.classList.toggle('on',x===b))}));
-    body.querySelectorAll('#kG .opt').forEach(b=>onTap(b,()=>{m.goalId=b.dataset.g||null;body.querySelectorAll('#kG .opt').forEach(x=>x.classList.toggle('on',x===b))}));
-    body.querySelectorAll('#kO .opt').forEach(b=>onTap(b,()=>{m.owner=b.dataset.u;body.querySelectorAll('#kO .opt').forEach(x=>x.classList.toggle('on',x===b))}));
-    body.querySelectorAll('#kS .opt').forEach(b=>onTap(b,()=>{m.src=b.dataset.s;body.querySelectorAll('#kS .opt').forEach(x=>x.classList.toggle('on',x===b))}));
-    body.querySelector('#kSave').onclick=()=>{m.name=body.querySelector('#kN').value.trim();if(!m.name)return;m.unit=body.querySelector('#kU').value.trim();m.note=body.querySelector('#kNote').value.trim();m.u=Date.now();
-      if(!id)S.metrics.push(m);closeSheet();save();if(!id)openMetricSheet(m.id)};
-  });
-}
-function openMetricSheet(id){const m=S.metrics.find(x=>x.id===id);if(!m)return;
-  openSheet(body=>{
-    const ser=m.series.slice().sort((a,b)=>a.d<b.d?-1:1);m.series=ser;
-    body.innerHTML=`<div class="sh-kicker">${m.parentId&&S.metrics.find(x=>x.id===m.parentId)?esc(S.metrics.find(x=>x.id===m.parentId).name)+' › ':''}数値</div><div class="sh-title">${esc(m.name)}</div>
-      <div class="sh-date">${m.owner?esc(memName(m.owner))+'　':''}${m.src==='pending'?'接続待ち':m.src==='connected'?'接続済み':'手入力'}${m.target!=null?'　目標 '+fmtV(m.target)+(m.unit||''):''}</div>
-      <div style="display:flex;align-items:baseline;gap:6px;margin-top:10px"><span style="font-size:40px;font-weight:200;letter-spacing:-.02em;font-variant-numeric:tabular-nums">${fmtV(latestV(m))}</span><span style="color:var(--gray)">${esc(m.unit||'')}</span>${prevV(m)!==null?`<span style="margin-left:auto;font-size:13px;color:${latestV(m)>=prevV(m)?'#34c759':'var(--red)'}">${latestV(m)>=prevV(m)?'▲':'▼'} ${fmtV(Math.abs(latestV(m)-prevV(m)))}</span>`:''}</div>
-      ${lineChart(ser,m.target)}
-      <div class="sh-sec">今日の値を入れる</div><div class="frow"><input class="field" id="kV" type="number" inputmode="decimal" placeholder="${fmtV(latestV(m))}"><label class="opt"><input type="date" id="kD" value="${TODAY}"></label><button class="ib pri" id="kAdd">＋</button></div>
-      <div class="sh-sec">目標</div><div class="frow"><input class="field" id="kT" type="number" inputmode="decimal" placeholder="目標値" value="${m.target??''}"></div>
-      <div class="opts" style="margin-top:14px"><button class="opt${m.pin?' on':''}" id="kPin">${m.pin?'ダッシュボードに表示中':'ダッシュボードに出す'}</button><button class="opt" id="kEdit">編集</button></div>
-      <div class="sh-actions col"><button class="btn primary" id="kAI">AIに依頼する</button><button class="btn dangerous" id="kDel">削除</button></div>`;
-    body.querySelector('#kAdd').onclick=()=>{const v=parseFloat(body.querySelector('#kV').value);if(isNaN(v))return;const d=body.querySelector('#kD').value||TODAY;
-      m.series=m.series.filter(s=>s.d!==d);m.series.push({d,v});m.series.sort((a,b)=>a.d<b.d?-1:1);m.u=Date.now();notify(`${m.name}：${fmtV(v)}${m.unit||''}`,{type:'metric',id:m.id});save();openMetricSheet(id)};
-    body.querySelector('#kT').onblur=e=>{const v=parseFloat(e.target.value);m.target=isNaN(v)?null:v;m.u=Date.now();saveQuiet()};
-    body.querySelector('#kPin').onclick=()=>{m.pin=!m.pin;m.u=Date.now();save();openMetricSheet(id)};
-    body.querySelector('#kEdit').onclick=()=>openMetricEdit(id);
-    body.querySelector('#kAI').onclick=()=>openAISheet(m.name,[ctxHeader(),`## 数値：${m.name}（id ${m.id}／${m.unit||''}）\n- 取得：${m.src}${m.note?'／ヒント：'+m.note:''}\n- 責任者：${memName(m.owner)||'未定'}／目標 ${m.target!=null?fmtV(m.target):'なし'}\n- 推移：${ser.slice(-12).map(s=>`${s.d.slice(5)}=${fmtV(s.v)}`).join(', ')||'なし'}`,goalBlock(goalOf(m.goalId)),rulesBlock(),'## 依頼\n'+(m.src==='pending'?'この数値が何を指すか確かめ、取得元と接続方法を調べて実際に取ってきて。取れたら metrics[].series に入れ、src を connected にして。':'この数値を伸ばすための打ち手を3つ出し、いちばん効くものをタスクにして tasks に入れて。')].join('\n\n'));
-    body.querySelector('#kDel').onclick=()=>{S.del[m.id]=Date.now();S.metrics=S.metrics.filter(x=>x.id!==m.id);closeSheet();save()};
-  });
-}
-
-/* ============================================================ マインドマップ */
-function mmWalk(n,fn,p){fn(n,p);(n.c||[]).forEach(c=>mmWalk(c,fn,n))}
-function renderMindmaps(el,act){
-  el.innerHTML=card(S.mindmaps.length?S.mindmaps.map(m=>{let n=0;mmWalk(m.root,()=>n++);return`<div class="li" data-id="${m.id}"><div class="ic" style="width:30px;height:30px;border-radius:9px;background:var(--fill);display:grid;place-items:center;color:var(--ink2);flex:none">${ICON.map}</div><div class="t"><b>${esc(m.title)}</b><small>${n}ノード · ${fmtT(m.u)}</small></div>${CH2}</div>`}).join(''):'<div class="hint">考えを広げる場所。ノードをタップして足す。中身はAIも読めるので、「これを広げて」と頼める。</div>');
-  el.querySelectorAll('.li').forEach(x=>onTap(x,()=>openMindmap(x.dataset.id)));
-  addBtn(act,'＋ マップ',()=>openSheet(body=>{
-    body.innerHTML=`<div class="sh-kicker">マインドマップ</div><input class="field" id="mmT" placeholder="真ん中に置く言葉" style="margin-top:10px"><div class="sh-actions"><button class="btn primary" id="mmAdd">作る</button></div>`;
-    body.querySelector('#mmAdd').onclick=()=>{const t=body.querySelector('#mmT').value.trim();if(!t)return;const m={id:uid('mm_'),title:t,root:{id:uid('n_'),t,c:[]},u:Date.now()};S.mindmaps.push(m);closeSheet();save();openMindmap(m.id)};
-  }));
-}
-const tw=s=>[...String(s)].reduce((a,c)=>a+(c.charCodeAt(0)>255?13:7.5),0)+22;
-function mmSVG(root){
-  const nodes=[],links=[];let y=0,maxD=0;const colW=180,rowH=36;
-  const walk=(n,d,parent)=>{const node={n,d,parent,x:d*colW,w:Math.max(56,tw(n.t))};nodes.push(node);maxD=Math.max(maxD,d);
-    if(n.c&&n.c.length){const ys=n.c.map(c=>walk(c,d+1,node));node.y=(ys[0]+ys[ys.length-1])/2}else{node.y=y;y+=rowH}
-    if(parent)links.push([parent,node]);return node.y};
-  walk(root,0,null);
-  const W=Math.max(...nodes.map(n=>n.x+n.w))+10,H=Math.max(y,rowH)+4;
-  return`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${links.map(([a,b])=>`<path d="M${a.x+a.w},${a.y+14}C${a.x+a.w+40},${a.y+14} ${b.x-40},${b.y+14} ${b.x},${b.y+14}"/>`).join('')}
-    ${nodes.map(n=>`<g class="nd${n.d?'':' root'}" data-nid="${n.n.id}"><rect x="${n.x}" y="${n.y+1}" width="${n.w}" height="26" rx="13"/><text x="${n.x+n.w/2}" y="${n.y+18}" text-anchor="middle">${esc(n.n.t)}</text></g>`).join('')}</svg>`;
-}
-function openMindmap(id){const m=S.mindmaps.find(x=>x.id===id);if(!m)return;
-  openSheet(body=>{
-    body.innerHTML=`<div class="sh-kicker">マインドマップ</div><div class="sh-title">${esc(m.title)}</div><div class="hint" style="padding:4px 0 0">ノードをタップ → 足す・直す・消す</div><div class="mm">${mmSVG(m.root)}</div>
-      <div class="sh-actions col"><button class="btn primary" id="mmAI">AIに広げてもらう</button><div style="display:flex;gap:8px"><button class="btn plain" id="mmCopy">テキストでコピー</button><button class="btn dangerous" id="mmDel">削除</button></div></div>`;
-    body.querySelectorAll('.nd').forEach(g=>g.onclick=()=>openNodeSheet(m,g.dataset.nid));
-    const txt=()=>{let o=[];mmWalk(m.root,(n,p)=>{let d=0,q=n;const find=(x,dd)=>{if(x===n){d=dd;return true}return(x.c||[]).some(c=>find(c,dd+1))};find(m.root,0);o.push('  '.repeat(d)+'- '+n.t)});return o.join('\n')};
-    body.querySelector('#mmCopy').onclick=async()=>{if(await copyText(txt()))toast('コピーした')};
-    body.querySelector('#mmAI').onclick=()=>openAISheet(m.title,[ctxHeader(),'## マインドマップ（id '+m.id+'）\n'+txt(),ctxBlock(null),rulesBlock(),'## 依頼\nこのマップを広げて。各枝に具体案を2〜3個ずつ足し、mindmaps[].root の c に {"id":"n_…","t":"…","c":[]} で入れて。実行できるものは tasks にも。'].join('\n\n'));
-    body.querySelector('#mmDel').onclick=()=>{S.del[m.id]=Date.now();S.mindmaps=S.mindmaps.filter(x=>x.id!==m.id);closeSheet();save()};
-  });
-}
-function openNodeSheet(m,nid){let node=null,parent=null;mmWalk(m.root,(n,p)=>{if(n.id===nid){node=n;parent=p}});if(!node)return;
-  openSheet(body=>{
-    body.innerHTML=`<div class="sh-kicker">${parent?esc(parent.t)+' › ':''}ノード</div><input class="field" id="nT" value="${esc(node.t)}" style="margin-top:10px"><div class="frow"><input class="field" id="nC" placeholder="子を足す"><button class="ib" id="nCMic"></button><button class="ib pri" id="nCAdd">＋</button></div>
-      <div class="sh-actions"><button class="btn primary" id="nSave">保存</button>${parent?'<button class="btn dangerous" id="nDel">消す</button>':''}<button class="btn plain" id="nBack">マップへ</button></div>`;
-    const ci=body.querySelector('#nC');attachMic(body.querySelector('#nCMic'),ci);
-    const addC=()=>{const v=ci.value.trim();if(!v)return;node.c.push({id:uid('n_'),t:v,c:[]});m.u=Date.now();saveQuiet();ci.value='';toast('足した')};
-    body.querySelector('#nCAdd').onclick=addC;ci.onkeydown=e=>{if(e.key==='Enter')addC()};
-    body.querySelector('#nSave').onclick=()=>{node.t=body.querySelector('#nT').value.trim()||node.t;m.u=Date.now();save();openMindmap(m.id)};
-    body.querySelector('#nBack').onclick=()=>openMindmap(m.id);
-    const del=body.querySelector('#nDel');if(del)del.onclick=()=>{parent.c=parent.c.filter(x=>x.id!==nid);m.u=Date.now();save();openMindmap(m.id)};
-  });
-}
-
-/* ============================================================ IndexedDB（録画・ローカルファイル） */
-const idb={
-  open(){return new Promise((res,rej)=>{const r=indexedDB.open('purpose-media',1);r.onupgradeneeded=()=>r.result.createObjectStore('m');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})},
-  async put(k,v){const d=await this.open();return new Promise((res,rej)=>{const t=d.transaction('m','readwrite');t.objectStore('m').put(v,k);t.oncomplete=res;t.onerror=()=>rej(t.error)})},
-  async get(k){const d=await this.open();return new Promise((res,rej)=>{const r=d.transaction('m').objectStore('m').get(k);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})},
-  async del(k){const d=await this.open();return new Promise((res,rej)=>{const t=d.transaction('m','readwrite');t.objectStore('m').delete(k);t.oncomplete=res;t.onerror=()=>rej(t.error)})}
-};
-function pickFile(accept){return new Promise(res=>{const i=document.getElementById('fileIn');i.accept=accept||'';i.value='';i.onchange=()=>res(i.files[0]||null);i.click()})}
-
-/* ============================================================ ドライブ */
-const DTAGS=['ナレッジ','スキル','素材','資料'];
-function renderDrive(el,act){
-  const list=S.drive.filter(d=>driveFilter==='all'||d.tag===driveFilter).sort((a,b)=>b.u-a.u);
-  el.innerHTML=`<div class="chips" style="padding-bottom:12px"><button class="chip${driveFilter==='all'?' on':''}" data-t="all">すべて<small>${S.drive.length}</small></button>${DTAGS.map(t=>`<button class="chip${driveFilter===t?' on':''}" data-t="${t}">${t}<small>${S.drive.filter(d=>d.tag===t).length}</small></button>`).join('')}</div>`
-  +card(list.length?list.map(d=>`<div class="li" data-id="${d.id}"><div class="t"><b>${esc(d.name)}</b><small><span class="pill">${esc(d.tag||'')}</span> ${d.kind==='file'?(d.size?kb(d.size):'ファイル')+(d.local?' · この端末のみ':''):d.kind==='link'?esc(d.url||''):esc((d.body||'').slice(0,50))}</small></div><div class="r">${ago(d.u)}</div></div>`).join(''):'<div class="hint">ナレッジ・スキル・参考素材を置く場所。AIはここを読んで仕事する。「どこにあるか分からない」を無くす。</div>');
-  el.querySelectorAll('.chip').forEach(b=>onTap(b,()=>{driveFilter=b.dataset.t;renderMore()}));
-  el.querySelectorAll('.li').forEach(x=>onTap(x,()=>openDriveSheet(x.dataset.id)));
-  addBtn(act,'＋ 置く',()=>openSheet(body=>{
-    let kind='note',tag=driveFilter==='all'?'ナレッジ':driveFilter,gid=null;
-    body.innerHTML=`<div class="sh-kicker">ドライブに置く</div>
-      <div class="opts" style="margin-top:10px" id="dK">${[['note','メモ'],['link','リンク'],['file','ファイル']].map(([k,l])=>`<button class="opt${kind===k?' on':''}" data-k="${k}">${l}</button>`).join('')}</div>
-      <input class="field" id="dN" placeholder="名前"><textarea class="field" id="dB" placeholder="中身（マニュアル・スキル・メモ）"></textarea><input class="field" id="dU" placeholder="https://" style="display:none">
-      <div class="sh-sec">種類</div><div class="opts" id="dT">${DTAGS.map(t=>`<button class="opt${tag===t?' on':''}" data-t="${t}">${t}</button>`).join('')}</div>
-      <div class="sh-sec">ゴール</div><div class="opts" id="dG"><button class="opt on" data-g="">なし</button>${sortedGoals().map(g=>`<button class="opt" data-g="${g.id}">${esc(g.title)}</button>`).join('')}</div>
-      <div class="sh-actions"><button class="btn primary" id="dAdd">置く</button></div>`;
-    const sw=()=>{body.querySelector('#dB').style.display=kind==='note'?'':'none';body.querySelector('#dU').style.display=kind==='link'?'':'none'};
-    body.querySelectorAll('#dK .opt').forEach(b=>onTap(b,()=>{kind=b.dataset.k;body.querySelectorAll('#dK .opt').forEach(x=>x.classList.toggle('on',x===b));sw()}));
-    body.querySelectorAll('#dT .opt').forEach(b=>onTap(b,()=>{tag=b.dataset.t;body.querySelectorAll('#dT .opt').forEach(x=>x.classList.toggle('on',x===b))}));
-    body.querySelectorAll('#dG .opt').forEach(b=>onTap(b,()=>{gid=b.dataset.g||null;body.querySelectorAll('#dG .opt').forEach(x=>x.classList.toggle('on',x===b))}));
-    body.querySelector('#dAdd').onclick=async()=>{
-      const name=body.querySelector('#dN').value.trim();
-      if(kind==='file'){const f=await pickFile();if(!f)return;const id=uid('d_');const item={id,name:name||f.name,kind:'file',tag,goalId:gid,size:f.size,mime:f.type,url:null,local:true,u:Date.now()};
-        toast('保存中…');await idb.put(id,f);
-        if(tok()){try{item.url=await ghUpload(`drive/${id}_${f.name}`,f,'ドライブ: '+f.name);item.local=false}catch(e){}}
-        S.drive.push(item);closeSheet();save();toast(item.url?'置いた（リンクあり）':'この端末に置いた');return}
-      if(!name){toast('名前を入れて');return}
-      S.drive.push({id:uid('d_'),name,kind,tag,goalId:gid,body:kind==='note'?body.querySelector('#dB').value:'',url:kind==='link'?body.querySelector('#dU').value.trim():null,u:Date.now()});closeSheet();save();toast('置いた')};
-  }));
-}
-function openDriveSheet(id){const d=S.drive.find(x=>x.id===id);if(!d)return;
-  openSheet(body=>{
-    body.innerHTML=`<div class="sh-kicker">${esc(d.tag||'ドライブ')}${d.goalId&&goalOf(d.goalId)?' · '+esc(goalOf(d.goalId).title):''}</div><div class="sh-title">${esc(d.name)}</div><div class="sh-date">${fmtT(d.u)}${d.size?' · '+kb(d.size):''}${d.local?' · この端末のみ':''}</div>
-      ${d.kind==='note'?`<textarea class="field" id="dvB" style="margin-top:12px;min-height:160px">${esc(d.body||'')}</textarea>`:''}
-      ${d.url?`<div class="cmd">${esc(d.url)}</div>`:''}
-      <div class="sh-actions col">${d.url?`<a class="btn primary" href="${esc(d.url)}" target="_blank" style="text-decoration:none;text-align:center">開く</a><button class="btn plain" id="dvCopy">リンクをコピー</button>`:''}${d.kind==='file'&&d.local?`<button class="btn plain" id="dvOpen">この端末で開く</button>${tok()?'<button class="btn plain" id="dvUp">リポジトリへ上げてリンクにする</button>':''}`:''}<button class="btn dangerous" id="dvDel">削除</button></div>`;
-    const ta=body.querySelector('#dvB');if(ta)ta.onblur=()=>{if(ta.value!==d.body){d.body=ta.value;d.u=Date.now();saveQuiet()}};
-    const cp=body.querySelector('#dvCopy');if(cp)cp.onclick=async()=>{if(await copyText(d.url))toast('コピーした')};
-    const op=body.querySelector('#dvOpen');if(op)op.onclick=async()=>{const b=await idb.get(d.id);if(!b){toast('この端末には無い');return}window.open(URL.createObjectURL(b),'_blank')};
-    const up=body.querySelector('#dvUp');if(up)up.onclick=async()=>{const b=await idb.get(d.id);if(!b){toast('この端末には無い');return}toast('上げている…');try{d.url=await ghUpload(`drive/${d.id}_${d.name}`,b,'ドライブ: '+d.name);d.local=false;d.u=Date.now();save();openDriveSheet(id)}catch(e){toast('上げられない')}};
-    body.querySelector('#dvDel').onclick=()=>{S.del[d.id]=Date.now();S.drive=S.drive.filter(x=>x.id!==d.id);idb.del(d.id).catch(()=>{});closeSheet();save()};
-  });
-}
-
-/* ============================================================ ファイル便 */
-function renderTransfers(el,act){
-  const list=S.transfers.slice().sort((a,b)=>b.t-a.t);
-  el.innerHTML=card(list.length?list.map(x=>{const exp=x.expires<Date.now();return`<div class="li" data-id="${x.id}"><div class="t"><b>${esc(x.name)}</b><small>${x.to?esc(x.to)+'へ · ':''}${fmtT(x.t)} · ${kb(x.size)}${x.note?' · '+esc(x.note):''}</small></div><div class="r${exp?' bad':''}">${exp?'期限切れ':'あと'+Math.ceil((x.expires-Date.now())/864e5)+'日'}</div></div>`}).join(''):'<div class="hint">ファイルを上げるとリンクになる（7日で消える）。いつ・誰に・何を送ったかが残るので、「あのリンクどれだっけ」が無くなる。AIも送れる。</div>')
-  +(tok()?'':card('<div class="hint">リンクを作るには 設定 で GitHub トークンを保存する。</div>'));
-  el.querySelectorAll('.li').forEach(x=>onTap(x,()=>openTransferSheet(x.dataset.id)));
-  addBtn(act,'＋ 送る',()=>openSheet(body=>{
-    body.innerHTML=`<div class="sh-kicker">ファイル便</div><input class="field" id="tfTo" placeholder="誰に（任意）" style="margin-top:10px"><input class="field" id="tfNote" placeholder="何のファイルか（任意）"><div class="sh-actions"><button class="btn primary" id="tfPick">ファイルを選んで上げる</button></div><div class="hint">7日で消える。95MBまで。</div>`;
-    body.querySelector('#tfPick').onclick=async()=>{
-      if(!tok()){toast('設定でトークンを保存してから');return}
-      const f=await pickFile();if(!f)return;const id=uid('f_');toast('上げている…');
-      try{const url=await ghUpload(`transfer/${id}_${f.name}`,f,'ファイル便: '+f.name);
-        const x={id,name:f.name,size:f.size,url,to:body.querySelector('#tfTo').value.trim(),note:body.querySelector('#tfNote').value.trim(),t:Date.now(),expires:Date.now()+7*864e5,path:`transfer/${id}_${f.name}`,u:Date.now()};
-        S.transfers.push(x);notify(`${x.to?x.to+'へ':''}「${f.name}」を送った`,{type:'transfer',id});closeSheet();save();openTransferSheet(id)}
-      catch(e){toast(e.message==='big'?'95MBを超えている':'上げられない')}
-    };
-  }));
-}
-function openTransferSheet(id){const x=S.transfers.find(t=>t.id===id);if(!x)return;
-  openSheet(body=>{
-    const msg=`${x.to?x.to+'さん\n':''}ファイルをお送りします。\n${x.name}${x.note?'（'+x.note+'）':''}\n${x.url}\n（${new Date(x.expires).getMonth()+1}/${new Date(x.expires).getDate()} まで）`;
-    body.innerHTML=`<div class="sh-kicker">ファイル便</div><div class="sh-title">${esc(x.name)}</div><div class="sh-date">${x.to?esc(x.to)+'へ · ':''}${fmtT(x.t)} · ${kb(x.size)}${x.expires<Date.now()?' · 期限切れ':''}</div><div class="cmd">${esc(x.url)}</div>
-      <div class="sh-actions col"><button class="btn primary" id="tfCopy">リンクをコピー</button><button class="btn plain" id="tfMsg">送る文ごとコピー</button><button class="btn dangerous" id="tfDel">消す</button></div>`;
-    body.querySelector('#tfCopy').onclick=async()=>{if(await copyText(x.url))toast('コピーした')};
-    body.querySelector('#tfMsg').onclick=async()=>{if(await copyText(msg))toast('コピーした')};
-    body.querySelector('#tfDel').onclick=async()=>{if(tok()&&x.path)ghDelete(x.path).catch(()=>{});S.del[x.id]=Date.now();S.transfers=S.transfers.filter(t=>t.id!==x.id);closeSheet();save()};
-  });
-}
-async function expireTransfers(){if(!tok())return;for(const x of S.transfers){if(x.expires<Date.now()&&x.path&&!x.expired){try{await ghDelete(x.path);x.expired=true;x.u=Date.now();persist()}catch(e){}}}}
-
-/* ============================================================ 録画・議事録 */
-let REC=null;
-const recbar=document.getElementById('recbar'), drawC=document.getElementById('draw'), camV=document.getElementById('cam');
-function pickMime(kind){const c=kind==='audio'?['audio/webm;codecs=opus','audio/webm','audio/mp4']:['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm','video/mp4'];
-  return c.find(m=>window.MediaRecorder&&MediaRecorder.isTypeSupported(m))||''}
-function startSR(onText){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return null;
-  const r=new SR();r.lang='ja-JP';r.continuous=true;r.interimResults=false;let live=true;
-  r.onresult=e=>{for(let i=e.resultIndex;i<e.results.length;i++)if(e.results[i].isFinal)onText(e.results[i][0].transcript.trim())};
-  r.onend=()=>{if(live)try{r.start()}catch(e){}};r.onerror=()=>{};
-  try{r.start()}catch(e){}return{stop(){live=false;try{r.stop()}catch(e){}}}}
-function recTick(){if(!REC)return;const s=(Date.now()-REC.t0)/1000;document.getElementById('recTime').textContent=mmss(s);REC.tm=setTimeout(recTick,500)}
-async function startScreenRec(o){
-  if(REC){toast('録画中');return}
-  if(!navigator.mediaDevices||!navigator.mediaDevices.getDisplayMedia){toast('この端末は画面録画に対応していない');return}
-  let scr;try{scr=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:30},audio:true})}catch(e){return}
-  let mic=null;try{mic=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){}
-  const vs=document.createElement('video');vs.srcObject=scr;vs.muted=true;await vs.play();
-  const W=vs.videoWidth||1280,H=vs.videoHeight||720,cv=document.createElement('canvas');cv.width=W;cv.height=H;const ctx=cv.getContext('2d');
-  drawC.width=innerWidth*devicePixelRatio;drawC.height=innerHeight*devicePixelRatio;drawC.getContext('2d').clearRect(0,0,drawC.width,drawC.height);
-  const ac=new(window.AudioContext||window.webkitAudioContext)(),dest=ac.createMediaStreamDestination();
-  if(scr.getAudioTracks().length)ac.createMediaStreamSource(new MediaStream(scr.getAudioTracks())).connect(dest);
-  if(mic)ac.createMediaStreamSource(new MediaStream(mic.getAudioTracks())).connect(dest);
-  const out=new MediaStream([...cv.captureStream(30).getVideoTracks(),...dest.stream.getAudioTracks()]);
-  const mime=pickMime('video'),mr=new MediaRecorder(out,mime?{mimeType:mime}:undefined),chunks=[];
-  mr.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
-  REC={kind:'screen',t0:Date.now(),mr,chunks,mime,scr,mic,ac,vs,cv,ctx,raf:0,cam:null,lines:[],goalId:o&&o.goalId||null,title:o&&o.title||'画面録画 '+fmtT(Date.now())};
-  const loop=()=>{if(!REC)return;ctx.drawImage(vs,0,0,W,H);
-    if(REC.cam&&camV.readyState>=2){const r=Math.min(W,H)*.14,x=W-r-24,y=H-r-24;ctx.save();ctx.beginPath();ctx.arc(x+r/2,y+r/2,r/2,0,Math.PI*2);ctx.clip();ctx.translate(x+r,y);ctx.scale(-1,1);ctx.drawImage(camV,0,0,r,r);ctx.restore();
-      ctx.beginPath();ctx.arc(x+r/2,y+r/2,r/2,0,Math.PI*2);ctx.lineWidth=4;ctx.strokeStyle='#fff';ctx.stroke()}
-    if(drawC.classList.contains('on')||REC.drew)ctx.drawImage(drawC,0,0,W,H);
-    REC.raf=requestAnimationFrame(loop)};loop();
-  REC.sr=startSR(t=>{REC.lines.push({t:Date.now()-REC.t0,text:t});const lv=document.getElementById('recLive');if(lv)lv.textContent+=`\n[${mmss((Date.now()-REC.t0)/1000)}] ${t}`});
-  mr.start(1000);recbar.classList.add('show');recTick();
-  scr.getVideoTracks()[0].onended=()=>stopRec();
-  toast('録画を始めた。ペンで描ける');
-}
-async function startMinutes(o){
-  if(REC){toast('録音中');return}
-  let mic;try{mic=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){toast('マイクが使えない');return}
-  const mime=pickMime('audio'),mr=new MediaRecorder(mic,mime?{mimeType:mime}:undefined),chunks=[];
-  mr.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
-  REC={kind:'minutes',t0:Date.now(),mr,chunks,mime,mic,lines:[],goalId:o&&o.goalId||null,title:o&&o.title||'議事録 '+fmtT(Date.now()),attendees:o&&o.attendees||[ME()],link:o&&o.link||null};
-  REC.sr=startSR(t=>{REC.lines.push({t:Date.now()-REC.t0,text:t});const lv=document.getElementById('recLive');if(lv)lv.textContent+=`\n[${mmss((Date.now()-REC.t0)/1000)}] ${t}`});
-  mr.start(1000);recbar.classList.add('show');document.getElementById('recPen').style.display='none';document.getElementById('recCam').style.display='none';recTick();
-  if(REC.link)window.open(REC.link,'_blank');
-  closeSheet();toast(REC.sr?'議事録を取り始めた':'録音を始めた（文字起こしはこのブラウザ非対応）');
-}
-async function stopRec(){
-  if(!REC)return;const R=REC;REC=null;clearTimeout(R.tm);cancelAnimationFrame(R.raf||0);
-  if(R.sr)R.sr.stop();recbar.classList.remove('show');drawC.classList.remove('on');document.getElementById('recPen').classList.remove('on');document.getElementById('recPen').style.display='';document.getElementById('recCam').style.display='';
-  camV.classList.remove('show');if(R.cam)R.cam.getTracks().forEach(t=>t.stop());
-  const blob=await new Promise(res=>{R.mr.onstop=()=>res(new Blob(R.chunks,{type:R.mime||R.chunks[0]?.type||''}));R.mr.stop()});
-  [R.scr,R.mic].forEach(s=>s&&s.getTracks().forEach(t=>t.stop()));if(R.ac)R.ac.close().catch(()=>{});
-  const id=uid('rec_'),dur=Math.round((Date.now()-R.t0)/1000);
-  await idb.put(id,blob).catch(()=>{});
-  const transcript=R.lines.map(l=>`[${mmss(l.t/1000)}] ${l.text}`).join('\n');
-  const r={id,kind:R.kind,title:R.title,t:R.t0,dur,size:blob.size,mime:blob.type,transcript,goalId:R.goalId,attendees:R.attendees||[ME()],scope:'private',url:null,local:true,u:Date.now()};
-  S.recordings.push(r);notify(`${R.kind==='minutes'?'議事録':'録画'}「${r.title}」（${mmss(dur)}）`,{type:'rec',id});save();
-  if(curTab!=='more'||curPanel!=='recordings')openPanel('recordings');
-  openRecSheet(id);
-}
-document.getElementById('recStop').onclick=stopRec;
-document.getElementById('recPen').onclick=function(){drawC.classList.toggle('on');this.classList.toggle('on',drawC.classList.contains('on'))};
-document.getElementById('recCam').onclick=async function(){if(!REC)return;
-  if(REC.cam){REC.cam.getTracks().forEach(t=>t.stop());REC.cam=null;camV.classList.remove('show');this.classList.remove('on');return}
-  try{REC.cam=await navigator.mediaDevices.getUserMedia({video:{width:480,height:480,facingMode:'user'}});camV.srcObject=REC.cam;camV.classList.add('show');this.classList.add('on')}catch(e){toast('カメラが使えない')}};
-(function(){let dr=null;const g=()=>drawC.getContext('2d');
-  drawC.addEventListener('pointerdown',e=>{dr={x:e.clientX*devicePixelRatio,y:e.clientY*devicePixelRatio};drawC.setPointerCapture(e.pointerId)});
-  drawC.addEventListener('pointermove',e=>{if(!dr)return;const c=g();c.strokeStyle='#ff3b30';c.lineWidth=4*devicePixelRatio;c.lineCap='round';c.beginPath();c.moveTo(dr.x,dr.y);dr={x:e.clientX*devicePixelRatio,y:e.clientY*devicePixelRatio};c.lineTo(dr.x,dr.y);c.stroke();if(REC)REC.drew=true});
-  ['pointerup','pointercancel'].forEach(ev=>drawC.addEventListener(ev,()=>{dr=null}));
-  drawC.addEventListener('dblclick',()=>g().clearRect(0,0,drawC.width,drawC.height));
-})();
-function renderRecordings(el,act){
-  const list=S.recordings.slice().sort((a,b)=>b.t-a.t);
-  el.innerHTML=card(`<div class="sec-h">始める</div><div class="opts"><button class="opt" id="rcScreen">画面を録画</button><button class="opt" id="rcMin">議事録を取る</button><button class="opt" id="rcLink">会議リンクで</button></div>
-    ${REC?`<div class="rec-live" id="recLive">録音中… ${mmss((Date.now()-REC.t0)/1000)}${REC.lines.map(l=>`\n[${mmss(l.t/1000)}] ${l.text}`).join('')}</div>`:'<div class="hint" style="padding-bottom:0">画面録画はペンで描け、顔も出せる。議事録はマイクで文字起こし。どちらも内容をAIが読める。</div>'}`)
-  +card(list.length?list.map(r=>`<div class="li" data-id="${r.id}"><div class="ic" style="width:30px;height:30px;border-radius:9px;background:var(--fill);display:grid;place-items:center;color:var(--ink2);flex:none">${ICON.rec}</div><div class="t"><b>${esc(r.title)}</b><small>${r.kind==='minutes'?'議事録':'録画'} · ${mmss(r.dur||0)} · ${fmtT(r.t)}${r.transcript?' · 文字起こしあり':''}${r.scope!=='private'?' · '+(r.scope==='org'?'組織内公開':'外部公開'):''}</small></div>${CH2}</div>`).join(''):'<div class="hint">まだ無い</div>');
-  el.querySelector('#rcScreen').onclick=()=>startScreenRec({});
-  el.querySelector('#rcMin').onclick=()=>openMinutesSheet(null);
-  el.querySelector('#rcLink').onclick=()=>openMinutesSheet('link');
-  el.querySelectorAll('.li').forEach(x=>onTap(x,()=>openRecSheet(x.dataset.id)));
-  act.innerHTML='';
-}
-function openMinutesSheet(mode){
-  openSheet(body=>{
-    let gid=null,att=[ME()];
-    body.innerHTML=`<div class="sh-kicker">議事録</div><input class="field" id="mnT" placeholder="会議の名前" style="margin-top:10px">${mode==='link'?'<input class="field" id="mnL" placeholder="Google Meet / Zoom のリンク">':''}
-      <div class="sh-sec">参加者</div><div class="opts" id="mnA">${S.members.map(m=>`<button class="opt${att.includes(m.id)?' on':''}" data-u="${m.id}">${esc(m.name)}</button>`).join('')}</div>
-      <div class="sh-sec">ゴール</div><div class="opts" id="mnG"><button class="opt on" data-g="">なし</button>${sortedGoals().map(g=>`<button class="opt" data-g="${g.id}">${esc(g.title)}</button>`).join('')}</div>
-      <div class="sh-actions"><button class="btn primary" id="mnGo">始める</button></div>
-      <div class="hint">${mode==='link'?'リンクを別タブで開き、このタブのマイクで録音・文字起こしする。会議中はこのタブを閉じない。':'このタブのマイクで録音し、話した内容をその場で文字にする。'}</div>`;
-    body.querySelectorAll('#mnA .opt').forEach(b=>onTap(b,()=>{const u=b.dataset.u;att=att.includes(u)?att.filter(x=>x!==u):[...att,u];b.classList.toggle('on')}));
-    body.querySelectorAll('#mnG .opt').forEach(b=>onTap(b,()=>{gid=b.dataset.g||null;body.querySelectorAll('#mnG .opt').forEach(x=>x.classList.toggle('on',x===b))}));
-    body.querySelector('#mnGo').onclick=()=>startMinutes({title:body.querySelector('#mnT').value.trim()||('議事録 '+fmtT(Date.now())),goalId:gid,attendees:att,link:mode==='link'?body.querySelector('#mnL').value.trim():null});
-  });
-}
-function openRecSheet(id){const r=S.recordings.find(x=>x.id===id);if(!r)return;
-  openSheet(async body=>{
-    body.innerHTML=`<div class="sh-kicker">${r.kind==='minutes'?'議事録':'録画'}${r.goalId&&goalOf(r.goalId)?' · '+esc(goalOf(r.goalId).title):''}</div><div class="sh-title" id="rcT" contenteditable="true">${esc(r.title)}</div>
-      <div class="sh-date">${fmtT(r.t)} · ${mmss(r.dur||0)}${r.size?' · '+kb(r.size):''}${r.attendees&&r.attendees.length?' · '+r.attendees.map(a=>memName(a)).filter(Boolean).join('、'):''}</div>
-      <div id="rcMedia"></div>
-      <div class="sh-sec">公開範囲</div><div class="opts" id="rcS">${[['private','自分だけ'],['org','組織内'],['public','外部にも']].map(([k,l])=>`<button class="opt${r.scope===k?' on':''}" data-s="${k}">${l}</button>`).join('')}</div>
-      ${r.url?`<div class="cmd">${esc(r.url)}</div>`:''}
-      <div class="sh-sec">文字起こし</div><textarea class="field" id="rcTx" style="min-height:120px" placeholder="なし">${esc(r.transcript||'')}</textarea>
-      <div class="sh-actions col"><button class="btn primary" id="rcAI">AIに要約・タスク化させる</button><div style="display:flex;gap:8px">${r.url?'<button class="btn plain" id="rcCopy">リンクをコピー</button>':'<button class="btn plain" id="rcUp">リンクを作る</button>'}<button class="btn dangerous" id="rcDel">削除</button></div></div>`;
-    const ti=body.querySelector('#rcT');ti.onblur=()=>{const v=ti.textContent.trim();if(v&&v!==r.title){r.title=v;r.u=Date.now();saveQuiet();renderMore()}};
-    const tx=body.querySelector('#rcTx');tx.onblur=()=>{if(tx.value!==r.transcript){r.transcript=tx.value;r.u=Date.now();saveQuiet()}};
-    const med=body.querySelector('#rcMedia');const blob=await idb.get(r.id).catch(()=>null);
-    const src=blob?URL.createObjectURL(blob):r.url;
-    if(src)med.innerHTML=r.kind==='minutes'?`<audio class="play" controls src="${src}"></audio>`:`<video class="play" controls playsinline src="${src}"></video>`;
-    else med.innerHTML='<div class="hint">この端末に動画が無い（別の端末で録った）。</div>';
-    body.querySelectorAll('#rcS .opt').forEach(b=>onTap(b,()=>{r.scope=b.dataset.s;r.u=Date.now();saveQuiet();body.querySelectorAll('#rcS .opt').forEach(x=>x.classList.toggle('on',x===b))}));
-    const up=body.querySelector('#rcUp');if(up)up.onclick=async()=>{if(!tok()){toast('設定でトークンを保存してから');return}if(!blob){toast('この端末に動画が無い');return}toast('上げている…（大きいと時間がかかる）');
-      try{const ext=(r.mime||'').includes('mp4')?'mp4':(r.kind==='minutes'?'weba':'webm');r.url=await ghUpload(`media/${r.id}.${ext}`,blob,'録画: '+r.title);r.local=false;if(r.scope==='private')r.scope='org';r.u=Date.now();save();openRecSheet(id);toast('リンクができた')}catch(e){toast(e.message==='big'?'95MBを超えている':'上げられない')}};
-    const cp=body.querySelector('#rcCopy');if(cp)cp.onclick=async()=>{if(await copyText(r.url))toast('コピーした')};
-    body.querySelector('#rcAI').onclick=()=>openAISheet(r.title,[ctxHeader(),`## ${r.kind==='minutes'?'議事録':'録画'}：${r.title}（${fmtT(r.t)}／${mmss(r.dur||0)}／id ${r.id}）${r.url?'\n'+r.url:''}\n### 文字起こし\n${r.transcript||'（なし）'}`,goalBlock(goalOf(r.goalId)),rulesBlock(),'## 依頼\n決まったこと・やること（担当と期日）・未決・フィードバックを整理して、やることは tasks に入れて。要約は recordings[].summary に書いて。'].join('\n\n'));
-    body.querySelector('#rcDel').onclick=()=>{S.del[r.id]=Date.now();S.recordings=S.recordings.filter(x=>x.id!==r.id);idb.del(r.id).catch(()=>{});closeSheet();save()};
-  });
-}
-
-/* ============================================================ 受信箱（LINE・メール貼り付け） */
-function renderInbox(el,act){
-  const list=S.inbox.slice().sort((a,b)=>(a.handled-b.handled)||(b.t-a.t));
-  el.innerHTML=card(`<div class="sec-h">貼る</div><div class="opts" id="ibS">${['LINE','メール','Slack','その他'].map((s,i)=>`<button class="opt${i?'':' on'}" data-s="${s}">${s}</button>`).join('')}</div>
-    <textarea class="field" id="ibT" placeholder="LINEやメールの文をそのまま貼る。AIがこれを読んで動く。"></textarea><div class="frow"><button class="ib" id="ibMic"></button><div style="flex:1"></div><button class="btn primary" id="ibAdd" style="flex:none;padding:10px 22px">受信箱へ</button></div>`)
-  +card(list.length?list.map(i=>`<div class="li" data-id="${i.id}" style="${i.handled?'opacity:.5':''}"><div class="t"><b>${esc(i.text.split('\n')[0].slice(0,50))}</b><small><span class="pill">${esc(i.src)}</span> ${fmtT(i.t)}${i.handled?' · 済':''}</small></div>${CH2}</div>`).join(''):'<div class="hint">まだ無い</div>');
-  let src='LINE';
-  el.querySelectorAll('#ibS .opt').forEach(b=>onTap(b,()=>{src=b.dataset.s;el.querySelectorAll('#ibS .opt').forEach(x=>x.classList.toggle('on',x===b))}));
-  const ta=el.querySelector('#ibT');attachMic(el.querySelector('#ibMic'),ta);
-  el.querySelector('#ibAdd').onclick=()=>{const v=ta.value.trim();if(!v)return;const it={id:uid('ib_'),t:Date.now(),src,text:v,handled:false,u:Date.now()};S.inbox.push(it);notify(`${src}を受信箱に入れた`,{type:'inbox',id:it.id});ta.value='';save();toast('入れた')};
-  el.querySelectorAll('.li').forEach(x=>onTap(x,()=>openInboxSheet(x.dataset.id)));
-  addBtn(act,'AIに対応させる',()=>{const un=S.inbox.filter(i=>!i.handled);if(!un.length){toast('未対応は無い');return}
-    openAISheet('受信箱',[ctxHeader(),'## 受信箱（未対応）\n'+un.map(i=>`### [${i.src}] ${fmtT(i.t)}（id ${i.id}）\n${i.text}`).join('\n\n'),ctxBlock(null),rulesBlock(),'## 依頼\nそれぞれ何をすべきか判断して対応して（返信の下書き、日程、タスク化）。返信文は chat に who:"ai" で置き、対応したら inbox[].handled を true に。人に確認が要るものだけ私に聞いて。'].join('\n\n'))});
-}
-function openInboxSheet(id){const i=S.inbox.find(x=>x.id===id);if(!i)return;
-  openSheet(body=>{
-    body.innerHTML=`<div class="sh-kicker">${esc(i.src)} · ${fmtT(i.t)}</div><div class="sh-note" style="margin-top:10px">${esc(i.text)}</div>
-      <div class="sh-actions col"><button class="btn primary" id="ibAI">AIに対応させる</button><div style="display:flex;gap:8px"><button class="btn plain" id="ibTask">タスクにする</button><button class="btn plain" id="ibDone">${i.handled?'未対応に戻す':'済みにする'}</button></div><button class="btn dangerous" id="ibDel">削除</button></div>`;
-    body.querySelector('#ibAI').onclick=()=>openAISheet(i.src,[ctxHeader(),`## ${i.src}（id ${i.id}）\n${i.text}`,ctxBlock(null),rulesBlock(),'## 依頼\nこの内容に対応して（返信の下書き、日程調整、必要なタスク化）。返信文は chat に who:"ai" で置き、終わったら inbox[].handled を true に。'].join('\n\n'));
-    body.querySelector('#ibTask').onclick=()=>openQuickAdd({title:i.text.split('\n')[0].slice(0,60)});
-    body.querySelector('#ibDone').onclick=()=>{i.handled=!i.handled;i.u=Date.now();closeSheet();save()};
-    body.querySelector('#ibDel').onclick=()=>{S.del[i.id]=Date.now();S.inbox=S.inbox.filter(x=>x.id!==i.id);closeSheet();save()};
-  });
-}
-
-/* ============================================================ 設定 */
-function renderSettings(el){
-  const n=document.getElementById('setNode');n.style.display='block';el.appendChild(n);
-  document.getElementById('repoInput').value=localStorage.getItem('purpose.repo')||'';
-  const mo=document.getElementById('meOpts');mo.innerHTML=S.members.map(m=>`<button class="opt${ME()===m.id?' on':''}" data-u="${m.id}">${esc(m.name)}</button>`).join('');
-  mo.querySelectorAll('.opt').forEach(b=>onTap(b,()=>{localStorage.setItem('purpose.me',b.dataset.u);render();toast(memName(b.dataset.u)+'として使う')}));
-  document.getElementById('repoInput').onblur=e=>{const v=e.target.value.trim();if(v)localStorage.setItem('purpose.repo',v)};
 }
 
 /* ============================================================ boot */
 render();
-pull().then(ok=>{if(tok())setStat(ok?'同期済み（読み書き）':'リモート未作成');expireTransfers()}).catch(()=>{});
+pull().then(ok=>{if(tok())setStat(ok?'同期済み（読み書き）':'リモート未作成')}).catch(()=>{});
 document.addEventListener('visibilitychange',()=>{
   if(document.visibilityState==='visible'&&Date.now()-lastPull>60000)pull().catch(()=>{});
 });
 setInterval(()=>{if(document.visibilityState==='visible'&&Date.now()-lastPull>90000)pull().catch(()=>{})},30000);
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
-window.addEventListener('beforeunload',e=>{if(REC){e.preventDefault();e.returnValue=''}});
 
 /* テスト用（Browserペインの合成タップ） */
 window.__tap=sel=>{const el=document.querySelector(sel);if(!el)return'no:'+sel;
