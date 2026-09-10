@@ -42,6 +42,16 @@ h1 small{display:block;font-size:12px;font-weight:500;color:var(--gray);letter-s
 .row.pressed .sl{background:var(--well);transition:background .06s}
 .row.d1 .sl{padding-left:26px}
 .row.d2 .sl{padding-left:52px}
+/* 入れ子の線：ゴールの点(x=11)から中の目標へ、中の目標の丸(x=37)からタスクへ */
+.row.d1>.sl::before,.row.d1>.sl::after,.row.d2>.sl::before,.row.d2>.sl::after,.row.d2::before{content:"";position:absolute;background:var(--gray3);pointer-events:none}
+.row.d1>.sl::before{left:10.5px;top:0;bottom:0;width:1px}
+.row.d1:last-child>.sl::before{bottom:50%}
+.row.d1>.sl::after{left:10.5px;top:50%;width:11px;height:1px}
+.row.d2::before{left:10.5px;top:0;bottom:0;width:1px;z-index:1}
+.row.d1:last-child .row.d2::before{display:none}
+.row.d2>.sl::before{left:36.5px;top:0;bottom:0;width:1px}
+.row.d2:last-child>.sl::before{bottom:50%}
+.row.d2>.sl::after{left:36.5px;top:50%;width:11px;height:1px}
 .chk{flex:none;width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--gray3);display:grid;place-items:center;transition:.25s}
 .chk svg{width:11px;height:11px;opacity:0;transform:scale(.4);transition:.25s cubic-bezier(.32,1.5,.45,1)}
 .row.done .chk{background:var(--ink);box-shadow:none}
@@ -202,12 +212,14 @@ function chain(kind,g,m,t){
 }
 function promptNew(){return `Purpose で新しいゴールを立てたい。
 ${WS()}
-${S.goals.length?'\n## いまあるゴール\n'+sortedGoals().map(x=>`- ${x.title}（${x.deadline||'期限なし'}／${(x.miles||[]).filter(m=>m.done).length}/${(x.miles||[]).length}）`).join('\n')+'\n':''}
-進め方
-1. すぐに逆質問から始める（最初の質問：「いま一番達成したい状態は？ いつまでに、どうなっていたいか」）。CLAUDE.md の「壁打ちプロトコル」に従い、質問は一度に1つ。解像度が100%になるまで終わらない
-   100% ＝ 目標の構造が分解され、定量的な達成条件が決まり、末端の「次にやること」が AI がそのまま実行できる粒度まで書けている状態
-2. 100%になったら、ゴール → 中の目標（3〜5）→ 日付つきタスク（完了の基準・ステップつき）→ フライトプラン を data.json に入れ子で書く
-3. git add data.json && git commit && git push で反映。私はアプリでこなすだけ`}
+まず CLAUDE.md を読み、「壁打ちプロトコル」の通りに進める。
+
+やってほしいこと
+- 最初の質問は「いま一番達成したい状態は？ いつまでに、どうなっていたいか」。以後は毎ターン「私の発言の言い換え → 飛躍を1つ指摘 → 質問1つ（例2〜5個）」
+- 私が言ったことの1段下を必ず掘る。「それは何が満たされれば起きる？」「それは何で成り立っている？」「そのために具体的に何をする？」「全部やったら本当に届く？」。断定や量の言葉（絶対・毎回・全部）は根拠を聞く。論理の飛躍は全部詰める
+- 構造の中身（中の目標・タスク）を自分で埋めない。私が言っていないものを data.json に置かない。事実（課題文・日程・過去の記録）は自分で調べる
+- 材料が並んだだけで100%と言わない。各層が私の言葉で埋まり、条件が数字か成果物で書け、末端がそのまま実行できる1文になり、飛躍が残っていないときだけ100%
+- 100%になったらドラフトを見せて1回確認 → ゴール → 中の目標 → 日付つきタスク（完了の基準・ステップ）を data.json に入れ子で書き、git add data.json && git commit && git push`}
 function promptFor(kind,g,m,t){
   if(kind==='goal')return `Purpose のゴール「${g.title}」を、私と一緒に進めてください。
 ${WS()}
