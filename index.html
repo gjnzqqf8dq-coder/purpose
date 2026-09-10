@@ -5,1594 +5,235 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#f2f3f6">
+<meta name="theme-color" content="#ffffff">
 <meta name="apple-mobile-web-app-title" content="Purpose">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icon-512.png">
 <title>Purpose</title>
 <style>
-/* ============================================================
-   Purpose v16 — 白ベースLiquid Glass ＋ 壁打ち特化（ゴール→中の目標→タスク、書くのはAI）
-   28作品から抽出した原則:
-   1. 背景こそ主役（風景級のグラデ＋粒子）。フラット地は禁止
-   2. ガラス＝背景を透かした暗色パネル × 白文字（高コントラスト）
-   3. 上辺リムライト＋深い落ち影で浮かせる
-   4. アクセントはライム1色だけ
-   5. アクティブ要素は物理レンズ
-   ============================================================ */
-:root{
-  color-scheme:light;
-
-  --r1:28px; --p1:18px;
-  --r2:16px;
-  --r3:12px;
-
-
-  --ink:#0b0b0f;
-  --ink2:#3a3a42;
-  --gray:rgba(60,60,67,.60);
-  --gray3:rgba(60,60,67,.30);
-  --sep:rgba(60,60,67,.15);
-  --fill:rgba(120,120,128,.12);
-  --press:rgba(120,120,128,.22);
-  --red:#ff3b30;                   /* systemRed */
-  --ckc:#ffffff;                   /* チェックマークの色（墨丸の上） */
-  --well:rgba(118,118,128,.10);    /* カードの中に掘る面 */
-  --pill:#111318;                  /* 選択＝墨のピル */
-
-  --glass-grad:linear-gradient(180deg,rgba(255,255,255,.78),rgba(255,255,255,.52) 55%,rgba(255,255,255,.64));
-  --rim-top:inset 0 1px 0 rgba(255,255,255,.95);
-  --rim-line:inset 0 0 0 .5px rgba(20,25,35,.07);
-  --drop:0 20px 44px -18px rgba(40,50,70,.25);
-
-  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Hiragino Sans","Noto Sans JP",sans-serif;
-  --ease:cubic-bezier(.22,.9,.28,1);
-  --spring:cubic-bezier(.32,1.5,.45,1);
-}
-
+/* Purpose v17 — 白黒。ゴール → 中の目標 → タスク の入れ子だけ。書くのは Claude Code、私はこなす */
+:root{color-scheme:light;
+  --ink:#000;--ink2:#3c3c43;--gray:#8a8a8e;--gray3:#c7c7cc;--sep:#e5e5ea;--fill:#f2f2f7;--well:#fafafa;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Hiragino Sans","Noto Sans JP",sans-serif}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
-body{background:#eef0f4;color:var(--ink);font-family:var(--font);overflow:hidden;
-  -webkit-font-smoothing:antialiased;font-feature-settings:"palt";user-select:none;-webkit-user-select:none}
-input,textarea{user-select:text;-webkit-user-select:text}
-button{font-family:inherit;color:inherit}
-
-/* ============ 背景 = 主役（夕暮れの丘） ============ */
-#bg{position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:linear-gradient(180deg,#f7f8fa 0%,#f0f2f5 38%,#e9ebf0 72%,#e5e8ee 100%)}
-#bg i{position:absolute;display:block;border-radius:50%;filter:blur(70px);
-  transition:background 1.2s var(--ease)}
-#bg i:nth-child(1){width:120vmax;height:70vmax;right:-30vmax;top:-32vmax;
-  background:radial-gradient(closest-side,rgba(255,190,140,.30),transparent 70%);
-  animation:g1 26s var(--ease) infinite alternate}
-#bg i:nth-child(2){width:80vmax;height:60vmax;left:-24vmax;top:4vmax;
-  background:radial-gradient(closest-side,rgba(140,170,255,.22),transparent 70%);
-  animation:g2 34s var(--ease) infinite alternate}
-#bg i:nth-child(3){width:130vmax;height:60vmax;left:-10vmax;bottom:-36vmax;filter:blur(50px);
-  background:radial-gradient(closest-side,rgba(255,255,255,.85),transparent 74%)}
-@keyframes g1{to{transform:translate3d(-6vmax,5vmax,0) scale(1.12)}}
-@keyframes g2{to{transform:translate3d(6vmax,-4vmax,0) scale(1.08)}}
-/* 粒子（写真の質感） */
-#bg::after{content:"";position:absolute;inset:0;opacity:.035;mix-blend-mode:overlay;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
-
-/* ============ shell ============ */
-#app{position:relative;z-index:1;height:100dvh;display:flex;flex-direction:column;max-width:560px;margin:0 auto}
-main{flex:1;min-height:0;overflow-y:auto;padding:calc(env(safe-area-inset-top) + 20px) 16px 140px;
+body{background:#fff;color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;font-feature-settings:"palt";
+  user-select:none;-webkit-user-select:none;overflow:hidden}
+button{font-family:inherit;color:inherit;background:none;border:none;cursor:pointer}
+#app{height:100dvh;display:flex;flex-direction:column;max-width:640px;margin:0 auto}
+main{flex:1;min-height:0;overflow-y:auto;padding:calc(env(safe-area-inset-top) + 22px) 20px calc(env(safe-area-inset-bottom) + 60px);
   -webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-y:contain}
 main::-webkit-scrollbar{display:none}
-.screen{display:none}
-.screen.active{display:block;animation:in .36s var(--ease) both}
-@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h1{font-size:28px;font-weight:700;letter-spacing:-.02em;line-height:1.2;margin:0 0 18px}
+h1 small{display:block;font-size:12px;font-weight:500;color:var(--gray);letter-spacing:.02em;margin-top:5px;font-variant-numeric:tabular-nums}
 
-.caption{font-size:13px;color:var(--gray);letter-spacing:-.01em;font-variant-numeric:tabular-nums}
-.large-title{font-size:34px;font-weight:700;letter-spacing:-.022em;line-height:1.15;margin:3px 0 0;
-}
-.navrow{margin:2px 6px 16px}
-.empty{color:var(--gray);font-size:15px;padding:40px 12px;text-align:center;line-height:2.1}
+/* 新しいゴール＝1タップで Claude Code */
+#newBtn{display:flex;align-items:center;gap:12px;width:100%;padding:15px 16px;margin:0 0 22px;border-radius:14px;background:var(--ink);color:#fff;text-align:left;
+  transition:transform .25s cubic-bezier(.32,1.5,.45,1)}
+#newBtn:active{transform:scale(.98);transition:transform .07s}
+#newBtn i{flex:none;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.16);display:grid;place-items:center;font-size:20px;font-weight:300;font-style:normal}
+#newBtn b{display:block;font-size:15px;font-weight:600;letter-spacing:-.01em}
+#newBtn small{display:block;font-size:11.5px;opacity:.55;margin-top:1px}
 
-/* ============ scroll edge / topbar ============ */
-#edgeTop{position:fixed;top:0;left:0;right:0;height:calc(env(safe-area-inset-top) + 6px);z-index:8;pointer-events:none;
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  -webkit-mask:linear-gradient(#000 30%,transparent);mask:linear-gradient(#000 30%,transparent);
-  opacity:0;transition:opacity .3s var(--ease)}
-#edgeTop.on{opacity:1}
-#topbar{position:fixed;top:0;left:0;right:0;z-index:9;max-width:560px;margin:0 auto;
-  height:calc(env(safe-area-inset-top) + 46px);padding-top:env(safe-area-inset-top);
-  display:flex;align-items:center;justify-content:center;font-size:16.5px;font-weight:600;letter-spacing:-.02em;
-  background:rgba(248,249,251,.6);
-  backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);
-  box-shadow:0 .5px 0 var(--sep);
-  opacity:0;pointer-events:none;transition:opacity .28s var(--ease)}
-#topbar.show{opacity:1}
+/* 入れ子の行 */
+.row{position:relative;overflow:hidden;touch-action:pan-y}
+.sl{display:flex;align-items:center;gap:11px;min-height:50px;padding:10px 0;background:#fff;box-shadow:0 .5px 0 var(--sep);position:relative;will-change:transform}
+.row.pressed .sl{background:var(--well);transition:background .06s}
+.row.d1 .sl{padding-left:26px}
+.row.d2 .sl{padding-left:52px}
+.chk{flex:none;width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--gray3);display:grid;place-items:center;transition:.25s}
+.chk svg{width:11px;height:11px;opacity:0;transform:scale(.4);transition:.25s cubic-bezier(.32,1.5,.45,1)}
+.row.done .chk{background:var(--ink);box-shadow:none}
+.row.done .chk svg{opacity:1;transform:scale(1)}
+.chk.goal{box-shadow:none;background:none}
+.chk.goal i{width:10px;height:10px;border-radius:50%;background:var(--ink);display:block}
+.chk.goal i.hollow{background:none;box-shadow:inset 0 0 0 1.5px var(--ink)}
+.tt{flex:1;min-width:0}
+.tt b{display:block;font-size:15.5px;font-weight:500;line-height:1.35;letter-spacing:-.01em;word-break:break-word}
+.row.d0 .tt b{font-weight:600;font-size:16.5px}
+.tt small{display:block;font-size:12px;color:var(--gray);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tt small.over{color:var(--ink)}
+.row.done .tt b{color:var(--gray);text-decoration:line-through;text-decoration-color:var(--gray3)}
+.go{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--ink);font-size:17px;transition:background .25s}
+.go:active{background:var(--fill);transition:background .06s}
+.chev{flex:none;width:11px;height:11px;color:var(--gray3);transition:transform .3s cubic-bezier(.32,1.5,.45,1)}
+.row.open>.sl .chev{transform:rotate(90deg)}
+.kids{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s cubic-bezier(.22,.9,.28,1)}
+.row.open>.kids{grid-template-rows:1fr}
+.kids>div{min-height:0;overflow:hidden}
+.del{position:absolute;top:0;right:0;bottom:0;width:84px;background:var(--ink);color:#fff;font-size:14px;font-weight:600;display:grid;place-items:center;opacity:0}
+.row.sw .del{opacity:1}
+.none{font-size:13px;color:var(--gray3);padding:12px 0 12px 52px;box-shadow:0 .5px 0 var(--sep)}
+.empty{color:var(--gray);font-size:15px;padding:44px 0;text-align:center;line-height:2}
 
-/* ============ chips = 小さなガラス ============ */
-.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 16px 18px;margin:0 -16px}
-.chips::-webkit-scrollbar{display:none}
-.chip{flex:none;display:flex;align-items:center;gap:6px;border:none;cursor:pointer;
-  padding:9px 15px;border-radius:999px;font-size:13.5px;font-weight:600;letter-spacing:-.01em;
-  color:var(--ink2);
-  background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(255,255,255,.6));
-  backdrop-filter:blur(16px) saturate(170%);-webkit-backdrop-filter:blur(16px) saturate(170%);
-  box-shadow:0 8px 20px -10px rgba(40,50,70,.22),var(--rim-top),var(--rim-line);
-  transition:transform .4s var(--spring),background .3s,color .3s,box-shadow .3s}
-.chip:active{transform:scale(.94);transition:transform .07s}
-.chip i{width:6px;height:6px;border-radius:50%;flex:none;background:hsl(var(--h,220) 90% 52%)}
-.chip small{font-size:11.5px;font-weight:500;color:var(--gray);font-variant-numeric:tabular-nums}
-.chip.on{background:var(--pill);color:#fff;
-  box-shadow:0 10px 22px -8px rgba(20,25,40,.4),inset 0 1px 0 rgba(255,255,255,.2)}
-.chip.on small{color:rgba(255,255,255,.55)}
-
-
-.catsec{display:flex;align-items:center;gap:8px;margin:26px 10px 10px}
-.catsec:first-of-type{margin-top:2px}
-.catsec i{width:5px;height:5px;border-radius:50%;flex:none;background:hsl(var(--h,220) 90% 52%)}
-.catsec b{font-size:11px;font-weight:600;letter-spacing:.14em;color:var(--gray)}
-.catsec span{font-size:12px;color:var(--gray3);font-variant-numeric:tabular-nums;margin-left:auto}
-
-/* ============ GOAL CARD = 風景を透かすガラス ============ */
-.goal{position:relative;border-radius:var(--r1);margin-bottom:14px;overflow:hidden;--h:158;
-  background:var(--glass-grad);
-  backdrop-filter:blur(26px) saturate(170%) brightness(1.06);
-  -webkit-backdrop-filter:blur(26px) saturate(170%) brightness(1.06);
-  box-shadow:var(--drop),var(--rim-top),var(--rim-line),
-    inset 0 -12px 22px -18px rgba(120,130,155,.14)}
-/* 斜めのスペキュラ一閃 */
-.goal::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
-  background:linear-gradient(118deg,rgba(255,255,255,.8) 0%,transparent 26%);
-  mix-blend-mode:screen;opacity:.6}
-.goal>*{position:relative;z-index:1}
-.g-head{padding:16px var(--p1) 6px;cursor:pointer;transition:background .4s var(--ease)}
-.g-head:active{background:var(--press);transition:background .07s}
-.g-kick{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;
-  color:var(--gray);margin-bottom:2px;letter-spacing:.12em;min-height:34px}
-.g-kick i{width:5px;height:5px;border-radius:50%;background:hsl(var(--h) 90% 52%)}
-.g-kick em{font-style:normal;margin-left:auto;display:flex;align-items:baseline;gap:3px;
-  font-weight:500;font-size:11px;letter-spacing:.02em;
-  font-variant-numeric:tabular-nums;color:var(--gray)}
-.g-kick em b{font-size:32px;font-weight:200;color:var(--ink);letter-spacing:-.02em;line-height:1;
-  font-variant-numeric:tabular-nums}
-.g-kick em.over,.g-kick em.over b{color:var(--red)}
-.g-title{font-size:20px;font-weight:600;line-height:1.32;letter-spacing:-.018em;word-break:break-word;
-}
-
-/* 進捗ルート */
-.g-route{position:relative;height:24px;margin:13px 2px 0}
-.g-track{position:absolute;left:0;right:0;top:11px;height:3px;border-radius:2px;background:rgba(0,0,0,.08);
-  box-shadow:inset 0 1px 1px rgba(0,0,0,.06)}
-.g-fill{position:absolute;left:0;top:11px;height:3px;border-radius:2px;background:var(--ink);
-  transition:width .9s var(--ease)}
-.mdot{position:absolute;top:0;width:24px;height:24px;transform:translateX(-50%);display:grid;place-items:center}
-.mdot i{width:10px;height:10px;border-radius:50%;background:#fff;
-  box-shadow:inset 0 0 0 1.5px var(--gray3);transition:.35s var(--spring)}
-.mdot.done i{background:var(--ink);box-shadow:none}
-.mdot.next i{width:14px;height:14px;background:#fff;
-  box-shadow:inset 0 0 0 2px var(--ink)}
-.g-sum{display:flex;gap:10px;align-items:baseline;font-size:12.5px;color:var(--gray);padding:5px 2px 13px;letter-spacing:-.01em}
-.g-sum em{font-style:normal;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.g-sum span{margin-left:auto;flex:none;font-variant-numeric:tabular-nums;color:var(--gray3)}
-
-/* 展開 */
-.g-nest{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--ease)}
-.goal.open .g-nest{grid-template-rows:1fr}
-.g-nest>div{min-height:0;overflow:hidden}
-.g-inner{padding:0 var(--p1) 8px}
-
-/* 中の目標 */
-.mile{border-top:.5px solid var(--sep)}
-.mile:first-child{border-top:none}
-.m-head{display:flex;align-items:center;gap:12px;padding:13px 2px;cursor:pointer;transition:opacity .3s}
-.m-head:active{opacity:.5;transition:opacity .06s}
-.m-num{flex:none;width:23px;height:23px;border-radius:50%;display:grid;place-items:center;
-  font-size:11.5px;font-weight:650;font-variant-numeric:tabular-nums;
-  background:var(--fill);color:var(--ink2);transition:.35s var(--ease)}
-.m-head.done .m-num{background:var(--ink);color:var(--ckc)}
-.m-title{flex:1;min-width:0;font-size:15px;font-weight:500;line-height:1.4;letter-spacing:-.01em;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:color .4s}
-.m-head.done .m-title{color:var(--gray);text-decoration:line-through;text-decoration-color:var(--gray3)}
-.m-cnt{flex:none;font-size:11px;color:var(--gray3);font-variant-numeric:tabular-nums;letter-spacing:.03em}
-.m-chev{flex:none;width:12px;color:var(--gray3);transition:transform .45s var(--spring)}
-.mile.on .m-chev{transform:rotate(90deg)}
-
-/* 芯：タスク＝掘った暗い面 */
-.m-nest{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease)}
-.mile.on .m-nest{grid-template-rows:1fr}
-.m-nest>div{min-height:0;overflow:hidden}
-.m-inner{margin:0 0 13px 35px;border-radius:var(--r2);background:var(--well);overflow:hidden;
-  box-shadow:inset 0 1px 3px rgba(0,0,0,.07)}
-.tk{position:relative;overflow:hidden;touch-action:pan-y}
-.tk+.tk .tk-slide{box-shadow:0 -.5px 0 rgba(60,60,67,.12)}
-.tk-del{position:absolute;top:0;right:0;bottom:0;width:84px;background:var(--red);color:#fff;
-  font-size:14px;font-weight:600;border:none;display:grid;place-items:center;cursor:pointer;
-  opacity:0;transition:opacity .12s}
-.tk.sw .tk-del{opacity:1}
-.tk-slide{position:relative;display:flex;align-items:center;gap:11px;padding:11px 13px;
-  background:#fdfdfe;will-change:transform;transition:background .4s var(--ease)}
-.tk.pressed .tk-slide{background:#ececf0;transition:background .07s}
-.tk-c{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;
-  box-shadow:inset 0 0 0 1.5px var(--gray3);transition:.35s var(--ease)}
-.tk-c svg{opacity:0;transform:scale(.4);transition:.3s var(--spring)}
-.tk.done .tk-c{background:var(--ink);box-shadow:none}
-.tk.done .tk-c svg{opacity:1;transform:scale(1)}
-.tk-t{flex:1;min-width:0;font-size:14px;line-height:1.4;letter-spacing:-.01em;position:relative;transition:color .45s}
-.tk.done .tk-t{color:var(--gray)}
-.tk.done .tk-t::after{content:"";position:absolute;left:0;top:54%;height:1px;width:100%;background:var(--gray3)}
-.tk-d{flex:none;font-size:11.5px;color:var(--gray3);font-variant-numeric:tabular-nums}
-.tk-d.over{color:var(--red)}
-.m-none{font-size:12.5px;color:var(--gray3);padding:11px 13px}
-
-.g-foot{display:flex;gap:2px;padding:2px 6px 9px;border-top:.5px solid var(--sep);margin:0 var(--p1)}
-.g-foot button{flex:1;border:none;background:none;cursor:pointer;font-size:13px;font-weight:550;
-  letter-spacing:-.01em;color:var(--gray);padding:11px 4px 8px;transition:opacity .3s}
-.g-foot button:active{opacity:.4;transition:opacity .06s}
-.g-foot .plan{position:relative}
-.g-foot .plan.todo{color:var(--ink);font-weight:600}
-.g-foot .plan.todo::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;
-  background:var(--red);box-shadow:0 0 5px rgba(255,59,48,.7);margin-right:6px;vertical-align:2px}
-
-/* ============ FLOATING CHROME ============ */
-#edgeBot{position:fixed;bottom:0;left:0;right:0;height:120px;z-index:6;pointer-events:none;
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  -webkit-mask:linear-gradient(transparent,#000 82%);mask:linear-gradient(transparent,#000 82%)}
-nav{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 14px);z-index:11;
-  display:flex;justify-content:center;pointer-events:none}
-.tabbar{pointer-events:auto;position:relative;display:flex;padding:5px;border-radius:999px;touch-action:none;
-  background:rgba(251,251,253,.62);
-  backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);
-  box-shadow:0 12px 32px rgba(40,50,70,.2),
-    inset 0 0 0 .5px rgba(0,0,0,.05),
-    inset 0 1px 0 rgba(255,255,255,.9);
-  transition:padding .45s var(--spring)}
-.tab{width:92px;padding:9px 0 8px;border-radius:999px;border:none;background:none;color:var(--gray);
-  font-size:10px;font-weight:600;cursor:pointer;
-  display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;z-index:4;
-  transition:color .3s var(--ease),width .45s var(--spring)}
-.tab svg{width:23px;height:23px}
-.tab b{font-weight:600;max-height:14px;overflow:hidden;transition:max-height .4s var(--ease),opacity .3s}
-.tab.active{color:var(--ink)}
-nav.mini .tab{width:60px}
-nav.mini .tab b{max-height:0;opacity:0}
-#lens{position:absolute;z-index:1;top:5px;left:5px;width:92px;height:calc(100% - 10px);border-radius:999px;
-  background:rgba(255,255,255,.5);
-  backdrop-filter:blur(3px) saturate(190%) brightness(1.06);-webkit-backdrop-filter:blur(3px) saturate(190%) brightness(1.06);
-  box-shadow:0 4px 14px rgba(0,0,0,.12),
-    inset 0 0 0 .5px rgba(255,255,255,.7),inset 0 1.5px 1.5px rgba(255,255,255,.95),
-    inset 0 -1.5px 2px rgba(0,0,0,.07),inset 2px 0 3px -1px rgba(255,255,255,.5),inset -2px 0 3px -1px rgba(255,255,255,.5);
-  transition:transform .55s var(--spring),scale .35s var(--spring),width .45s var(--spring);will-change:transform}
-nav.mini #lens{width:60px}
-#lens::before{content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;opacity:.5;
-  background:conic-gradient(from 210deg,rgba(255,180,120,.3),rgba(140,180,255,.26) 30%,transparent 45%,rgba(140,220,255,.22) 62%,rgba(255,170,140,.24) 82%,rgba(255,180,120,.3));
-  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2.5px),#000);mask:radial-gradient(farthest-side,transparent calc(100% - 2.5px),#000)}
-#lens::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;mix-blend-mode:screen;
-  background:linear-gradient(115deg,rgba(255,255,255,.6) 0%,rgba(255,255,255,0) 30%),
-    linear-gradient(295deg,rgba(255,255,255,.28) 0%,transparent 24%),
-    radial-gradient(120% 90% at 50% -30%,rgba(255,255,255,.4),transparent 55%);
-  background-size:220% 100%,220% 100%,100% 100%;
-  background-position:calc(var(--lx,0px)) 0,calc(var(--lx,0px)*.6) 0,0 0;opacity:.85}
-.refract #lens{backdrop-filter:blur(1.5px) saturate(190%) brightness(1.05) url(#lensFilter)}
-
-#toast{position:fixed;top:calc(env(safe-area-inset-top) + 16px);left:50%;
-  transform:translateX(-50%) translateY(-90px);z-index:30;padding:12px 22px;font-size:13.5px;font-weight:600;
-  letter-spacing:-.01em;transition:.55s var(--spring);white-space:nowrap;border-radius:999px;
-  background:rgba(251,251,253,.66);color:var(--ink);
-  backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);
-  box-shadow:0 12px 32px rgba(40,50,70,.22),inset 0 0 0 .5px rgba(0,0,0,.05),inset 0 1px 0 rgba(255,255,255,.9)}
-#toast.show{transform:translateX(-50%) translateY(0)}
-
-/* ============ sheet ============ */
-#dim{position:fixed;inset:0;background:rgba(0,0,0,.18);z-index:14;opacity:0;pointer-events:none;
-  transition:opacity .32s var(--ease)}
+/* シート */
+#dim{position:fixed;inset:0;background:rgba(0,0,0,.2);z-index:14;opacity:0;pointer-events:none;transition:opacity .3s}
 #dim.show{opacity:1;pointer-events:auto}
-#sheet{position:fixed;left:0;right:0;bottom:0;max-width:560px;margin:0 auto;z-index:15;
-  background:rgba(252,252,253,.86);
-  backdrop-filter:blur(44px) saturate(170%);-webkit-backdrop-filter:blur(44px) saturate(170%);
-  border-radius:30px 30px 0 0;transform:translateY(105%);will-change:transform;
-  box-shadow:0 -10px 44px rgba(40,50,70,.22),inset 0 1px 0 rgba(255,255,255,.95),inset 0 0 0 .5px rgba(0,0,0,.04);
-  display:none}
-.sh-grab{padding:10px 0 4px;touch-action:none;cursor:grab}
-.sh-handle{width:36px;height:5px;border-radius:3px;background:var(--gray3);margin:0 auto}
-#sheetBody{max-height:78dvh;overflow-y:auto;padding:8px 22px calc(env(safe-area-inset-bottom) + 26px);
-  -webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;scrollbar-width:none}
+#sheet{position:fixed;left:0;right:0;bottom:0;max-width:640px;margin:0 auto;z-index:15;background:#fff;border-radius:22px 22px 0 0;
+  transform:translateY(105%);will-change:transform;box-shadow:0 -8px 40px rgba(0,0,0,.18);display:none}
+.grab{padding:10px 0 4px;touch-action:none;cursor:grab}
+.grab i{display:block;width:36px;height:5px;border-radius:3px;background:var(--gray3);margin:0 auto}
+#sheetBody{max-height:80dvh;overflow-y:auto;padding:8px 22px calc(env(safe-area-inset-bottom) + 24px);scrollbar-width:none;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch}
 #sheetBody::-webkit-scrollbar{display:none}
-.sh-kicker{font-size:12px;font-weight:500;color:var(--gray);margin-top:8px}
-.sh-title{font-size:22px;font-weight:700;margin-top:6px;line-height:1.4;letter-spacing:-.02em;word-break:break-word}
-.sh-date{font-size:13.5px;color:var(--gray);margin-top:4px;font-variant-numeric:tabular-nums}
-.sh-note{font-size:14.5px;color:var(--ink2);line-height:1.85;white-space:pre-wrap;word-break:break-word;margin-top:12px}
-.sh-sec{font-size:12px;font-weight:500;color:var(--gray);margin:24px 0 6px}
-.row{display:flex;align-items:center;gap:11px;padding:11px 10px;margin:0 -10px;border-radius:13px;
-  font-size:15px;letter-spacing:-.01em;cursor:pointer;transition:background .35s}
-.row:active{background:var(--press);transition:background .07s}
-.row .c{flex:none;width:21px;height:21px;border-radius:50%;display:grid;place-items:center;
-  box-shadow:inset 0 0 0 1.5px var(--gray3);transition:.3s}
-.row .c svg{opacity:0;transform:scale(.4);transition:.3s var(--spring)}
-.row.done .c{background:var(--ink);box-shadow:none}
-.row.done .c svg{opacity:1;transform:scale(1)}
-.row span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:color .4s}
-.row.done span{color:var(--gray);text-decoration:line-through;text-decoration-color:var(--gray3)}
-.row small,.row i{flex:none;font-size:11.5px;color:var(--gray3);font-style:normal;font-variant-numeric:tabular-nums}
-.opts{display:flex;gap:6px;flex-wrap:wrap}
-.opt{border:none;cursor:pointer;padding:8px 14px;border-radius:999px;font-size:12.5px;font-weight:600;
-  background:var(--fill);color:var(--ink2);
-  transition:transform .4s var(--spring),background .3s,color .3s}
-.opt:active{transform:scale(.93);transition:transform .07s}
-.opt.on{background:var(--pill);color:#fff}
-.sh-actions{display:flex;gap:8px;margin-top:26px}
-.btn{flex:1;padding:14px;border-radius:999px;border:none;font-size:15px;font-weight:650;
-  letter-spacing:-.01em;cursor:pointer;
-  transition:transform .4s var(--spring),opacity .3s,background .3s,color .3s}
-.btn:active{transform:scale(.96);opacity:.85;transition:transform .07s}
-.btn.primary{background:var(--pill);color:#fff;box-shadow:0 10px 22px -8px rgba(20,25,40,.35)}
-.btn.plain{background:var(--fill);color:var(--ink)}
-.btn.dangerous{background:var(--fill);color:var(--red)}
-.btn.dangerous.arm{background:var(--red);color:#fff}
-.pl-lead{font-size:13px;color:var(--gray);line-height:1.7;margin:4px 0 2px}
-.pl-row{display:flex;align-items:center;gap:11px;padding:11px 0;font-size:14.5px;border-bottom:.5px solid var(--sep)}
-.pl-row .n{flex:none;width:21px;height:21px;border-radius:50%;background:var(--fill);display:grid;place-items:center;
-  font-size:11px;font-weight:600;color:var(--gray);font-variant-numeric:tabular-nums}
-.pl-row .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pl-row .w{flex:none;font-size:11.5px;color:var(--gray3);font-variant-numeric:tabular-nums}
-.pl-row .go{flex:none;border:none;background:var(--pill);color:#fff;font-size:11.5px;font-weight:650;
-  border-radius:999px;padding:6px 12px;cursor:pointer;transition:transform .4s var(--spring),opacity .3s}
-.pl-row .go:active{transform:scale(.92);transition:transform .07s}
-.pl-row .go.off{background:var(--fill);color:var(--gray3)}
-.pl-alt{padding:12px 0;border-bottom:.5px solid var(--sep);font-size:14px;line-height:1.65}
-.pl-alt em{font-style:normal;color:var(--gray)}
-.pl-alt .h{margin-top:5px;color:var(--ink2);font-size:13.5px}
-.pl-empty{font-size:12.5px;color:var(--gray3);padding:11px 0}
-.setwrap p{font-size:12.5px;color:var(--gray);line-height:1.8;margin:8px 0 12px}
-.setwrap input,.setwrap textarea{width:100%;border:none;background:var(--fill);border-radius:13px;
-  font-family:ui-monospace,monospace;font-size:16px;padding:12px;outline:none;margin-bottom:8px;color:var(--ink)}
-.setwrap textarea{min-height:80px;resize:vertical}
-.setwrap .btn{width:100%;margin-bottom:8px;padding:12px;font-size:14px}
-.stat{font-size:11.5px;color:var(--gray);margin-top:6px;line-height:1.7}
-
-/* ============ calendar ============ */
-.cal-wrap{border-radius:var(--r1);padding:15px 12px 10px;position:relative;overflow:hidden;
-  background:var(--glass-grad);
-  backdrop-filter:blur(26px) saturate(170%) brightness(1.06);-webkit-backdrop-filter:blur(26px) saturate(170%) brightness(1.06);
-  box-shadow:var(--drop),var(--rim-top),var(--rim-line)}
-.cal-wrap::before{content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(118deg,rgba(255,255,255,.12) 0%,transparent 26%);mix-blend-mode:screen}
-.cal-head{display:flex;align-items:center;justify-content:space-between;margin:0 6px 10px;position:relative}
-.cal-title{font-size:18px;font-weight:650;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-.cal-nav{display:flex;gap:2px}
-.cal-nav button{width:36px;height:36px;border:none;background:none;cursor:pointer;font-size:19px;
-  color:var(--gray);border-radius:50%;transition:background .4s}
-.cal-nav button:active{background:var(--press);transition:background .05s}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:2px;text-align:center;position:relative}
-.cal-wd{font-size:11px;color:var(--gray3);font-weight:600;padding:4px 0 8px}
-.cal-d{position:relative;height:45px;display:flex;flex-direction:column;align-items:center;padding-top:4px;cursor:pointer}
-.cal-d span{width:33px;height:33px;display:grid;place-items:center;font-size:17px;font-weight:400;
-  border-radius:50%;font-variant-numeric:tabular-nums;letter-spacing:-.02em;
-  transition:background .35s var(--ease),color .35s var(--ease)}
-.cal-d:active span{background:var(--press);transition:background .05s}
-.cal-d.dim span{color:var(--gray3)}
-.cal-d.today span{font-weight:700;color:var(--red)}
-.cal-d.sel span{background:var(--pill);color:#fff;font-weight:600;
-  box-shadow:0 6px 14px -4px rgba(20,25,40,.35)}
-.cal-d.today.sel span{background:var(--red);color:#fff}
-.cal-d .dot{width:4.5px;height:4.5px;border-radius:50%;background:var(--gray3);margin-top:1px}
-.cal-d .dot.on{background:var(--ink);box-shadow:none}
-.cal-d .flag{position:absolute;top:1px;right:6px;width:5px;height:5px;border-radius:50%;background:var(--red);
-  box-shadow:0 0 6px rgba(255,59,48,.8)}
-.cal-detail{margin-top:14px;border-radius:var(--r1);padding:15px 16px;position:relative;overflow:hidden;
-  background:var(--glass-grad);
-  backdrop-filter:blur(26px) saturate(170%) brightness(1.06);-webkit-backdrop-filter:blur(26px) saturate(170%) brightness(1.06);
-  box-shadow:var(--drop),var(--rim-top),var(--rim-line)}
-.sec-sub{font-size:12.5px;color:var(--gray);margin-bottom:4px}
-.cal-dl{padding:11px 0;border-bottom:.5px solid var(--sep);display:flex;align-items:center;gap:11px;font-size:14.5px}
-.cal-dl .f{flex:none;width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:0 0 6px rgba(255,59,48,.8)}
-.cal-dl small{color:var(--gray);font-size:12px;margin-left:auto;flex:none}
-.cal-detail .m-inner{margin:8px 0 0}
-
-/* ============ desktop ============ */
-#sidebar,#inspector{display:none}
-#content{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;position:relative}
-@media (min-width:960px){
-  #app{max-width:none;flex-direction:row}
-  nav,#topbar,#edgeBot{display:none}
-  #sidebar{display:flex;flex-direction:column;width:266px;flex:none;padding:26px 12px 18px;overflow-y:auto;
-    scrollbar-width:none;background:rgba(250,250,252,.55);
-    backdrop-filter:blur(30px) saturate(170%);-webkit-backdrop-filter:blur(30px) saturate(170%);
-    box-shadow:inset -.5px 0 0 var(--sep)}
-  #sidebar::-webkit-scrollbar{display:none}
-  .sb-logo{font-size:14.5px;font-weight:700;letter-spacing:-.02em;padding:0 12px 18px}
-  .sb-sec{font-size:11px;color:var(--gray);font-weight:600;padding:14px 12px 6px;
-    display:flex;align-items:center;gap:6px}
-  .sb-sec i{width:5px;height:5px;border-radius:50%;background:hsl(var(--h,220) 90% 52%)}
-  .sb-item{display:flex;align-items:center;gap:9px;width:100%;border:none;background:none;
-    font-size:13px;font-weight:550;color:var(--ink2);padding:9px 12px;border-radius:11px;cursor:pointer;text-align:left;
-    transition:background .3s var(--ease)}
-  .sb-item:hover{background:var(--fill)}
-  .sb-item.on{background:var(--press)}
-  .sb-item svg{width:16px;height:16px;flex:none;color:var(--gray)}
-  .sb-goal{display:block;width:100%;border:none;background:none;text-align:left;cursor:pointer;
-    padding:9px 12px 10px;border-radius:11px;transition:background .3s var(--ease)}
-  .sb-goal:hover{background:var(--fill)}
-  .sb-goal.on{background:var(--press)}
-  .sb-goal .t{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
-  .sb-goal .t b{font-size:13px;font-weight:550;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;color:var(--ink2)}
-  .sb-goal .t small{flex:none;font-size:10.5px;color:var(--gray3);font-variant-numeric:tabular-nums}
-  .sb-goal .t small.over{color:var(--red)}
-  .sb-goal .bar{height:3px;background:rgba(0,0,0,.08);border-radius:2px;margin-top:7px;overflow:hidden}
-  .sb-goal .bar i{display:block;height:100%;background:var(--ink);border-radius:2px;
-    transition:width .7s var(--ease)}
-  #content{flex-direction:row}
-  main{flex:1;min-width:0;padding:38px 40px 70px}
-  .screen.active{max-width:700px;margin:0 auto;width:100%}
-  .large-title{font-size:29px}
-  #inspector{display:block;width:352px;flex:none;overflow-y:auto;padding:42px 26px 56px;scrollbar-width:none;
-    background:rgba(250,250,252,.45);
-    backdrop-filter:blur(30px) saturate(170%);-webkit-backdrop-filter:blur(30px) saturate(170%);
-    box-shadow:inset .5px 0 0 var(--sep)}
-  #inspector::-webkit-scrollbar{display:none}
-  .ins-empty{color:var(--gray3);font-size:13px;text-align:center;margin-top:36vh;line-height:2}
-  .cal-detail{display:none}
-  .chips,.catsec{display:none}
-  .goal .g-nest{grid-template-rows:1fr}
-  .m-nest{display:none}
-  .mile.on .m-chev{transform:none}
-  .m-head{padding:13px 12px;margin:0 -12px;border-radius:12px;transition:background .3s var(--ease)}
-  .m-head.sel{background:var(--fill)}
-  .m-head.sel .m-title{color:var(--ink);font-weight:600}
-  .g-head{cursor:default}
-  .g-head:hover{background:none}
-  .m-head:hover .m-title{color:var(--ink)}
-}
+.kick{font-size:12px;color:var(--gray);margin-top:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ttl{font-size:22px;font-weight:700;margin-top:6px;line-height:1.35;letter-spacing:-.02em;word-break:break-word}
+.sub{font-size:13px;color:var(--gray);margin-top:4px;font-variant-numeric:tabular-nums}
+.sec{font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--gray);margin:24px 0 8px}
+.txt{font-size:15px;line-height:1.8;color:var(--ink2);white-space:pre-wrap;word-break:break-word}
+.txt.dim{color:var(--gray3)}
+.st{display:flex;align-items:center;gap:11px;padding:10px 0;box-shadow:0 .5px 0 var(--sep);font-size:15px;cursor:pointer}
+.st .chk{width:20px;height:20px}
+.st.done .chk{background:var(--ink);box-shadow:none}
+.st.done .chk svg{opacity:1;transform:scale(1)}
+.st.done span{color:var(--gray);text-decoration:line-through;text-decoration-color:var(--gray3)}
+.st span{flex:1}
+.lg>div{position:relative;padding:5px 0 10px 16px;font-size:14px;line-height:1.6;color:var(--ink2);white-space:pre-wrap;word-break:break-word}
+.lg>div::before{content:"";position:absolute;left:3px;top:12px;width:6px;height:6px;border-radius:50%;background:var(--gray3)}
+.lg>div.ai::before{background:var(--ink)}
+.lg small{display:block;font-size:11px;color:var(--gray);font-variant-numeric:tabular-nums}
+.pl{padding:9px 0;box-shadow:0 .5px 0 var(--sep);font-size:14.5px;line-height:1.6}
+.pl em{font-style:normal;color:var(--gray);font-size:12.5px;margin-left:6px}
+.pl .h{color:var(--ink2);font-size:13.5px}
+.btn{display:block;width:100%;padding:15px;border-radius:14px;font-size:15.5px;font-weight:600;letter-spacing:-.01em;margin-top:26px;background:var(--ink);color:#fff;
+  transition:transform .25s cubic-bezier(.32,1.5,.45,1)}
+.btn:active{transform:scale(.97);transition:transform .07s}
+.btn.plain{background:var(--fill);color:var(--ink);margin-top:8px}
+.btn.danger{background:none;color:var(--gray);font-weight:500;font-size:13.5px;margin-top:6px;padding:12px}
+.btn.danger.arm{color:#000;font-weight:600}
+.setwrap p{font-size:13px;color:var(--gray);line-height:1.8;margin:8px 0 10px}
+.setwrap input{width:100%;border:none;background:var(--fill);border-radius:12px;font-family:ui-monospace,monospace;font-size:16px;padding:12px;outline:none;margin-bottom:8px;color:var(--ink);user-select:text;-webkit-user-select:text}
+.stat{font-size:12px;color:var(--gray);margin-top:10px;line-height:1.7}
+#toast{position:fixed;top:calc(env(safe-area-inset-top) + 14px);left:50%;transform:translateX(-50%) translateY(-90px);z-index:30;padding:11px 20px;font-size:13.5px;font-weight:600;
+  border-radius:999px;background:var(--ink);color:#fff;transition:.4s cubic-bezier(.32,1.5,.45,1);white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis}
+#toast.show{transform:translateX(-50%) translateY(0)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-
-/* ============ v16 壁打ち特化（ゴール→中の目標→タスク、書くのはAI） ============ */
-.card{position:relative;border-radius:var(--r1);margin-bottom:14px;overflow:hidden;padding:14px var(--p1) 12px;
-  background:var(--glass-grad);
-  backdrop-filter:blur(26px) saturate(170%) brightness(1.06);-webkit-backdrop-filter:blur(26px) saturate(170%) brightness(1.06);
-  box-shadow:var(--drop),var(--rim-top),var(--rim-line)}
-.card::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
-  background:linear-gradient(118deg,rgba(255,255,255,.8) 0%,transparent 26%);mix-blend-mode:screen;opacity:.6}
-.card>*{position:relative;z-index:1}
-.card .m-inner{margin:8px 0 0}
-.sec-h{display:flex;align-items:baseline;gap:8px;font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--gray);margin-bottom:4px;min-height:30px}
-.sec-h span{margin-left:auto;font-size:12px;color:var(--gray3);font-variant-numeric:tabular-nums;letter-spacing:0}
-.sec-h .num{margin-left:auto;font-size:30px;font-weight:200;color:var(--ink);letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
-.sec-h .num.zero{color:var(--gray3)}
-.hint{font-size:12.5px;color:var(--gray3);padding:10px 2px;line-height:1.7}
-.fl-acts{display:flex;gap:6px;padding:0 13px 10px;background:#fdfdfe}
-.fl-acts button{border:none;background:var(--fill);color:var(--ink2);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer}
-.fl-acts button.dng{color:var(--red)}
-.tk-s{flex:none;font-size:10.5px;color:var(--gray3);font-variant-numeric:tabular-nums}
-.ov{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:.5px solid var(--sep);cursor:pointer}
-.ov:first-of-type{border-top:none}
-.ov:active{opacity:.5}
-.ov i.c{width:6px;height:6px;border-radius:50%;flex:none;background:hsl(var(--h,220) 90% 52%)}
-.ov .t{flex:1;min-width:0}
-.ov .t b{display:block;font-size:14.5px;font-weight:550;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:-.01em}
-.ov .t small{display:block;font-size:11.5px;color:var(--gray);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ov .bar{width:54px;height:3px;background:rgba(0,0,0,.08);border-radius:2px;overflow:hidden;flex:none}
-.ov .bar i{display:block;height:100%;background:var(--ink)}
-.ov .n{flex:none;font-size:11.5px;color:var(--gray3);font-variant-numeric:tabular-nums;min-width:18px;text-align:right}
-.field{width:100%;border:none;background:var(--fill);border-radius:13px;font-family:inherit;font-size:16px;padding:12px 13px;outline:none;color:var(--ink);margin:6px 0;display:block}
-textarea.field{min-height:84px;resize:vertical;line-height:1.6}
-.frow{display:flex;gap:6px;align-items:center;margin:6px 0}
-.frow .field{flex:1;margin:0}
-.ib{flex:none;width:42px;height:42px;border-radius:50%;border:none;background:var(--fill);color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:20px;font-weight:300}
-.ib.pri{background:var(--pill);color:#fff;box-shadow:0 10px 22px -8px rgba(20,25,40,.35)}
-.opt input[type=date]{border:none;background:none;font-family:inherit;font-size:12.5px;color:inherit;outline:none;width:118px}
-.tl{padding:6px 0 0}
-.tl>div{position:relative;padding:4px 0 9px 16px;font-size:13.5px;line-height:1.6;color:var(--ink2);white-space:pre-wrap;word-break:break-word}
-.tl>div::before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--gray3)}
-.tl>div.ai::before{background:hsl(222 90% 52%);box-shadow:0 0 6px hsl(222 90% 60% / .6)}
-.tl small{display:block;font-size:11px;color:var(--gray3);font-variant-numeric:tabular-nums}
-.steps .row{padding:9px 10px}
-[contenteditable]:focus{outline:none;background:var(--well);border-radius:8px}
-.cmd{font-family:ui-monospace,SFMono-Regular,monospace;font-size:12px;background:var(--well);border-radius:10px;padding:9px 11px;margin:6px 0;white-space:pre-wrap;word-break:break-all;color:var(--ink2);max-height:130px;overflow:auto;line-height:1.5}
-.sh-actions.col{flex-direction:column}
-.sh-actions.col .btn{width:100%}
-.agent{display:flex;align-items:center;gap:12px;padding:13px 4px;border-top:.5px solid var(--sep);cursor:pointer;transition:opacity .3s}
-.agent:first-of-type{border-top:none}
-.agent:active{opacity:.5;transition:opacity .06s}
-.agent .ic{flex:none;width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-size:13px;font-weight:700;color:#fff;background:var(--pill)}
-.agent .ic.soft{background:var(--fill);color:var(--ink2)}
-.agent .t{flex:1;min-width:0}
-.agent .t b{display:block;font-size:15px;font-weight:600;letter-spacing:-.01em}
-.agent .t small{display:block;font-size:11.5px;color:var(--gray);margin-top:1px}
-.agent .ch{flex:none;width:12px;color:var(--gray3)}
-.ins-sum{font-size:13.5px;line-height:1.8;color:var(--ink2)}
-.ins-sum b{display:block;font-size:11px;letter-spacing:.12em;color:var(--gray);margin:16px 0 4px}
-.ins-sum .big{font-size:30px;font-weight:200;color:var(--ink);letter-spacing:-.02em;line-height:1.1;margin-bottom:6px}
-.newgoal{display:flex;align-items:center;gap:12px;padding:15px var(--p1);cursor:pointer;margin-bottom:14px;border-radius:var(--r1);
-  background:var(--pill);color:#fff;box-shadow:0 14px 30px -12px rgba(20,25,40,.45),inset 0 1px 0 rgba(255,255,255,.18);
-  transition:transform .4s var(--spring)}
-.newgoal:active{transform:scale(.97);transition:transform .07s}
-.newgoal .plus{flex:none;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.14);display:grid;place-items:center;font-size:20px;font-weight:300}
-.newgoal b{display:block;font-size:15.5px;font-weight:600;letter-spacing:-.01em}
-.newgoal small{display:block;font-size:11.5px;opacity:.6;margin-top:1px}
 </style>
 </head>
 <body>
-<div id="bg"><i></i><i></i><i></i></div>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <filter id="lensFilter" x="0" y="0" width="100%" height="100%">
-    <feImage id="lensMap" result="map"/>
-    <feDisplacementMap in="SourceGraphic" in2="map" scale="24" xChannelSelector="R" yChannelSelector="G"/>
-  </filter>
-</svg>
-
 <div id="app">
-<aside id="sidebar">
-  <div class="sb-logo">Purpose</div>
-  <div class="sb-sec">ビュー</div>
-  <button class="sb-item" data-tab="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.5l2.3 2.3L15.8 9.6"/></svg>今日</button>
-  <button class="sb-item" data-tab="cal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="4"/><path d="M3.5 9.5h17M8 2.8v3.4M16 2.8v3.4"/></svg>カレンダー</button>
-  <div id="sbGoals"></div>
-  <div class="sb-sec" style="margin-top:8px">AI</div>
-  <button class="sb-item" id="sbNew"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>新しいゴールを壁打ち</button>
-</aside>
-
-<div id="content">
-<div id="topbar"><span id="topTitle">今日</span></div>
 <main id="main">
-
-  <section class="screen active" id="scr-today">
-    <div class="navrow">
-      <div class="caption" id="todayCap"></div>
-      <h1 class="large-title" id="todayTitle">今日</h1>
-    </div>
-    <div id="todayBody"></div>
-  </section>
-
-  <section class="screen" id="scr-home">
-    <div class="navrow">
-      <div class="caption" id="homeCap"></div>
-      <h1 class="large-title" id="homeTitle">ゴール</h1>
-    </div>
-    <div class="chips" id="catChips"></div>
-    <div id="goalBlocks"></div>
-  </section>
-
-  <section class="screen" id="scr-cal">
-    <div class="navrow">
-      <div class="caption">スケジュール</div>
-      <h1 class="large-title">カレンダー</h1>
-    </div>
-    <div class="cal-wrap">
-      <div class="cal-head">
-        <div class="cal-title" id="calTitle"></div>
-        <div class="cal-nav"><button id="calPrev">‹</button><button id="calNext">›</button></div>
-      </div>
-      <div class="cal-grid" id="calGrid"></div>
-    </div>
-    <div class="cal-detail" id="calDetail"></div>
-  </section>
-
+  <h1 id="h1">Purpose<small id="cap"></small></h1>
+  <button id="newBtn"><i>＋</i><div><b>新しいゴール</b><small>Claude Code が開く。答えるだけ。</small></div></button>
+  <div id="tree"></div>
 </main>
-<aside id="inspector"></aside>
 </div>
-
-<div id="edgeTop"></div>
-<div id="edgeBot"></div>
-
 <div id="dim"></div>
-<div id="sheet"><div class="sh-grab"><div class="sh-handle"></div></div><div id="sheetBody"></div></div>
-
+<div id="sheet"><div class="grab"><i></i></div><div id="sheetBody"></div></div>
 <div id="setNode" class="setwrap" style="display:none">
-  <div class="sh-title" style="margin-top:4px">設定</div>
-  <p>正データは GitHub の <b>data.json</b>。AIが書き、全端末に自動反映。このアプリからの書き戻しにはトークンを一度だけ保存。</p>
-  <input type="password" id="tokenInput" placeholder="GitHub token（Contents: Read/Write）">
-  <p style="margin-top:14px">作業場（リポジトリ）のパス。Claude Code／Codex を開く時に使う。</p>
-  <input type="text" id="repoInput" placeholder="~/Downloads/claude box/_作業ファイル/purpose">
-  <button class="btn primary" id="btnSyncNow">保存して同期</button>
-  <button class="btn plain" id="btnExport">壁打ちプロンプトをコピー</button>
-  <textarea id="pasteArea" placeholder="AIのJSONを貼って取り込み"></textarea>
-  <button class="btn plain" id="btnImport">取り込む</button>
-  <button class="btn plain" id="btnBackup">バックアップ書き出し</button>
+  <div class="ttl">設定</div>
+  <p>正データは GitHub の data.json。Claude Code が書き、ここは表示するだけ。アプリからのチェックを書き戻すにはトークンを一度だけ保存。</p>
+  <input type="password" id="tokenInput" placeholder="GitHub token（Contents: Read/Write）" autocomplete="off">
+  <p>作業場（リポジトリ）のパス。Claude Code を開く時に渡す。</p>
+  <input type="text" id="repoInput" placeholder="~/Downloads/claude box/_作業ファイル/purpose" autocomplete="off">
+  <button class="btn" id="btnSave">保存して同期</button>
   <div class="stat" id="syncStat"></div>
 </div>
-
-<nav id="navbar">
-  <div class="tabbar" id="tabbar">
-    <div id="lens"></div>
-    <button class="tab active" data-scr="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.5l2.3 2.3L15.8 9.6"/></svg><b>今日</b></button>
-    <button class="tab" data-scr="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2.6" y="2.6" width="18.8" height="18.8" rx="6.2"/><rect x="6.6" y="6.6" width="10.8" height="10.8" rx="3.6"/><rect x="10.3" y="10.3" width="3.4" height="3.4" rx="1.2" fill="currentColor"/></svg><b>ゴール</b></button>
-    <button class="tab" data-scr="cal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="4"/><path d="M3.5 9.5h17M8 2.8v3.4M16 2.8v3.4"/></svg><b>カレンダー</b></button>
-  </div>
-</nav>
-
 <div id="toast"></div>
-</div>
 
 <script>
-/* ============================================================ state */
+/* ============================================================ state（v16 と同じ data.json） */
 const KEY='purpose.v2';
 const REPO='gjnzqqf8dq-coder/purpose', PATH='data.json', BRANCH='main';
-const APPURL='https://gjnzqqf8dq-coder.github.io/purpose/';
-const DEFCATS=[
-  {id:'c_shukatsu',name:'就活',  hue:222,u:1},
-  {id:'c_seisaku', name:'藝大',  hue:345,u:1},
-  {id:'c_karada',  name:'筋トレ',hue:152,u:1},
-  {id:'c_manabi',  name:'学び',  hue:272,u:1},
-  {id:'c_kurashi', name:'くらし',hue:35, u:1}
-];
 const COLS=['cats','goals','tasks'];
 const emptyState=()=>({cats:[],goals:[],tasks:[],del:{}});
 let S=load(), sha=null, pushT=null, lastPull=0;
-
-function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.goals)return norm(Object.assign(emptyState(),d))}catch(e){}
-  return norm(emptyState())}
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.goals)return norm(Object.assign(emptyState(),d))}catch(e){}return norm(emptyState())}
 function norm(s){
   COLS.forEach(k=>{if(!Array.isArray(s[k]))s[k]=[]});
   if(!s.del||typeof s.del!=='object')s.del={};
-  DEFCATS.forEach(c=>{if(!s.cats.some(x=>x.id===c.id))s.cats.push({...c})});
-  s.cats.forEach(c=>{if(typeof c.hue!=='number')c.hue=220});
-  s.goals.forEach(g=>{if(!Array.isArray(g.miles))g.miles=[];if(!('cat'in g))g.cat=null;planOf(g);if(typeof g.criteria!=='string')g.criteria=''});
-  s.tasks.forEach(t=>{if(!t.date)t.date=null;if(typeof t.criteria!=='string')t.criteria='';
-    if(!Array.isArray(t.steps))t.steps=[];if(!Array.isArray(t.log))t.log=[]});
+  s.goals.forEach(g=>{if(!Array.isArray(g.miles))g.miles=[];if(typeof g.criteria!=='string')g.criteria='';
+    if(!g.plan||typeof g.plan!=='object')g.plan={route:[],cargo:[],alt:[]};['route','cargo','alt'].forEach(k=>{if(!Array.isArray(g.plan[k]))g.plan[k]=[]})});
+  s.tasks.forEach(t=>{if(!t.date)t.date=null;if(typeof t.criteria!=='string')t.criteria='';if(!Array.isArray(t.steps))t.steps=[];if(!Array.isArray(t.log))t.log=[]});
   return s;
 }
 function persist(){localStorage.setItem(KEY,JSON.stringify(S))}
 function save(){persist();schedulePush();render()}
 function saveQuiet(){persist();schedulePush()}
-const uid=p=>(p||'x')+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36);
 const repoPath=()=>localStorage.getItem('purpose.repo')||'~/Downloads/claude box/_作業ファイル/purpose';
 
-/* ============================================================ dates */
+/* ============================================================ util */
 const pad=n=>String(n).padStart(2,'0');
 const fmt=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 const now=new Date(), TODAY=fmt(now);
 const WDJ=['日','月','火','水','木','金','土'];
 const dleft=dl=>Math.round((new Date(dl+'T00:00:00')-new Date(TODAY+'T00:00:00'))/864e5);
-const addDays=n=>{const d=new Date(TODAY+'T00:00:00');d.setDate(d.getDate()+n);return fmt(d)};
 const fmtT=ms=>{const d=new Date(ms);return`${d.getMonth()+1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}`};
-let calY=now.getFullYear(), calM=now.getMonth(), calSel=TODAY;
-
-/* ============================================================ physics */
-function springLinear(stiff,damp,dur){
-  const w0=Math.sqrt(stiff), z=damp/(2*Math.sqrt(stiff)), N=80, out=[];
-  for(let i=0;i<=N;i++){const t=dur/1000*i/N;let x;
-    if(z<1){const wd=w0*Math.sqrt(1-z*z);x=1-Math.exp(-z*w0*t)*(Math.cos(wd*t)+z*w0/wd*Math.sin(wd*t))}
-    else x=1-Math.exp(-w0*t)*(1+w0*t);
-    out.push(x.toFixed(4))}
-  return `linear(${out.join(',')})`;
-}
-const SPR_POP=springLinear(320,22,620), SPR_SOFT=springLinear(300,32,440);
-const rubber=(x,c=120)=>x*c/(x+c);
-
-/* ============================================================ util */
-let toastT;
-function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');
-  clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2200)}
+const md=s=>s?s.slice(5).replace('-','/'):'';
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-const CK=s=>`<svg viewBox="0 0 24 24" width="${s||11}" height="${s||11}" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" style="color:var(--ckc)"><path d="M4 12.5l5 5L20 6.5"/></svg>`;
-const CHEV='<svg class="m-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>';
-const CH2='<svg class="ch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>';
-async function copyText(s){try{await navigator.clipboard.writeText(s);return true}catch(e){
-  const ta=document.createElement('textarea');ta.value=s;ta.style.position='fixed';ta.style.opacity=0;document.body.appendChild(ta);ta.select();
-  let ok=false;try{ok=document.execCommand('copy')}catch(_){}ta.remove();return ok}}
-function onTap(el,fn){
-  let p=null;
+const CK='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"><path d="M4 12.5l5 5L20 6.5"/></svg>';
+const CHEV='<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>';
+let toastT;function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2400)}
+async function copyText(s){try{await navigator.clipboard.writeText(s);return true}catch(e){const ta=document.createElement('textarea');ta.value=s;ta.style.position='fixed';ta.style.opacity=0;document.body.appendChild(ta);ta.select();let ok=false;try{ok=document.execCommand('copy')}catch(_){}ta.remove();return ok}}
+function onTap(el,fn){let p=null;
   el.addEventListener('pointerdown',e=>{p={x:e.clientX,y:e.clientY}});
   el.addEventListener('pointermove',e=>{if(p&&Math.hypot(e.clientX-p.x,e.clientY-p.y)>10)p=null});
   el.addEventListener('pointerup',e=>{if(p){p=null;fn(e)}});
-  el.addEventListener('pointercancel',()=>{p=null});
-}
-function onLongPress(el,fn,ms){
-  let t=null;
-  el.addEventListener('pointerdown',()=>{t=setTimeout(fn,ms||600)});
-  ['pointerup','pointermove','pointercancel','pointerleave'].forEach(ev=>el.addEventListener(ev,()=>clearTimeout(t)));
-}
-const catOf=g=>S.cats.find(c=>c.id===g.cat)||null;
-const hueOf=g=>{const c=catOf(g);return c?c.hue:222};
+  el.addEventListener('pointercancel',()=>{p=null})}
+function onLongPress(el,fn,ms){let t=null;
+  el.addEventListener('pointerdown',()=>{t=setTimeout(fn,ms||550)});
+  ['pointerup','pointermove','pointercancel','pointerleave'].forEach(ev=>el.addEventListener(ev,()=>clearTimeout(t)))}
 const goalOf=id=>S.goals.find(g=>g.id===id)||null;
 const taskOf=id=>S.tasks.find(t=>t.id===id)||null;
+const mileTasks=m=>S.tasks.filter(t=>t.mileId===m.id).sort((a,b)=>(a.done-b.done)||((a.date||'9999')<(b.date||'9999')?-1:1));
+const goalDone=g=>(g.miles||[]).length>0&&g.miles.every(m=>m.done);
+const sortedGoals=()=>[...S.goals].sort((a,b)=>(goalDone(a)-goalDone(b))||((a.deadline||'9999')<(b.deadline||'9999')?-1:1));
 
-/* ============================================================ sheet */
-const sheet=document.getElementById('sheet'), sheetBody=document.getElementById('sheetBody'), dim=document.getElementById('dim');
-let sheetOpen=false, sheetAnim=null;
-const isDesk=()=>matchMedia('(min-width:960px)').matches;
-function openSheet(build){
-  sheetBody.scrollTop=0;sheetBody.replaceChildren();build(sheetBody);
-  sheet.style.display='block';sheet.style.transform='';
-  dim.classList.add('show');
-  if(sheetAnim)sheetAnim.cancel();
-  sheetAnim=sheet.animate([{transform:'translateY(105%)'},{transform:'translateY(0)'}],
-    {duration:420,easing:SPR_SOFT,fill:'both'});
-  sheetOpen=true;
-}
-function closeSheet(fromY){
-  if(!sheetOpen)return;
-  if(sheetAnim)sheetAnim.cancel();
-  dim.classList.remove('show');
-  sheetAnim=sheet.animate([{transform:`translateY(${fromY||0}px)`},{transform:'translateY(105%)'}],
-    {duration:280,easing:'cubic-bezier(.4,0,.7,1)',fill:'both'});
-  sheetAnim.onfinish=()=>{sheet.style.display='none';returnSettingsNode()};
-  sheetOpen=false;
-}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
-onTap(dim,()=>closeSheet());
-function returnSettingsNode(){const n=document.getElementById('setNode');
-  if(n&&n.parentElement===sheetBody){n.style.display='none';document.body.appendChild(n)}}
-let shDrag=null;
-sheet.addEventListener('pointerdown',e=>{
-  if(!e.target.closest('.sh-grab'))return;
-  shDrag={y0:e.clientY,t0:performance.now(),y:0,moved:false};
-  if(sheetAnim)sheetAnim.cancel();
-  sheet.setPointerCapture(e.pointerId);
-});
-sheet.addEventListener('pointermove',e=>{
-  if(!shDrag)return;
-  let dy=e.clientY-shDrag.y0;
-  if(Math.abs(dy)>4)shDrag.moved=true;
-  shDrag.y=dy;shDrag.t1=performance.now();
-  sheet.style.transform=`translateY(${dy>0?dy:-rubber(-dy,60)}px)`;
-});
-function shEnd(){
-  if(!shDrag)return;
-  const dy=shDrag.y||0, dt=Math.max(1,(shDrag.t1||performance.now())-shDrag.t0), v=dy/dt, moved=shDrag.moved;
-  shDrag=null;
-  if(moved&&(dy>150||v>.45))closeSheet(dy);
-  else{
-    const from=sheet.style.transform;sheet.style.transform='';
-    if(sheetAnim)sheetAnim.cancel();
-    sheetAnim=sheet.animate([{transform:from||'translateY(0)'},{transform:'translateY(0)'}],
-      {duration:540,easing:SPR_POP,fill:'both'});
-  }
-}
-sheet.addEventListener('pointerup',shEnd);
-sheet.addEventListener('pointercancel',shEnd);
-
-/* ============================================================ tab bar */
-const TABS=['today','home','cal'], TABTITLE={today:'今日',home:'ゴール',cal:'カレンダー'};
-let curTab='today';
-const lens=document.getElementById('lens'), tabbar=document.getElementById('tabbar'), navbar=document.getElementById('navbar');
-const tabW=()=>navbar.classList.contains('mini')?60:92;
-function lensX(x){lens.style.transform=`translateX(${x}px)`;lens.style.setProperty('--lx',(-x*.38)+'px')}
-function lensTo(i){lensX(i*tabW())}
-function setTab(name){
-  curTab=name;
-  document.querySelectorAll('.tab').forEach(x=>{
-    const on=x.dataset.scr===name;
-    if(on&&!x.classList.contains('active')){
-      const ic=x.querySelector('svg');
-      if(ic)ic.animate([{transform:'scale(1)'},{transform:'scale(1.2)'},{transform:'scale(1)'}],
-        {duration:420,easing:'cubic-bezier(.32,1.6,.45,1)'});
-    }
-    x.classList.toggle('active',on);
-  });
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('scr-'+name).classList.add('active');
-  document.getElementById('topTitle').textContent=TABTITLE[name];
-  lensTo(TABS.indexOf(name));
-  render();mainEl.scrollTo({top:0});syncEdge();
-}
-function goTab(name){
-  if(sheetOpen)closeSheet();
-  if(name!==curTab)setTab(name);else mainEl.scrollTo({top:0,behavior:'smooth'});
-}
-let drag=null;
-tabbar.addEventListener('pointerdown',e=>{
-  drag={x0:e.clientX,idx:TABS.indexOf(curTab),moved:false,tab:e.target.closest('.tab')};
-  tabbar.setPointerCapture(e.pointerId);lens.style.scale='1.12 1.16';
-});
-tabbar.addEventListener('pointermove',e=>{
-  if(!drag)return;
-  const dx=e.clientX-drag.x0;
-  if(Math.abs(dx)>12)drag.moved=true;
-  if(!drag.moved)return;
-  const W=tabW(), max=(TABS.length-1)*W;
-  let x=drag.idx*W+dx;
-  if(x<0)x=-rubber(-x,40);if(x>max)x=max+rubber(x-max,40);
-  lens.style.transition='scale .35s var(--spring)';lensX(x);
-});
-function endDrag(e){
-  if(!drag)return;
-  lens.style.transition='';lens.style.scale='1 1';
-  const st=drag;drag=null;const W=tabW();
-  if(st.moved){
-    const idx=Math.max(0,Math.min(TABS.length-1,Math.round((st.idx*W+(e.clientX-st.x0))/W)));
-    if(TABS[idx]!==curTab)setTab(TABS[idx]);else lensTo(idx);
-  }else{
-    let name=st.tab&&st.tab.dataset.scr;
-    if(!name){const rc=tabbar.getBoundingClientRect();
-      name=TABS[Math.max(0,Math.min(TABS.length-1,Math.floor((e.clientX-rc.left-5)/W)))]}
-    goTab(name);
-  }
-}
-tabbar.addEventListener('pointerup',endDrag);
-tabbar.addEventListener('pointercancel',()=>{lens.style.transition='';lens.style.scale='1 1';drag=null;lensTo(TABS.indexOf(curTab))});
-
-/* refraction map (Chromium) */
-(function(){
-  try{
-    if(!CSS.supports('backdrop-filter','url(#lensFilter)'))return;
-    const W=184,H=84,c=document.createElement('canvas');c.width=W;c.height=H;
-    const g=c.getContext('2d'),img=g.createImageData(W,H);
-    for(let y=0;y<H;y++)for(let x=0;x<W;x++){
-      const nx=(x-W/2)/(W/2),ny=(y-H/2)/(H/2);
-      const r=Math.min(1,Math.hypot(nx,ny)),k=Math.pow(r,3),i=(y*W+x)*4;
-      img.data[i]=128-nx*k*127;img.data[i+1]=128-ny*k*127;img.data[i+2]=128;img.data[i+3]=255;
-    }
-    g.putImageData(img,0,0);
-    document.getElementById('lensMap').setAttribute('href',c.toDataURL());
-    document.documentElement.classList.add('refract');
-  }catch(e){}
-})();
-
-/* scroll edge + tab minimize */
-const mainEl=document.getElementById('main');
-let lastY=0;
-function syncEdge(){
-  const y=mainEl.scrollTop;
-  document.getElementById('edgeTop').classList.toggle('on',y>10);
-  document.getElementById('topbar').classList.toggle('show',y>54);
-  const mini=y>72&&y>lastY;
-  if(mini!==navbar.classList.contains('mini')){
-    navbar.classList.toggle('mini',mini);
-    requestAnimationFrame(()=>lensTo(TABS.indexOf(curTab)));
-  }
-  lastY=y;
-}
-mainEl.addEventListener('scroll',syncEdge,{passive:true});
-
-/* ============================================================ render */
-let expandedGoal=null, openMile=null, curCat='all';
-function render(){renderChips();renderSidebar();renderToday();renderHome();renderCal();renderInspector()}
-const sortedGoals=()=>[...S.goals].sort((a,b)=>(a.deadline||'9999')<(b.deadline||'9999')?-1:1);
-const goalTasks=g=>S.tasks.filter(t=>t.goalId===g.id);
-const mileTasks=m=>S.tasks.filter(t=>t.mileId===m.id).sort((a,b)=>(a.date||'9999')<(b.date||'9999')?-1:1);
-function dLabel(g){
-  if(!g.deadline)return'';
-  const d=dleft(g.deadline);
-  if(d===0)return'<b style="font-size:17px;font-weight:600">今日</b>';
-  if(d<0)return`<b>${-d}</b>日超過`;
-  return`<b>${d}</b>日`;
-}
-
-/* ---- category chips ---- */
-function renderChips(){
-  const box=document.getElementById('catChips');if(!box)return;
-  const used=S.cats.filter(c=>S.goals.some(g=>g.cat===c.id));
-  const un=S.goals.filter(g=>!g.cat||!S.cats.some(c=>c.id===g.cat)).length;
-  let html=`<button class="chip${curCat==='all'?' on':''}" data-c="all">すべて<small>${S.goals.length}</small></button>`;
-  html+=used.map(c=>`<button class="chip${curCat===c.id?' on':''}" data-c="${c.id}" style="--h:${c.hue}"><i></i>${esc(c.name)}<small>${S.goals.filter(g=>g.cat===c.id).length}</small></button>`).join('');
-  if(un)html+=`<button class="chip${curCat==='none'?' on':''}" data-c="none">未分類<small>${un}</small></button>`;
-  box.innerHTML=html;
-  box.querySelectorAll('.chip').forEach(b=>onTap(b,()=>{
-    curCat=b.dataset.c;renderChips();renderHome();mainEl.scrollTo({top:0});syncEdge();
-    b.animate([{transform:'scale(.9)'},{transform:'scale(1)'}],{duration:420,easing:SPR_POP});
-  }));
-}
-
-/* ---- sidebar (desktop) ---- */
-function renderSidebar(){
-  const sb=document.getElementById('sbGoals');if(!sb)return;
-  const groups=groupGoals(sortedGoals());
-  sb.innerHTML=groups.map(gr=>{
-    const rows=gr.list.map(g=>{
-      const ms=g.miles||[], dn=ms.filter(m=>m.done).length;
-      const dl=g.deadline?dleft(g.deadline):null;
-      return `<button class="sb-goal${expandedGoal===g.id&&curTab==='home'?' on':''}" data-gid="${g.id}">
-        <div class="t"><b>${esc(g.title)}</b><small${dl!==null&&dl<0?' class="over"':''}>${dl===null?'':(dl<0?`+${-dl}日`:`${dl}日`)}</small></div>
-        <div class="bar"><i style="width:${ms.length?dn/ms.length*100:0}%"></i></div></button>`;
-    }).join('');
-    return `<div class="sb-sec" style="--h:${gr.hue}">${gr.cat?'<i></i>':''}${esc(gr.name)}</div>${rows}`;
-  }).join('');
-  sb.querySelectorAll('.sb-goal').forEach(b=>b.onclick=()=>{
-    expandedGoal=b.dataset.gid;
-    if(curTab!=='home')setTab('home');else{renderHome();renderSidebar();renderInspector()}
-    const el=document.querySelector(`.goal[data-gid="${b.dataset.gid}"]`);
-    if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
-  });
-  document.querySelectorAll('#sidebar .sb-item[data-tab]').forEach(b=>b.classList.toggle('on',curTab===b.dataset.tab));
-}
-document.querySelectorAll('#sidebar .sb-item[data-tab]').forEach(b=>b.onclick=()=>goTab(b.dataset.tab));
-document.getElementById('sbNew').onclick=()=>openNewGoal();
-
-function groupGoals(list){
-  const out=[];
-  S.cats.forEach(c=>{
-    const l=list.filter(g=>g.cat===c.id);
-    if(l.length)out.push({cat:c,name:c.name,hue:c.hue,list:l});
-  });
-  const un=list.filter(g=>!g.cat||!S.cats.some(c=>c.id===g.cat));
-  if(un.length)out.push({cat:null,name:'未分類',hue:220,list:un});
-  return out;
-}
-
-/* ---- HOME ---- */
-function renderHome(){
-  document.getElementById('homeCap').textContent=`${now.getMonth()+1}月${now.getDate()}日 ${WDJ[now.getDay()]}曜日`;
-  const wrap=document.getElementById('goalBlocks');
-  let gs=sortedGoals();
-  if(curCat==='none')gs=gs.filter(g=>!g.cat||!S.cats.some(c=>c.id===g.cat));
-  else if(curCat!=='all')gs=gs.filter(g=>g.cat===curCat);
-
-  if(!S.goals.length){
-    wrap.innerHTML='<div class="empty">ゴールはAIとの壁打ちで決める。<br>「今日」の一番上から始める。</div>';
-    return;
-  }
-  if(!gs.length){wrap.innerHTML='<div class="empty">このカテゴリにはまだゴールがない。</div>';return}
-  if(expandedGoal===null||!gs.some(g=>g.id===expandedGoal))expandedGoal=gs[0].id;
-
-  if(isDesk()){
-    const g=gs.find(x=>x.id===expandedGoal)||gs[0];
-    expandedGoal=g.id;
-    if(selMile&&selMile.gid!==g.id)selMile=null;
-    wrap.innerHTML=goalCard(g);
-    bindHome(wrap);
-    const sel=inspectorMile();
-    if(sel){selMile={gid:sel.g.id,mid:sel.m.id};
-      const mh=wrap.querySelector(`.mile[data-mid="${sel.m.id}"] .m-head`);
-      if(mh)mh.classList.add('sel')}
-    return;
-  }
-
-  const groups=curCat==='all'?groupGoals(gs):[{cat:null,name:'',hue:220,list:gs}];
-  wrap.innerHTML=groups.map(gr=>{
-    const head=curCat==='all'&&gr.name
-      ?`<div class="catsec" style="--h:${gr.hue}">${gr.cat?'<i></i>':''}<b>${esc(gr.name)}</b><span>${gr.list.length}</span></div>`:'';
-    return head+gr.list.map(goalCard).join('');
-  }).join('');
-  bindHome(wrap);
-}
-
-function goalCard(g){
-  const ms=g.miles||[], doneN=ms.filter(m=>m.done).length, next=ms.find(m=>!m.done);
-  const isOpen=expandedGoal===g.id;
-  const h=hueOf(g);
-  let route='';
-  if(ms.length){
-    const n=ms.length, pos=i=>n===1?50:(i/(n-1))*100;
-    let lastDone=-1;for(let i=0;i<n;i++){if(ms[i].done)lastDone=i;else break}
-    route=`<div class="g-route"><div class="g-track"></div>
-      <div class="g-fill" style="width:${lastDone<0?0:pos(lastDone)}%"></div>
-      ${ms.map((m,i)=>`<div class="mdot${m.done?' done':(m===next?' next':'')}" style="left:${pos(i)}%"><i></i></div>`).join('')}
-    </div>
-    <div class="g-sum"><em>${next?'いま：'+esc(next.title):'ぜんぶ達成 🎉'}</em><span>${doneN}/${ms.length}</span></div>`;
-  }else{
-    route=`<div class="g-sum" style="padding-top:10px"><em>中の目標がまだ無い — 壁打ちで分解する</em></div>`;
-  }
-
-  const miles=ms.map((m,i)=>{
-    const ts=mileTasks(m), dn=ts.filter(t=>t.done).length;
-    const on=openMile===m.id||(openMile===null&&m===next);
-    const inner=ts.length
-      ?ts.map(t=>taskChip(t)).join('')
-      :'<div class="m-none">タスクなし</div>';
-    return `<div class="mile${on?' on':''}" data-mid="${m.id}" data-gid="${g.id}">
-      <div class="m-head${m.done?' done':''}">
-        <div class="m-num">${m.done?CK(9):i+1}</div>
-        <div class="m-title">${esc(m.title)}</div>
-        ${ts.length?`<div class="m-cnt">${dn}/${ts.length}</div>`:''}
-        ${CHEV}
-      </div>
-      <div class="m-nest"><div><div class="m-inner">${inner}</div></div></div>
-    </div>`;
-  }).join('');
-
-  return `<article class="goal${isOpen?' open':''}" data-gid="${g.id}" style="--h:${h}">
-    <div class="g-head">
-      <div class="g-kick"><em class="${g.deadline&&dleft(g.deadline)<0?'over':''}">${dLabel(g)}</em></div>
-      <div class="g-title">${esc(g.title)}</div>
-      ${route}
-    </div>
-    <div class="g-nest"><div>
-      <div class="g-inner">${ms.length?miles:''}</div>
-      <div class="g-foot">
-        <button class="plan${planCount(g)?'':' todo'}" data-act="plan">${planCount(g)?'フライトプラン':'プラン未記入'}</button>
-        <button data-act="ai">AIと進める</button>
-        <button data-act="open">くわしく</button>
-      </div>
-    </div></div>
-  </article>`;
-}
-
-function taskChip(t){
-  const over=t.date&&t.date<TODAY&&!t.done;
-  const st=t.steps.length?`<span class="tk-s">${t.steps.filter(s=>s.done).length}/${t.steps.length}</span>`:'';
-  return `<div class="tk${t.done?' done':''}" data-tid="${t.id}">
-    <button class="tk-del">削除</button>
-    <div class="tk-slide">
-      <div class="tk-c">${CK(10)}</div>
-      <div class="tk-t">${esc(t.title)}</div>
-      ${st}
-      <div class="tk-d${over?' over':''}">${t.date?t.date.slice(5).replace('-','/'):'未定'}</div>
-    </div></div>`;
-}
-
-function bindHome(wrap){
-  wrap.querySelectorAll('.goal').forEach(el=>{
-    const gid=el.dataset.gid;
-    onTap(el.querySelector('.g-head'),()=>{
-      if(isDesk())return;
-      expandedGoal=expandedGoal===gid?null:gid;
-      wrap.querySelectorAll('.goal').forEach(x=>x.classList.toggle('open',x.dataset.gid===expandedGoal));
-      renderSidebar();
-    });
-    el.querySelectorAll('.mile').forEach(mel=>{
-      onTap(mel.querySelector('.m-head'),()=>{
-        const mid=mel.dataset.mid;
-        if(isDesk()){
-          selMile={gid,mid};
-          el.querySelectorAll('.m-head').forEach(x=>x.classList.toggle('sel',x.parentElement.dataset.mid===mid));
-          renderInspector();
-          return;
-        }
-        openMile=openMile===mid?'__none__':mid;
-        el.querySelectorAll('.mile').forEach(x=>x.classList.toggle('on',x.dataset.mid===openMile));
-      });
-      onLongPress(mel.querySelector('.m-head'),()=>openMileSheet(gid,mel.dataset.mid),520);
-    });
-    el.querySelectorAll('.g-foot button').forEach(b=>onTap(b,()=>{
-      if(b.dataset.act==='plan')openPlanSheet(gid);
-      else if(b.dataset.act==='ai')openAgentSheet('goal',goalOf(gid));
-      else openGoalSheet(gid);
-    }));
-    bindTasks(el);
-  });
-}
-
-/* ---- inspector (desktop) ---- */
-let selMile=null;
-function inspectorMile(){
-  if(selMile){
-    const g=S.goals.find(x=>x.id===selMile.gid);
-    const m=g&&(g.miles||[]).find(x=>x.id===selMile.mid);
-    if(g&&m)return{g,m};
-  }
-  const g=S.goals.find(x=>x.id===expandedGoal)||sortedGoals()[0];
-  if(!g)return null;
-  const m=(g.miles||[]).find(x=>!x.done)||(g.miles||[])[0];
-  return m?{g,m}:null;
-}
-function renderInspector(){
-  const box=document.getElementById('inspector');
-  if(!box||!isDesk())return;
-  if(curTab==='cal'){
-    const d=new Date(calSel+'T00:00:00');
-    const dls=S.goals.filter(g=>g.deadline===calSel), ts=S.tasks.filter(t=>t.date===calSel);
-    box.innerHTML=`<div class="sh-kicker">${calSel.replace(/-/g,'/')}</div>
-      <div class="sh-title">${d.getMonth()+1}月${d.getDate()}日 ${WDJ[d.getDay()]}曜日</div>
-      ${dls.map(g=>`<div class="cal-dl"><div class="f"></div><span>${esc(g.title)}</span><small>期限</small></div>`).join('')}
-      ${ts.length?`<div class="m-inner" style="margin:10px 0 0">${ts.map(t=>taskChip(t)).join('')}</div>`:''}
-      ${!ts.length&&!dls.length?'<div class="ins-empty">この日の予定はない</div>':''}`;
-    bindTasks(box);return;
-  }
-  if(curTab==='today'){box.innerHTML=currentPositionHTML();bindTasks(box);
-    const b=box.querySelector('#insNew');if(b)b.onclick=()=>openNewGoal();return}
-  const sel=inspectorMile();
-  if(!sel){box.innerHTML='<div class="ins-empty">中の目標を選ぶ</div>';return}
-  const{g,m}=sel, ts=mileTasks(m);
-  box.innerHTML=`
-    <div class="sh-kicker">${esc(g.title)}</div>
-    <div class="sh-title" style="margin-top:6px">${esc(m.title)}</div>
-    <div class="sh-sec">タスク</div>
-    <div class="m-inner" id="insTasks" style="margin:0">${ts.length?ts.map(t=>taskChip(t)).join(''):'<div class="m-none">まだ無い — 壁打ちで足す</div>'}</div>
-    <div class="sh-actions col">
-      <button class="btn primary" id="insAI">この中の目標をAIと進める</button>
-      <div style="display:flex;gap:8px"><button class="btn plain" id="insDone">${m.done?'未達成に戻す':'達成にする'}</button>
-      <button class="btn dangerous" id="insDel">削除</button></div>
-    </div>`;
-  bindTasks(box);
-  box.querySelector('#insAI').onclick=()=>openAgentSheet('mile',{g,m});
-  box.querySelector('#insDone').onclick=()=>{m.done=!m.done;g.u=Date.now();save();renderInspector();if(m.done)toast('達成')};
-  const del=box.querySelector('#insDel');
-  del.onclick=()=>{
-    if(!del.classList.contains('arm')){del.classList.add('arm');del.textContent='本当に削除する';
-      setTimeout(()=>{del.classList.remove('arm');del.textContent='削除'},2600);return}
-    g.miles=g.miles.filter(x=>x.id!==m.id);g.u=Date.now();
-    S.tasks.forEach(t=>{if(t.mileId===m.id){t.mileId=null;t.u=Date.now()}});
-    selMile=null;save();renderInspector();toast('削除した');
-  };
-}
-
-/* ============================================================ swipe tasks */
-let openRow=null;
-function toggleTask(t,el){
-  t.done=!t.done;t.u=Date.now();
-  if(el){el.classList.toggle('done',t.done);
-    if(t.done)el.querySelector('.tk-c').animate([{transform:'scale(1)'},{transform:'scale(1.3)'},{transform:'scale(1)'}],{duration:420,easing:'cubic-bezier(.32,1.6,.45,1)'})}
-  saveQuiet();
-}
-function bindTasks(root){
-  root.querySelectorAll('.tk').forEach(el=>{
-    if(el.dataset.b)return;el.dataset.b=1;
-    const t=S.tasks.find(x=>x.id===el.dataset.tid);if(!t)return;
-    const slide=el.querySelector('.tk-slide'), delBtn=el.querySelector('.tk-del');
-    let p=null;
-    el.addEventListener('pointerdown',e=>{
-      if(e.target===delBtn)return;
-      p={x0:e.clientX,y0:e.clientY,mode:null,base:openRow===el?-84:0,t0:performance.now(),chk:!!e.target.closest('.tk-c')};
-      el.classList.add('pressed');
-    });
-    el.addEventListener('pointermove',e=>{
-      if(!p)return;
-      const dx=e.clientX-p.x0, dy=e.clientY-p.y0;
-      if(!p.mode){
-        if(Math.abs(dx)>8&&Math.abs(dx)>Math.abs(dy)){p.mode='x';el.classList.add('sw');el.setPointerCapture(e.pointerId);el.classList.remove('pressed')}
-        else if(Math.abs(dy)>8){p=null;el.classList.remove('pressed');return}
-      }
-      if(p.mode==='x'){
-        let x=p.base+dx;
-        if(x>0)x=rubber(x,30);
-        if(x<-108)x=-108-rubber(-x-108,40);
-        slide.style.transform=`translateX(${x}px)`;p.x=x;p.t1=performance.now();
-      }
-    });
-    el.addEventListener('pointerup',()=>{
-      if(!p)return;
-      el.classList.remove('pressed');
-      const st=p;p=null;
-      if(st.mode==='x'){
-        const x=st.x??st.base, v=(x-st.base)/Math.max(1,(st.t1||performance.now())-st.t0);
-        if(x<-94||v<-.5){doDelete(el,t);openRow=null;return}
-        if(x<-42){
-          if(openRow&&openRow!==el){openRow.querySelector('.tk-slide').style.transform='';openRow.classList.remove('sw')}
-          openRow=el;
-          slide.animate([{transform:`translateX(${x}px)`},{transform:'translateX(-84px)'}],{duration:460,easing:SPR_POP,fill:'both'});
-          slide.style.transform='translateX(-84px)';
-        }else{
-          slide.animate([{transform:`translateX(${x}px)`},{transform:'translateX(0)'}],{duration:460,easing:SPR_POP,fill:'both'});
-          slide.style.transform='';
-          setTimeout(()=>el.classList.remove('sw'),460);
-          if(openRow===el)openRow=null;
-        }
-        return;
-      }
-      if(openRow){openRow.querySelector('.tk-slide').style.transform='';openRow.classList.remove('sw');openRow=null;return}
-      if(st.chk){toggleTask(t,el);refreshCounts(el);return}
-      openTaskSheet(t.id);
-    });
-    el.addEventListener('pointercancel',()=>{p=null;el.classList.remove('pressed')});
-    delBtn.addEventListener('click',()=>{doDelete(el,t);openRow=null});
-  });
-}
-function refreshCounts(el){
-  const mile=el.closest('.mile');if(!mile)return;
-  const ts=S.tasks.filter(x=>x.mileId===mile.dataset.mid), dn=ts.filter(x=>x.done).length;
-  const c=mile.querySelector('.m-cnt');if(c)c.textContent=`${dn}/${ts.length}`;
-}
-function doDelete(el,t){
-  const slide=el.querySelector('.tk-slide'), h=el.offsetHeight;
-  slide.animate([{transform:slide.style.transform||'translateX(0)'},{transform:'translateX(-105%)'}],
-    {duration:260,easing:'cubic-bezier(.4,0,.7,1)',fill:'both'});
-  el.animate([{height:h+'px',opacity:1},{height:'0px',opacity:0}],
-    {duration:340,delay:120,easing:'cubic-bezier(.22,.9,.28,1)',fill:'both'}).onfinish=()=>{
-    S.del[t.id]=Date.now();S.tasks=S.tasks.filter(x=>x.id!==t.id);persist();schedulePush();render();
-  };
-}
-
-/* ============================================================ goal sheet */
-function openGoalSheet(gid){
-  const g=S.goals.find(x=>x.id===gid);if(!g)return;
-  openSheet(body=>{
-    const ms=g.miles||[], untied=goalTasks(g).filter(t=>!t.mileId);
-    body.innerHTML=`
-      <div class="sh-kicker">ゴール</div>
-      <div class="sh-title">${esc(g.title)}</div>
-      <div class="sh-date">${g.deadline?g.deadline.replace(/-/g,'/')+'　'+dLabel(g).replace(/<\/?b[^>]*>/g,''):'期限なし'}</div>
-      ${g.note?`<div class="sh-note">${esc(g.note)}</div>`:''}
-      <div class="sh-sec">完了の基準</div>
-      <div class="sh-note" style="margin-top:4px;${g.criteria?'':'color:var(--gray3)'}">${g.criteria?esc(g.criteria):'まだ無い — 壁打ちで決める'}</div>
-      <div class="sh-sec">カテゴリ</div>
-      <div class="opts">${S.cats.map(x=>`<button class="opt${g.cat===x.id?' on':''}" data-cat="${x.id}">${esc(x.name)}</button>`).join('')}
-        <button class="opt${g.cat?'':' on'}" data-cat="">未分類</button></div>
-      <div class="sh-sec">中の目標</div>
-      <div id="shMiles">${ms.length?ms.map(m=>`
-        <div class="row${m.done?' done':''}" data-mid="${m.id}"><div class="c">${CK(10)}</div><span>${esc(m.title)}</span><small>${mileTasks(m).filter(t=>t.done).length}/${mileTasks(m).length}</small></div>`).join(''):'<div class="pl-empty">まだ無い — 壁打ちで分解する</div>'}
-      </div>
-      ${untied.length?`<div class="sh-sec">紐づいていないタスク</div><div class="m-inner" id="shUntied" style="margin:0">${untied.map(t=>taskChip(t)).join('')}</div>`:''}
-      <div class="sh-actions col">
-        <button class="btn primary" id="shAI">このゴールをAIと進める</button>
-        <button class="btn dangerous" id="shDel">ゴールを削除</button>
-      </div>`;
-    body.querySelectorAll('.opt[data-cat]').forEach(b=>onTap(b,()=>{
-      g.cat=b.dataset.cat||null;g.u=Date.now();
-      body.querySelectorAll('.opt[data-cat]').forEach(x=>x.classList.toggle('on',x===b));
-      save();
-    }));
-    body.querySelectorAll('#shMiles .row').forEach(row=>onTap(row,()=>openMileSheet(g.id,row.dataset.mid)));
-    bindTasks(body);
-    body.querySelector('#shAI').onclick=()=>openAgentSheet('goal',g);
-    const del=body.querySelector('#shDel');
-    del.onclick=()=>{
-      if(!del.classList.contains('arm')){del.classList.add('arm');del.textContent='本当に削除する';
-        setTimeout(()=>{del.classList.remove('arm');del.textContent='ゴールを削除'},2600);return}
-      S.del[g.id]=Date.now();S.goals=S.goals.filter(x=>x.id!==g.id);
-      S.tasks.forEach(t=>{if(t.goalId===g.id){t.goalId=null;t.mileId=null;t.u=Date.now()}});
-      closeSheet();save();toast('削除した');
-    };
-  });
-}
-
-/* ============================================================ milestone sheet */
-function openMileSheet(gid,mid){
-  const g=S.goals.find(x=>x.id===gid);if(!g)return;
-  const m=(g.miles||[]).find(x=>x.id===mid);if(!m)return;
-  openSheet(body=>{
-    const ts=mileTasks(m);
-    body.innerHTML=`
-      <div class="sh-kicker">${esc(g.title)}</div>
-      <div class="sh-title">${esc(m.title)}</div>
-      <div class="sh-sec">タスク</div>
-      <div class="m-inner" id="shMT" style="margin:0">${ts.length?ts.map(t=>taskChip(t)).join(''):'<div class="m-none">まだ無い — 壁打ちで足す</div>'}</div>
-      <div class="sh-actions col">
-        <button class="btn primary" id="shMAI">この中の目標をAIと進める</button>
-        <div style="display:flex;gap:8px"><button class="btn plain" id="shMDone">${m.done?'未達成に戻す':'達成にする'}</button>
-        <button class="btn dangerous" id="shMDel">削除</button></div>
-      </div>`;
-    bindTasks(body);
-    body.querySelector('#shMAI').onclick=()=>openAgentSheet('mile',{g,m});
-    body.querySelector('#shMDone').onclick=()=>{m.done=!m.done;g.u=Date.now();save();closeSheet();if(m.done)toast('達成')};
-    const del=body.querySelector('#shMDel');
-    del.onclick=()=>{
-      if(!del.classList.contains('arm')){del.classList.add('arm');del.textContent='本当に削除する';
-        setTimeout(()=>{del.classList.remove('arm');del.textContent='削除'},2600);return}
-      g.miles=g.miles.filter(x=>x.id!==m.id);g.u=Date.now();
-      S.tasks.forEach(t=>{if(t.mileId===m.id){t.mileId=null;t.u=Date.now()}});
-      closeSheet();save();toast('削除した');
-    };
-  });
-}
-function newTask(o){return Object.assign({id:uid('t_'),title:'',date:null,done:false,goalId:null,mileId:null,criteria:'',steps:[],log:[],u:Date.now()},o)}
-
-/* ============================================================ flight plan（読むと昇格だけ。書くのはAI） */
-function emptyPlan(){return{route:[],cargo:[],alt:[]}}
-function planOf(g){if(!g.plan||typeof g.plan!=='object')g.plan=emptyPlan();
-  ['route','cargo','alt'].forEach(k=>{if(!Array.isArray(g.plan[k]))g.plan[k]=[]});return g.plan}
-function planCount(g){const p=planOf(g);return p.route.length+p.cargo.length+p.alt.length}
-
-function openPlanSheet(gid){
-  const g=S.goals.find(x=>x.id===gid);if(!g)return;
-  openSheet(body=>{
-    const draw=()=>{
-      const p=planOf(g);
-      body.innerHTML=`
-        <div class="sh-kicker">FLIGHT PLAN</div>
-        <div class="sh-title">${esc(g.title)}</div>
-        <div class="pl-lead">着くまでに何が起きるかを先に一周見ておく層。書くのはAI。ここではタップで昇格だけ。</div>
-
-        <div class="sh-sec">ROUTE ／ 通る道</div>
-        <div id="plR">${p.route.length?p.route.map((r,i)=>`
-          <div class="pl-row" data-i="${i}"><div class="n">${i+1}</div><div class="t">${esc(r.title)}</div>
-          ${r.when?`<div class="w">${esc(r.when)}</div>`:''}
-          <button class="go${r.m?' off':''}" data-act="mile" data-i="${i}">${r.m?'済':'中の目標に'}</button></div>`).join('')
-          :'<div class="pl-empty">まだ無い。</div>'}
-        </div>
-
-        <div class="sh-sec">CARGO ／ 要る人・要るモノ</div>
-        <div id="plC">${p.cargo.length?p.cargo.map((c,i)=>`
-          <div class="pl-row" data-i="${i}"><div class="n">・</div><div class="t">${esc(c.title)}</div>
-          ${c.due?`<div class="w">${esc(c.due.slice(5).replace('-','/'))}</div>`:''}
-          <button class="go${c.t?' off':''}" data-act="task" data-i="${i}">${c.t?'済':'タスクに'}</button></div>`).join('')
-          :'<div class="pl-empty">まだ無い。</div>'}
-        </div>
-
-        <div class="sh-sec">ALTERNATE ／ 分かれ道</div>
-        <div id="plA">${p.alt.length?p.alt.map(a=>`
-          <div class="pl-alt">もし<b>${esc(a.cond)}</b>なら<em> → ${esc(a.risk)}</em>
-          <div class="h">いまの一手：${esc(a.hedge)}</div></div>`).join('')
-          :'<div class="pl-empty">まだ無い。</div>'}
-        </div>
-
-        <div class="sh-actions"><button class="btn plain" id="plAI">AIにプランを書かせる</button><button class="btn plain" id="plBack">ゴールに戻る</button></div>`;
-      const touch=()=>{g.u=Date.now();persist();schedulePush()};
-      body.querySelectorAll('#plR .go').forEach(btn=>btn.onclick=()=>{
-        const r=planOf(g).route[+btn.dataset.i];
-        if(r.m){toast('もう中の目標にしてある');return}
-        g.miles.push({id:uid('m_'),title:r.title,done:false});r.m=true;touch();render();draw();toast('中の目標にした');
-      });
-      body.querySelectorAll('#plC .go').forEach(btn=>btn.onclick=()=>{
-        const c=planOf(g).cargo[+btn.dataset.i];
-        if(c.t){toast('もうタスクにしてある');return}
-        S.tasks.push(newTask({title:c.title,date:c.due||TODAY,goalId:g.id}));
-        c.t=true;touch();render();draw();toast('タスクにした');
-      });
-      body.querySelector('#plBack').onclick=()=>openGoalSheet(g.id);
-      body.querySelector('#plAI').onclick=()=>openAgentSheet('plan',g);
-    };
-    draw();
-  });
-}
-
-onLongPress(document.getElementById('homeTitle'),()=>openSettings(),600);
-onLongPress(document.getElementById('todayTitle'),()=>openSettings(),600);
-function openSettings(){openSheet(body=>{const n=document.getElementById('setNode');n.style.display='block';
-  document.getElementById('repoInput').value=localStorage.getItem('purpose.repo')||'';body.appendChild(n)})}
-
-/* ============================================================ calendar */
-document.getElementById('calPrev').onclick=()=>{calM--;if(calM<0){calM=11;calY--}renderCal(-1)};
-document.getElementById('calNext').onclick=()=>{calM++;if(calM>11){calM=0;calY++}renderCal(1)};
-function renderCal(slideDir){
-  document.getElementById('calTitle').textContent=`${calY}年${calM+1}月`;
-  const grid=document.getElementById('calGrid');
-  let html=WDJ.map(w=>`<div class="cal-wd">${w}</div>`).join('');
-  const start=new Date(calY,calM,1).getDay(), days=new Date(calY,calM+1,0).getDate();
-  const prevDays=new Date(calY,calM,0).getDate(), cells=[];
-  for(let i=start-1;i>=0;i--)cells.push({d:prevDays-i,dim:true,date:fmt(new Date(calY,calM-1,prevDays-i))});
-  for(let d=1;d<=days;d++)cells.push({d,dim:false,date:fmt(new Date(calY,calM,d))});
-  let nd=1;while(cells.length%7)cells.push({d:nd,dim:true,date:fmt(new Date(calY,calM+1,nd++))});
-  const taskDates=new Set(S.tasks.filter(t=>t.date).map(t=>t.date));
-  const openDates=new Set(S.tasks.filter(t=>!t.done&&t.date).map(t=>t.date));
-  const dlDates=new Set(S.goals.filter(g=>g.deadline).map(g=>g.deadline));
-  html+=cells.map(c=>`<div class="cal-d${c.dim?' dim':''}${c.date===TODAY?' today':''}${c.date===calSel?' sel':''}" data-d="${c.date}">
-    <span>${c.d}</span>${taskDates.has(c.date)?`<div class="dot${openDates.has(c.date)?' on':''}"></div>`:''}${dlDates.has(c.date)?'<div class="flag"></div>':''}
-  </div>`).join('');
-  grid.innerHTML=html;
-  if(slideDir)grid.animate([{opacity:0,transform:`translateX(${slideDir*26}px)`},{opacity:1,transform:'none'}],
-    {duration:420,easing:SPR_SOFT});
-  grid.querySelectorAll('.cal-d').forEach(el=>onTap(el,()=>{
-    calSel=el.dataset.d;renderCal();
-    const sp=document.querySelector(`.cal-d[data-d="${el.dataset.d}"] span`);
-    if(sp)sp.animate([{transform:'scale(.7)'},{transform:'scale(1.06)'},{transform:'scale(1)'}],
-      {duration:380,easing:'cubic-bezier(.32,1.5,.45,1)'});
-  }));
-  const det=document.getElementById('calDetail');
-  const d=new Date(calSel+'T00:00:00');
-  const dls=S.goals.filter(g=>g.deadline===calSel), ts=S.tasks.filter(t=>t.date===calSel);
-  det.innerHTML=`<div class="sec-sub">${d.getMonth()+1}月${d.getDate()}日 ${WDJ[d.getDay()]}曜日</div>`
-    +dls.map(g=>`<div class="cal-dl"><div class="f"></div><span>${esc(g.title)}</span><small>期限</small></div>`).join('')
-    +(ts.length?`<div class="m-inner">${ts.map(t=>taskChip(t)).join('')}</div>`:(dls.length?'':'<div class="empty" style="padding:18px 0">予定はない</div>'));
-  bindTasks(det);
-  renderInspector();
-}
-
-/* ============================================================ merge */
-function mergeState(a,b){
-  const out=emptyState();
-  out.del={...a.del,...b.del};
-  for(const k of Object.keys(out.del))for(const src of[a.del,b.del])if(src[k]&&src[k]>out.del[k])out.del[k]=src[k];
-  const pick=(la,lb)=>{
-    const m=new Map();
-    [...la,...lb].forEach(e=>{if(!e||!e.id)return;const ex=m.get(e.id);if(!ex||(e.u||0)>(ex.u||0))m.set(e.id,e)});
-    return[...m.values()].filter(e=>!(out.del[e.id]&&out.del[e.id]>(e.u||0)));
-  };
-  COLS.forEach(k=>{out[k]=pick(a[k]||[],b[k]||[])});
-  return norm(out);
-}
-
-/* ============================================================ github sync */
-const tok=()=>localStorage.getItem('purpose.token')||'';
-const b64e=s=>btoa(String.fromCharCode(...new TextEncoder().encode(s)));
-const b64d=s=>new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\n/g,'')),c=>c.charCodeAt(0)));
-async function gh(path,opt={}){
-  const h={'Accept':'application/vnd.github+json',...(opt.headers||{})};
-  if(tok())h['Authorization']='Bearer '+tok();
-  const r=await fetch(`https://api.github.com/repos/${REPO}/${path}`,{...opt,headers:h});
-  if(!r.ok&&r.status!==404)throw new Error('GitHub '+r.status);
-  return r.status===404?null:r.json();
-}
-async function pull(){
-  const j=await gh(`contents/${PATH}?ref=${BRANCH}&t=${Date.now()}`);
-  if(!j)return false;
-  sha=j.sha;
-  let remote;try{remote=JSON.parse(b64d(j.content))}catch(e){return false}
-  const before=JSON.stringify(S);
-  S=mergeState(S,Object.assign(emptyState(),remote));persist();
-  if(JSON.stringify(S)!==before)render();
-  lastPull=Date.now();return true;
-}
-async function push(){
-  const body={message:'update from Purpose app',content:b64e(JSON.stringify(S,null,2)),branch:BRANCH};
-  if(sha)body.sha=sha;
-  try{
-    const j=await gh(`contents/${PATH}`,{method:'PUT',body:JSON.stringify(body)});
-    if(j&&j.content){sha=j.content.sha;setStat('同期済み '+new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'}))}
-  }catch(e){
-    try{await pull();body.sha=sha;body.content=b64e(JSON.stringify(S,null,2));
-      const j2=await gh(`contents/${PATH}`,{method:'PUT',body:JSON.stringify(body)});
-      if(j2&&j2.content){sha=j2.content.sha;setStat('同期済み（マージ）')}
-    }catch(e2){setStat('同期エラー — 後で再試行')}
-  }
-}
-function schedulePush(){if(!tok())return;clearTimeout(pushT);pushT=setTimeout(push,3500)}
-function setStat(m){const el=document.getElementById('syncStat');if(el)el.textContent=m||''}
-document.getElementById('btnSyncNow').onclick=async()=>{
-  const v=document.getElementById('tokenInput').value.trim();
-  if(v)localStorage.setItem('purpose.token',v);
-  const rp=document.getElementById('repoInput').value.trim();if(rp)localStorage.setItem('purpose.repo',rp);
-  if(!tok()){toast(rp?'パスを保存した':'トークンを入れて');return}
-  document.getElementById('tokenInput').value='';setStat('同期中…');
-  try{await pull();await push();toast('同期した')}
-  catch(e){setStat('接続できない — トークンを確認');toast('同期に失敗')}
-};
-
-/* ============================================================ export / import */
-document.getElementById('btnExport').onclick=async()=>{
-  const p=webPrompt('new',null);
-  if(await copyText(p))toast('コピーした。AIへ');else{document.getElementById('pasteArea').value=p;toast('下の欄からコピーして')}
-};
-document.getElementById('btnImport').onclick=()=>{
-  let raw=document.getElementById('pasteArea').value.trim();
-  if(!raw){toast('先に貼り付けて');return}
-  const m=raw.match(/```(?:json)?\s*([\s\S]*?)```/);if(m)raw=m[1];
-  let j;try{j=JSON.parse(raw)}catch(e){toast('JSONとして読めなかった');return}
-  if(Array.isArray(j))j={tasks:j};
-  const inc=emptyState();
-  inc.cats=(j.cats||[]).map(c=>({id:c.id||uid('c_'),name:String(c.name||''),hue:+c.hue||220,u:c.u||Date.now()})).filter(c=>c.name);
-  inc.goals=(j.goals||[]).map(g=>({id:g.id||uid('g_'),title:String(g.title||''),deadline:g.deadline||null,
-    note:g.note||'',criteria:g.criteria||'',cat:g.cat||null,plan:g.plan||emptyPlan(),
-    miles:Array.isArray(g.miles)?g.miles.map(mm=>({id:mm.id||uid('m_'),title:String(mm.title||''),done:!!mm.done})).filter(mm=>mm.title):[],
-    u:g.u||Date.now()})).filter(g=>g.title);
-  inc.tasks=(j.tasks||[]).map(t=>newTask({...t,id:t.id||uid('t_'),title:String(t.title||''),date:t.date||null,done:!!t.done,u:t.u||Date.now()})).filter(t=>t.title);
-  const before=JSON.stringify(S);
-  S=mergeState(S,inc);
-  if(JSON.stringify(S)===before){toast('変更なし');return}
-  document.getElementById('pasteArea').value='';save();toast('取り込んだ');
-};
-document.getElementById('btnBackup').onclick=()=>{
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:'application/json'}));
-  a.download=`purpose_backup_${TODAY}.json`;a.click();
-};
-
-/* ============================================================
-   v16  壁打ち特化 — 新しいゴールは Claude Code と決める。書くのはAI、私はこなすだけ
-   ============================================================ */
-
-/* ---- 今日 ---- */
-function renderToday(){
-  document.getElementById('todayCap').textContent=`${now.getMonth()+1}月${now.getDate()}日 ${WDJ[now.getDay()]}曜日`;
-  const due=S.tasks.filter(t=>!t.done&&t.date&&t.date<=TODAY).sort((a,b)=>a.date<b.date?-1:1);
-  const fl=S.tasks.filter(t=>!t.done&&!t.date);
-  const doneT=S.tasks.filter(t=>t.done&&t.date===TODAY);
-  let h=`<div class="newgoal" id="btnNew"><div class="plus">＋</div><div><b>新しいゴールを壁打ちする</b><small>Claude Code が解像度100%まで聞いてから、ここに入れ子で置く</small></div></div>`;
-  h+=`<div class="card"><div class="sec-h">今日やる<span class="num${due.length?'':' zero'}">${due.length}</span></div>
-    ${due.length||doneT.length?`<div class="m-inner">${due.map(taskChip).join('')}${doneT.map(taskChip).join('')}</div>`:'<div class="hint">今日のタスクは無い。</div>'}
-  </div>`;
-  if(fl.length)h+=`<div class="card"><div class="sec-h">ふわついている<span>${fl.length}</span></div>
-    <div class="hint" style="padding-top:0">期日を決めるか、今日やるか、消すか。</div>
-    <div class="m-inner">${fl.map(t=>taskChip(t)+`<div class="fl-acts" data-tid="${t.id}"><button data-a="today">今日やる</button><button data-a="date">期日を決める</button><button data-a="del" class="dng">消す</button></div>`).join('')}</div></div>`;
-  const gs=sortedGoals();
-  h+=`<div class="card"><div class="sec-h">全体像<span>${gs.length} ゴール</span></div>
-    ${gs.length?gs.map(g=>{const ms=g.miles||[],dn=ms.filter(m=>m.done).length,next=ms.find(m=>!m.done);
-      const open=S.tasks.filter(t=>t.goalId===g.id&&!t.done).length, dl=g.deadline?dleft(g.deadline):null;
-      return `<div class="ov" data-gid="${g.id}" style="--h:${hueOf(g)}"><i class="c"></i><div class="t"><b>${esc(g.title)}</b><small>${next?'いま：'+esc(next.title):(ms.length?'ぜんぶ達成':'中の目標なし')}${dl!==null?'　'+(dl<0?`${-dl}日超過`:`あと${dl}日`):''}</small></div><div class="bar"><i style="width:${ms.length?dn/ms.length*100:0}%"></i></div><div class="n">${open}</div></div>`}).join('')
-      :'<div class="hint">ゴールがまだ無い。上から壁打ちを始める。</div>'}
-  </div>`;
-  const wrap=document.getElementById('todayBody');wrap.innerHTML=h;bindTasks(wrap);
-  onTap(wrap.querySelector('#btnNew'),()=>openNewGoal());
-  wrap.querySelectorAll('.fl-acts button').forEach(b=>onTap(b,()=>{
-    const t=taskOf(b.parentElement.dataset.tid);if(!t)return;
-    if(b.dataset.a==='today'){t.date=TODAY;t.u=Date.now();save();toast('今日に入れた')}
-    else if(b.dataset.a==='date')openTaskSheet(t.id);
-    else{S.del[t.id]=Date.now();S.tasks=S.tasks.filter(x=>x.id!==t.id);save();toast('消した')}
-  }));
-  wrap.querySelectorAll('.ov').forEach(el=>onTap(el,()=>{expandedGoal=el.dataset.gid;openMile=null;goTab('home')}));
-}
-function currentPositionHTML(){
-  const due=S.tasks.filter(t=>!t.done&&t.date&&t.date<=TODAY).length, fl=S.tasks.filter(t=>!t.done&&!t.date).length;
-  const gs=sortedGoals().filter(g=>!g.criteria||!(g.miles||[]).length);
-  return `<div class="sh-kicker">現在地</div><div class="sh-title">${TODAY.replace(/-/g,'/')}</div><div class="ins-sum">
-    <b>今日やる</b><div class="big">${due}</div>
-    <b>ふわついている</b><div>${fl||'なし'}</div>
-    <b>壁打ちが足りないゴール</b>${gs.length?gs.map(g=>`<div>・${esc(g.title)}</div>`).join(''):'<div>なし</div>'}
-    <div class="sh-actions"><button class="btn primary" id="insNew">新しいゴールを壁打ち</button></div></div>`;
-}
-
-/* ---- タスク詳細（完了の基準・ステップ・ログ） ---- */
-function openTaskSheet(tid){
-  const t=taskOf(tid);if(!t)return;
-  openSheet(body=>{
-    const g=goalOf(t.goalId), m=g&&(g.miles||[]).find(x=>x.id===t.mileId);
-    const sd=t.steps.filter(s=>s.done).length;
-    body.innerHTML=`
-      <div class="sh-kicker">${g?esc(g.title):'ゴールなし'}${m?' › '+esc(m.title):''}</div>
-      <div class="sh-title" id="tsTitle" contenteditable="true" spellcheck="false">${esc(t.title)}</div>
-      <div class="sh-sec">いつ</div>
-      <div class="opts" id="tsWhen">${[['今日',TODAY],['明日',addDays(1)],['来週',addDays(7)],['未定',null]].map(([l,v])=>`<button class="opt${t.date===v?' on':''}" data-w="${v||''}">${l}</button>`).join('')}<label class="opt${t.date&&![TODAY,addDays(1),addDays(7)].includes(t.date)?' on':''}"><input type="date" id="tsDate" value="${t.date||''}"></label></div>
-      ${S.goals.length?`<div class="sh-sec">ゴール</div><div class="opts" id="tsGoal"><button class="opt${t.goalId?'':' on'}" data-g="">なし</button>${sortedGoals().map(x=>`<button class="opt${t.goalId===x.id?' on':''}" data-g="${x.id}">${esc(x.title)}</button>`).join('')}</div>`:''}
-      ${g&&(g.miles||[]).length?`<div class="sh-sec">中の目標</div><div class="opts" id="tsMile"><button class="opt${t.mileId?'':' on'}" data-m="">なし</button>${g.miles.map(x=>`<button class="opt${t.mileId===x.id?' on':''}" data-m="${x.id}">${esc(x.title)}</button>`).join('')}</div>`:''}
-      <div class="sh-sec">完了の基準</div>
-      <textarea class="field" id="tsCrit" placeholder="何ができたら完了か。空なら壁打ちで決める">${esc(t.criteria)}</textarea>
-      <div class="sh-sec">ステップ <span style="float:right;font-variant-numeric:tabular-nums">${sd}/${t.steps.length}</span></div>
-      <div class="steps" id="tsSteps">${t.steps.map(s=>`<div class="row${s.done?' done':''}" data-sid="${s.id}"><div class="c">${CK(10)}</div><span>${esc(s.title)}</span></div>`).join('')||'<div class="pl-empty">まだ無い</div>'}</div>
-      <div class="frow"><input class="field" id="tsStepIn" placeholder="ステップを足す"><button class="ib" id="tsStepAdd">＋</button></div>
-      <div class="sh-sec">ログ</div>
-      <div class="tl" id="tsLog">${t.log.slice().reverse().map(l=>`<div class="${l.who==='ai'?'ai':''}"><small>${fmtT(l.t)}${l.who==='ai'?' · AI':''}</small>${esc(l.text)}</div>`).join('')||'<div class="pl-empty">まだ無い</div>'}</div>
-      <div class="frow"><input class="field" id="tsLogIn" placeholder="いま何が起きたか"><button class="ib" id="tsLogAdd">＋</button></div>
-      <div class="sh-actions col">
-        <button class="btn primary" id="tsAI">AIと一緒にこなす</button>
-        <div style="display:flex;gap:8px"><button class="btn plain" id="tsDone">${t.done?'未完了に戻す':'完了にする'}</button><button class="btn dangerous" id="tsDel">削除</button></div>
-      </div>`;
-    const touch=()=>{t.u=Date.now();saveQuiet()};
-    const title=body.querySelector('#tsTitle');
-    title.onblur=()=>{const v=title.textContent.trim();if(v&&v!==t.title){t.title=v;touch();render()}};
-    title.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();title.blur()}};
-    body.querySelectorAll('#tsWhen .opt[data-w]').forEach(b=>onTap(b,()=>{t.date=b.dataset.w||null;touch();render();
-      body.querySelectorAll('#tsWhen .opt').forEach(x=>x.classList.toggle('on',x===b))}));
-    body.querySelector('#tsDate').onchange=e=>{if(e.target.value){t.date=e.target.value;touch();render();
-      body.querySelectorAll('#tsWhen .opt').forEach(x=>x.classList.toggle('on',x.tagName==='LABEL'))}};
-    body.querySelectorAll('#tsGoal .opt').forEach(b=>onTap(b,()=>{t.goalId=b.dataset.g||null;t.mileId=null;touch();render();openTaskSheet(tid)}));
-    body.querySelectorAll('#tsMile .opt').forEach(b=>onTap(b,()=>{t.mileId=b.dataset.m||null;touch();render();
-      body.querySelectorAll('#tsMile .opt').forEach(x=>x.classList.toggle('on',x===b))}));
-    const crit=body.querySelector('#tsCrit');crit.onblur=()=>{if(crit.value!==t.criteria){t.criteria=crit.value;touch()}};
-    body.querySelectorAll('#tsSteps .row').forEach(r=>onTap(r,()=>{const s=t.steps.find(x=>x.id===r.dataset.sid);if(!s)return;s.done=!s.done;r.classList.toggle('done',s.done);touch();render()}));
-    const si=body.querySelector('#tsStepIn');
-    const addStep=()=>{const v=si.value.trim();if(!v)return;t.steps.push({id:uid('s_'),title:v,done:false});touch();openTaskSheet(tid)};
-    body.querySelector('#tsStepAdd').onclick=addStep;si.onkeydown=e=>{if(e.key==='Enter'&&!e.isComposing)addStep()};
-    const li=body.querySelector('#tsLogIn');
-    const addLog=()=>{const v=li.value.trim();if(!v)return;t.log.push({t:Date.now(),who:'me',text:v});touch();render();openTaskSheet(tid)};
-    body.querySelector('#tsLogAdd').onclick=addLog;li.onkeydown=e=>{if(e.key==='Enter'&&!e.isComposing)addLog()};
-    body.querySelector('#tsAI').onclick=()=>openAgentSheet('task',t);
-    body.querySelector('#tsDone').onclick=()=>{toggleTask(t);render();closeSheet();if(t.done)toast('完了')};
-    const del=body.querySelector('#tsDel');
-    del.onclick=()=>{
-      if(!del.classList.contains('arm')){del.classList.add('arm');del.textContent='本当に削除する';
-        setTimeout(()=>{del.classList.remove('arm');del.textContent='削除'},2600);return}
-      S.del[t.id]=Date.now();S.tasks=S.tasks.filter(x=>x.id!==t.id);closeSheet();save();toast('削除した');
-    };
-  });
-}
-
-/* ============================================================ AIへの手渡し（Addness方式：短い指示＋作業場のCLAUDE.mdが規律を持つ） */
-const WORKSPACE_DOC="# Purpose — 作業場（ゴール × 現在地）\n\nこのリポジトリは桑田航希の「作業場」。あなた（Claude Code / Codex / claude.ai / ChatGPT）は、起きた瞬間にここから\n**どこへ行くのか（ゴール・完了の基準）** と **いまどこにいるのか（現在地）** を読み取る。\n\n- 正データ：`data.json`。アプリ https://gjnzqqf8dq-coder.github.io/purpose/ はこれを表示するだけ\n- 書くのはあなた。編集したら必ず `git add data.json && git commit -m \"…\" && git push`（アプリは開いた時と復帰時に読む）\n- 本人は「こなすだけ」。アプリからは、チェック・スワイプ削除・期日の3択・完了の基準とステップとログの追記しかしない\n\n## 最初の言葉が「セットアップを始めてください」だったら\n\n下の「壁打ちプロトコル」で、いま追いかけているゴールを1つずつ立てる（3〜7個）。終わるごとに data.json に書いて push。\n\n## 壁打ちプロトコル（新しいゴール／曖昧なゴール）\n\n目的：ユーザーの「いちばん達成したい状態」から「今日の一歩」までを、一本の因果でつながった入れ子（ゴール → 中の目標 → タスク）にする。\n**解像度が100%になるまで終わらない。** 100% ＝ 次の8つが埋まり、かつ末端の「次にやること」が **AIがそのまま実行できる粒度**（誰が読んでも同じ行動になる1文）になっている。\n\n1. 何が起きたら達成か（完了の基準。成果物で書く。時間や努力量で書かない）\n2. いつまでに（期限）\n3. なぜそれが要るのか（上位の目的。これが大きい目標を見失わないための錨）\n4. いまどこにいるか（現状・持っているもの・過去に試したこと）\n5. 何が止めているか（ボトルネックを1つ）\n6. 通る道（工程3〜5。中の目標になる）\n7. 要る人・モノ・お金と期限（cargo）\n8. 今日の一歩（1つ。完了条件は成果物）\n\n### 会話の規律\n- 質問は毎ターン**1つだけ**。答えやすいように例を2〜5個添える\n- 各ターンの型：相手の発言の言い換え → data.json の既存ゴールを参照した結果を一言（重複や関連があれば言う）→ 次の質問\n- 「最短」「すべて」「約4回」など未確定の数字や断定は、事実に合わせた言い換えを提案する\n- 資料・事例を大量に貼られたら、それを「型」（工程と評価基準）に統合して返す\n- 相手の方針が妥当なら肯定し、修正は「3点だけ」のように絞る\n- 8つのうち埋まった数を「材料 n/8」として毎ターン末尾に示す\n- 材料がそろったら聞き続けず、ドラフトを出して「どうですか？」と1回だけ確認する\n\n### ドラフトの形（そのまま data.json の形）\n```json\n{\"goals\":[{\"id\":\"g_…\",\"title\":\"動詞で終わる1文\",\"deadline\":\"YYYY-MM-DD\",\"cat\":\"c_shukatsu\",\"note\":\"背景・方針・注意（2〜4文）\",\n  \"criteria\":\"何が起きたら達成か（成果物）\",\n  \"miles\":[{\"id\":\"m_…\",\"title\":\"工程1\",\"done\":false}],\n  \"plan\":{\"route\":[{\"id\":\"r_1\",\"title\":\"…\",\"when\":\"2026-10\",\"m\":true}],\"cargo\":[{\"id\":\"c_1\",\"title\":\"…\",\"due\":\"YYYY-MM-DD\",\"t\":false}],\"alt\":[{\"id\":\"a_1\",\"cond\":\"もし…\",\"risk\":\"…\",\"hedge\":\"…\"}]},\n  \"u\":1788000000000}],\n \"tasks\":[{\"id\":\"t_…\",\"title\":\"今日、…する\",\"date\":\"YYYY-MM-DD\",\"done\":false,\"goalId\":\"g_…\",\"mileId\":\"m_…\",\n  \"criteria\":\"成果物で書いた完了条件\",\"steps\":[{\"id\":\"s_1\",\"title\":\"…\",\"done\":false}],\"log\":[],\"u\":1788000000000}]}\n```\n- miles は3〜5個、順番＝通る順。tasks は最初の中の目標に2〜4個、日付つき。「今日、〜する」を1つ入れる\n- 確認が取れたら data.json にマージして push。本人には3行で報告（何を置いた／今日の一歩／次に聞くこと）\n\n## 並走の規律（どの層で呼ばれても）\n\n- アプリの「AIと進める／AIと一緒にこなす」は、ゴール・中の目標・タスクのどの層にもある。**本人がどの層を押したかが、今回の作業の粒度**。抽象度が高いほど精度が落ちるので、押された層より上には広げない\n- 渡された文脈（上位ゴールからそのノードまで）は全部読んだ前提で始める。前段階を聞き直さない\n- 自分で実行できることは実行する。調べる・下書く・作る・ファイルを開く・Notion を見る・ブラウザを使う。手段は自分で選ぶ\n- 本人の判断が要る所だけ、逆質問で取る（「良いアイデアの条件は？」「AとBならどっち？」）。質問は1つずつ\n- 「めんどくさい」を本人に残さない。前提の説明・分解・型づくり・候補出しは AI 側の仕事\n- 完了の基準に届いたら done:true にして push。アプリのチェックはそれで付く。本人がチェックを押す必要は無い\n\n## 「〜を進めてください」で来たら（ゴール／中の目標／タスク）\n\n1. data.json から対象の文脈を読む（criteria・note・miles・tasks・plan・log）\n2. criteria が空か曖昧なら、上のプロトコルで擦り合わせてから書く。曖昧なまま走らない\n3. 理想（criteria）と現在地の差分から次の一手を決める。中の目標・タスクが足りなければ足す（タスクは日付つき、steps は3〜5個）\n4. 進めたら `tasks[].log` に `{\"t\":<epoch_ms>,\"who\":\"ai\",\"text\":\"…\"}`、steps の done を更新。完了の基準に届いたら done:true\n5. 分かったこと・決めたことは goals[].note に書き足す。push。報告は3行以内。迷ったら質問（1つ）\n\n## data.json の構造\n\n```\ncats   {id,name,hue,u}                       カテゴリ。就活=c_shukatsu／藝大=c_seisaku／筋トレ=c_karada／学び=c_manabi／くらし=c_kurashi\ngoals  {id,title,deadline,cat,note,criteria,miles:[{id,title,done}],plan:{route,cargo,alt},u}\ntasks  {id,title,date|null,done,goalId,mileId,criteria,steps:[{id,title,done}],log:[{t,who,text}],u}\ndel    {\"<id>\": epoch_ms}                    削除は消さずにここへ\n```\n- `date` / `deadline` は `YYYY-MM-DD`、`t`/`u` は epoch ms。**`u` は必ず編集時点の時刻**（新しい方が同期で勝つ）\n- id は一意。新規は `g_ m_ t_ s_ r_ c_ a_` 接頭辞。既存は消さない\n- tasks.date が null ＝「ふわついている」（期日未定）。本人がアプリで「今日やる／期日／消す」を選ぶ\n\n## 文体\n日本語。名詞句の見出し、事実文、数字先行。コピー調・詩的表現・呼びかけは使わない。返答は短く。\n";
-function chain(kind,obj){
-  // 上位ゴールからそのノードまでの文脈を全部書く（前段階の説明を私がしなくて済むように）
-  const g=kind==='goal'||kind==='plan'?obj:kind==='mile'?obj.g:goalOf(obj.goalId);
-  if(!g)return '';
+/* ============================================================ Claude Code へ（1タップ） */
+const WS=()=>`作業場：${repoPath()}（正データ data.json）。まず CLAUDE.md を読み、その規律に従う。`;
+function chain(kind,g,m,t){
   const ms=g.miles||[];
-  const lines=[`## ゴール「${g.title}」（id ${g.id}）`,
-    `- 期限 ${g.deadline||'なし'}／カテゴリ ${catOf(g)?catOf(g).name:'未分類'}`,
-    `- 完了の基準：${g.criteria||'（未定）'}`,
-    g.note?`- メモ：${g.note}`:'',
-    `- 中の目標：${ms.length?ms.map((m,i)=>`${i+1}.${m.done?'✓':'○'}${m.title}`).join(' ／ '):'なし'}`];
-  const p=planOf(g);
-  if(p.route.length)lines.push(`- 通る道：${p.route.map(r=>r.title+(r.when?'（'+r.when+'）':'')).join(' → ')}`);
-  if(p.cargo.length)lines.push(`- 要るもの：${p.cargo.map(c=>c.title+(c.due?'（'+c.due+'）':'')).join('／')}`);
-  if(p.alt.length)lines.push(`- 分かれ道：${p.alt.map(a=>`もし${a.cond}なら${a.risk}→${a.hedge}`).join('／')}`);
-  const tline=t=>`  - ${t.done?'✓':'○'}${t.title}（${t.date||'未定'}）${t.criteria?' 基準:'+t.criteria:''}${t.steps.length?' 手順:'+t.steps.map(x=>(x.done?'✓':'○')+x.title).join('/'):''}${t.log.length?' 直近:'+t.log[t.log.length-1].text:''}`;
-  if(kind==='goal'||kind==='plan'){
-    lines.push('- タスク：');ms.forEach(m=>{const ts=mileTasks(m);if(ts.length)lines.push(`  ▸ ${m.title}`,...ts.map(tline))});
-    const un=goalTasks(g).filter(t=>!t.mileId);if(un.length)lines.push('  ▸ 紐づけなし',...un.map(tline));
-  }
-  if(kind==='mile'){const m=obj.m;lines.push(`\n## 中の目標「${m.title}」（id ${m.id}）${m.done?'（達成済）':''}`,'- タスク：',...(mileTasks(m).map(tline)||[]));
-    if(!mileTasks(m).length)lines.push('  （まだ無い）')}
-  if(kind==='task'){const t=obj,m=ms.find(x=>x.id===t.mileId);
-    if(m)lines.push(`\n## 中の目標「${m.title}」（id ${m.id}）`,'- 同じ中の目標のタスク：',...mileTasks(m).map(tline));
-    lines.push(`\n## タスク「${t.title}」（id ${t.id}）`,`- 期日 ${t.date||'未定'}／${t.done?'完了':'未完了'}`,`- 完了の基準：${t.criteria||'（未定 → まず私と決めて書く）'}`,
-      `- ステップ：${t.steps.length?t.steps.map((x,i)=>`${i+1}.${x.done?'✓':'○'}${x.title}`).join(' ／ '):'なし（3〜5個に分ける）'}`,
+  const L=[`## ゴール「${g.title}」（id ${g.id}）`,`- 期限 ${g.deadline||'なし'}`,`- 完了の基準：${g.criteria||'（未定）'}`,g.note?`- メモ：${g.note}`:'',
+    `- 中の目標：${ms.length?ms.map((x,i)=>`${i+1}.${x.done?'✓':'○'}${x.title}`).join(' ／ '):'なし'}`];
+  const p=g.plan;
+  if(p.route.length)L.push(`- 通る道：${p.route.map(r=>r.title+(r.when?'（'+r.when+'）':'')).join(' → ')}`);
+  if(p.cargo.length)L.push(`- 要るもの：${p.cargo.map(c=>c.title+(c.due?'（'+c.due+'）':'')).join('／')}`);
+  if(p.alt.length)L.push(`- 分かれ道：${p.alt.map(a=>`もし${a.cond}なら${a.risk}→${a.hedge}`).join('／')}`);
+  const tl=x=>`  - ${x.done?'✓':'○'}${x.title}（${x.date||'未定'}）${x.criteria?' 基準:'+x.criteria:''}${x.steps.length?' 手順:'+x.steps.map(s=>(s.done?'✓':'○')+s.title).join('/'):''}${x.log.length?' 直近:'+x.log[x.log.length-1].text:''}`;
+  if(kind==='goal'){L.push('- タスク：');ms.forEach(x=>{const ts=mileTasks(x);if(ts.length)L.push(`  ▸ ${x.title}`,...ts.map(tl))})}
+  if(kind==='mile'){const ts=mileTasks(m);L.push(`\n## 中の目標「${m.title}」（id ${m.id}）${m.done?'（達成済）':''}`,'- タスク：',...(ts.length?ts.map(tl):['  （まだ無い）']))}
+  if(kind==='task'){if(m)L.push(`\n## 中の目標「${m.title}」（id ${m.id}）`,'- 同じ中の目標のタスク：',...mileTasks(m).map(tl));
+    L.push(`\n## タスク「${t.title}」（id ${t.id}）`,`- 期日 ${t.date||'未定'}／${t.done?'完了':'未完了'}`,`- 完了の基準：${t.criteria||'（未定 → まず私と決めて書く）'}`,
+      `- ステップ：${t.steps.length?t.steps.map((s,i)=>`${i+1}.${s.done?'✓':'○'}${s.title}`).join(' ／ '):'なし（3〜5個に分ける）'}`,
       `- ログ（新しい順）：${t.log.length?'\n  '+t.log.slice(-8).reverse().map(l=>`[${fmtT(l.t)}${l.who==='ai'?' AI':''}] ${l.text}`).join('\n  '):'なし'}`)}
   const others=sortedGoals().filter(x=>x.id!==g.id);
-  if(others.length)lines.push(`\n## 他のゴール（参考）\n${others.map(x=>`- ${x.title}（${x.deadline||'期限なし'}）`).join('\n')}`);
-  return lines.filter(Boolean).join('\n');
+  if(others.length)L.push(`\n## 他のゴール（参考）\n${others.map(x=>`- ${x.title}（${x.deadline||'期限なし'}）`).join('\n')}`);
+  return L.filter(Boolean).join('\n');
 }
-function agentPrompt(kind,obj,seed){
-  const ws=`作業場：${repoPath()}（正データ data.json）。まず CLAUDE.md を読み、その規律に従う。`;
-  if(kind==='new')return `Purpose で新しいゴールを立てたい。${seed?'ひとこと：「'+seed+'」':''}
-${ws}
+function promptNew(){return `Purpose で新しいゴールを立てたい。
+${WS()}
 ${S.goals.length?'\n## いまあるゴール\n'+sortedGoals().map(x=>`- ${x.title}（${x.deadline||'期限なし'}／${(x.miles||[]).filter(m=>m.done).length}/${(x.miles||[]).length}）`).join('\n')+'\n':''}
 進め方
-1. すぐに逆質問から始める。CLAUDE.md の「壁打ちプロトコル」に従い、質問は一度に1つ。解像度が100%になるまで終わらない
+1. すぐに逆質問から始める（最初の質問：「いま一番達成したい状態は？ いつまでに、どうなっていたいか」）。CLAUDE.md の「壁打ちプロトコル」に従い、質問は一度に1つ。解像度が100%になるまで終わらない
    100% ＝ 目標の構造が分解され、定量的な達成条件が決まり、末端の「次にやること」が AI がそのまま実行できる粒度まで書けている状態
 2. 100%になったら、ゴール → 中の目標（3〜5）→ 日付つきタスク（完了の基準・ステップつき）→ フライトプラン を data.json に入れ子で書く
-3. git add data.json && git commit && git push で反映。私はアプリでこなすだけ`;
-  if(kind==='goal')return `Purpose のゴール「${obj.title}」を、私と一緒に進めてください。
-${ws}
+3. git add data.json && git commit && git push で反映。私はアプリでこなすだけ`}
+function promptFor(kind,g,m,t){
+  if(kind==='goal')return `Purpose のゴール「${g.title}」を、私と一緒に進めてください。
+${WS()}
 
-${chain('goal',obj)}
+${chain('goal',g)}
 
 進め方
-1. 上の文脈は全部読んだ前提で始める（私に前段階を聞き直さない）。足りない情報だけ data.json を読む
+1. 上の文脈は全部読んだ前提で始める（前段階を聞き直さない）。足りない情報だけ data.json を読む
 2. 完了の基準が曖昧なら、CLAUDE.md の「壁打ちプロトコル」で私と擦り合わせてから書く
 3. 理想（完了の基準）と現在地の差分から次の一手を決め、末端が「AIがそのまま実行できる粒度」になるまで中の目標・タスクを足す（タスクは日付つき）
 4. 実行できることは自分で実行する（調べる・下書く・作る・ファイルを開く）。めんどうな所は逆質問で私の判断だけを取る
 5. 進めたら tasks[].log と steps の done を更新、完了の基準に届いたものは done:true。note に決めたことを足し、push。報告は3行`;
-  if(kind==='mile')return `Purpose のゴール「${obj.g.title}」の中の目標「${obj.m.title}」を、私と一緒に進めてください。
-${ws}
+  if(kind==='mile')return `Purpose のゴール「${g.title}」の中の目標「${m.title}」を、私と一緒に進めてください。
+${WS()}
 
-${chain('mile',obj)}
+${chain('mile',g,m)}
 
 進め方
 1. 上の文脈は全部読んだ前提で始める。足りない情報だけ data.json を読む
 2. この中の目標の完了の基準を確認し、タスクが無ければ「AIがそのまま実行できる粒度」で2〜4個に分けて data.json に書く（日付つき・完了の基準つき）
 3. 実行できるタスクは自分で実行し、私の判断が要る所だけ逆質問する（質問は1つずつ）
 4. 進めたら tasks[].log と steps を更新、完了したタスクは done:true、全部終わったら miles[].done を true にして push。報告は3行`;
-  if(kind==='plan')return `Purpose のゴール「${obj.title}」（id ${obj.id}）のフライトプラン（plan.route／cargo／alt）を書いてください。
-${ws}
-route＝必ず通る工程を順に、cargo＝要る人・モノ・お金と期限、alt＝分岐と両張りの一手。data.json に書いて push。`;
-  return `Purpose のタスク「${obj.title}」を、私と一緒にこなしてください。
-${ws}
+  return `Purpose のタスク「${t.title}」を、私と一緒にこなしてください。
+${WS()}
 
-${chain('task',obj)}
+${g?chain('task',g,m,t):`## タスク「${t.title}」（id ${t.id}／ゴール未設定）\n- 期日 ${t.date||'未定'}\n- 完了の基準：${t.criteria||'（未定）'}`}
 
 進め方
 1. 上の文脈は全部読んだ前提で始める（前段階を聞き直さない）。ゴールを見失わない
@@ -1600,88 +241,164 @@ ${chain('task',obj)}
 3. 自分で実行できることは実行する（調べる・下書く・作る・Notionやファイルを見る）。めんどうな所は「良い◯◯の条件は？」のように逆質問で私の判断だけを取る
 4. 進めたら steps の done と log（who:"ai"）を更新。完了の基準に届いたら done:true にして push（アプリのチェックが付く）。報告は3行`;
 }
-function webPrompt(kind,obj,seed){
-  const data=JSON.stringify({cats:S.cats,goals:S.goals,tasks:S.tasks},null,1);
-  const proto=WORKSPACE_DOC.split('## 壁打ちプロトコル')[1]?.split('\n## ')[0]||'';
-  const ask=kind==='new'?`新しいゴールを立てたい。${seed?'ひとこと：「'+seed+'」':''}下のプロトコルで壁打ちして（質問は一度に1つ）。解像度100%になったら、追加分だけを {"goals":[…],"tasks":[…]} のjsonコードブロックで出して。`
-    :kind==='goal'?`ゴール「${obj.title}」（id ${obj.id}）の完了の基準と現在地の差分から次の一手を決めて。足りない中の目標・タスクを {"goals":[…],"tasks":[…]} のjsonで出して。`
-    :kind==='plan'?`ゴール「${obj.title}」（id ${obj.id}）の plan（route／cargo／alt）を書いて、{"goals":[{id, plan}]} のjsonで出して。`
-    :kind==='mile'?`ゴール「${obj.g.title}」の中の目標「${obj.m.title}」（id ${obj.m.id}）を実行できる粒度のタスク2〜4個に分けて、{"tasks":[…]} のjsonで出して。`
-    :`タスク「${obj.title}」（id ${obj.id}）を進めたい。完了の基準とステップを決めて、{"tasks":[…]} のjsonで出して。`;
-  return `あなたは目的達成のコーチ。私は「Purpose」（ゴール → 中の目標 → タスク の入れ子）で管理している。今日は ${TODAY}。
-
-## 依頼
-${ask}
-
-## 壁打ちプロトコル
-${proto.trim()}
-
-## スキーマ
-goals: {id,title,deadline:"YYYY-MM-DD"|null,cat,note,criteria,miles:[{id,title,done}],plan:{route,cargo,alt},u}
-tasks: {id,title,date:"YYYY-MM-DD"|null,done,goalId,mileId,criteria,steps:[{id,title,done}],log:[{t,who,text}],u}
-新規idは g_/m_/t_/s_ 接頭辞。u は現在時刻の epoch ms。既存は消さない。
-
-## 現在の全データ
-\`\`\`json
-${data}
-\`\`\``;
+const isIOS=/iPhone|iPad|iPod/.test(navigator.userAgent);
+function launch(p){
+  copyText(p);
+  if(isIOS){toast('指示文をコピーした。Mac の Claude Code に貼る');return}
+  location.href='claude://code/new?q='+encodeURIComponent(p);
+  toast('Claude Code を開く');
 }
-function openAgent(target,kind,obj,seed){
-  const p=agentPrompt(kind,obj,seed);
-  if(target==='claude'||target==='codex'){
-    copyText(p);
-    location.href=(target==='claude'?'claude://code/new?q=':'codex://new?prompt=')+encodeURIComponent(p);
-    toast(target==='claude'?'Claude Code を開く（指示文もコピー済み）':'Codex を開く（指示文もコピー済み）');
-  }else if(target==='claudeai')window.open('https://claude.ai/new?q='+encodeURIComponent(webPrompt(kind,obj,seed)),'_blank');
-  else if(target==='chatgpt')window.open('https://chatgpt.com/?q='+encodeURIComponent(webPrompt(kind,obj,seed)),'_blank');
-  else copyText(p).then(ok=>toast(ok?'指示文をコピーした':'コピーできない'));
+
+/* ============================================================ render（入れ子） */
+const open=new Set();
+function render(){
+  document.getElementById('cap').textContent=`${now.getMonth()+1}月${now.getDate()}日 ${WDJ[now.getDay()]}曜日`;
+  const tree=document.getElementById('tree');
+  const gs=sortedGoals();
+  tree.innerHTML=gs.map(g=>{
+    const ms=g.miles||[], next=ms.find(x=>!x.done), gd=goalDone(g), dl=g.deadline?dleft(g.deadline):null;
+    const sub=gd?'達成':(next?'いま：'+esc(next.title):(ms.length?'':'中の目標なし'))+(dl!==null?(next||!ms.length?'　':'')+(dl<0?`${-dl}日超過`:dl===0?'今日':`あと${dl}日`):'');
+    const kids=ms.length?ms.map((m,i)=>{
+      const ts=mileTasks(m), dn=ts.filter(x=>x.done).length;
+      const tk=ts.length?ts.map(t=>taskRow(t,2)).join('')
+        :'<div class="none">タスクなし — ✦ で分けてもらう</div>';
+      return `<div class="row d1${m.done?' done':''}${open.has(m.id)?' open':''}" data-m="${m.id}" data-g="${g.id}"><div class="sl"><button class="chk" data-a="chk">${CK}</button><div class="tt"><b>${esc(m.title)}</b>${ts.length?`<small>${dn}/${ts.length}</small>`:''}</div><button class="go" data-a="ai">✦</button>${CHEV}</div><div class="kids"><div>${tk}</div></div></div>`;
+    }).join(''):'<div class="none" style="padding-left:26px">中の目標なし — ✦ で分解してもらう</div>';
+    const loose=S.tasks.filter(t=>t.goalId===g.id&&!(ms.some(x=>x.id===t.mileId))).sort((a,b)=>(a.done-b.done)||((a.date||'9999')<(b.date||'9999')?-1:1));
+    const looseH=loose.map(t=>taskRow(t,1)).join('');
+    return `<div class="row d0${gd?' done':''}${open.has(g.id)?' open':''}" data-g="${g.id}"><div class="sl"><div class="chk goal"><i class="${gd?'':'hollow'}"></i></div><div class="tt"><b>${esc(g.title)}</b><small class="${dl!==null&&dl<0&&!gd?'over':''}">${sub}</small></div><button class="go" data-a="ai">✦</button>${CHEV}</div><div class="kids"><div>${kids}${looseH}</div></div></div>`;
+  }).join('');
+  const orphan=S.tasks.filter(t=>!t.goalId||!goalOf(t.goalId)).sort((a,b)=>(a.done-b.done)||((a.date||'9999')<(b.date||'9999')?-1:1));
+  if(!gs.length&&!orphan.length){tree.innerHTML='<div class="empty">まだ無い。上のボタンから。</div>';return}
+  if(orphan.length)tree.innerHTML+=`<div class="row d0 open" data-g=""><div class="sl"><div class="chk goal"><i class="hollow" style="opacity:.35"></i></div><div class="tt"><b style="color:var(--gray)">ゴールなし</b><small>${orphan.length}</small></div></div><div class="kids"><div>${orphan.map(t=>taskRow(t,1)).join('')}</div></div></div>`;
+  bind(tree);
 }
-const AGENTS=[
-  ['claude','CC','Claude Code','作業場を開いて壁打ち。決まったら data.json に書く'],
-  ['codex','Cx','Codex','同じく。ChatGPT のアカウントで'],
-  ['claudeai','ai','claude.ai','ブラウザで。結果のJSONは設定から取り込む'],
-  ['chatgpt','GPT','ChatGPT','同上'],
-  ['copy','⧉','指示文をコピー','手で貼る']
-];
-function agentList(kind,obj,seedFn){
-  return `<div id="agents">${AGENTS.map(([k,ic,t,s])=>`<div class="agent" data-k="${k}"><div class="ic${k==='claude'?'':' soft'}">${ic}</div><div class="t"><b>${t}</b><small>${s}</small></div>${CH2}</div>`).join('')}</div>`;
-}
-function bindAgents(body,kind,obj,seedFn){
-  body.querySelectorAll('.agent').forEach(a=>onTap(a,()=>{openAgent(a.dataset.k,kind,obj,seedFn?seedFn():'');if(a.dataset.k!=='copy')closeSheet()}));
-}
-function openNewGoal(){
-  openSheet(body=>{
-    body.innerHTML=`<div class="sh-kicker">新しいゴール</div><div class="sh-title">AIと壁打ちして決める</div>
-      <div class="pl-lead">解像度が100%になるまで質問される。決まったら、ゴール → 中の目標 → タスクの入れ子でここに現れる。私はこなすだけ。</div>
-      <input class="field" id="ngSeed" placeholder="ひとことで（任意）　例：電通に受かりたい" style="margin-top:8px">
-      <div class="sh-sec">どのAIで</div>${agentList('new')}`;
-    bindAgents(body,'new',null,()=>body.querySelector('#ngSeed').value.trim());
+function taskRow(t,d){const over=t.date&&t.date<TODAY&&!t.done;
+  return `<div class="row d${d}${t.done?' done':''}" data-t="${t.id}"><button class="del">削除</button><div class="sl"><button class="chk" data-a="chk">${CK}</button><div class="tt"><b>${esc(t.title)}</b>${t.date||t.steps.length?`<small class="${over?'over':''}">${t.date?md(t.date):''}${t.steps.length?(t.date?'　':'')+t.steps.filter(s=>s.done).length+'/'+t.steps.length:''}</small>`:''}</div><button class="go" data-a="ai">✦</button></div></div>`}
+function bind(root){
+  root.querySelectorAll('.row').forEach(el=>{
+    if(el.dataset.b)return;el.dataset.b=1;
+    const sl=el.querySelector(':scope>.sl'), gid=el.dataset.g;
+    const t=el.dataset.t?taskOf(el.dataset.t):null;
+    const g=goalOf(gid)||(t?goalOf(t.goalId):null);
+    const m=el.dataset.m&&g?g.miles.find(x=>x.id===el.dataset.m):null;
+    const kind=t?'task':m?'mile':'goal';
+    const mOfT=t&&g?g.miles.find(x=>x.id===t.mileId):null;
+    const ai=sl.querySelector('[data-a="ai"]');
+    if(ai)ai.onclick=e=>{e.stopPropagation();launch(kind==='task'?promptFor('task',g,mOfT,t):kind==='mile'?promptFor('mile',g,m):promptFor('goal',g))};
+    const chk=sl.querySelector('[data-a="chk"]');
+    if(chk)chk.onclick=e=>{e.stopPropagation();
+      if(t){t.done=!t.done;t.u=Date.now();el.classList.toggle('done',t.done)}
+      else{m.done=!m.done;g.u=Date.now();el.classList.toggle('done',m.done)}
+      saveQuiet();setTimeout(render,320)};
+    /* タップ：ゴール／中の目標は開閉、タスクは詳細。長押し：詳細（削除はここ） */
+    let p=null;
+    sl.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;p={x0:e.clientX,y0:e.clientY,mode:null,t0:performance.now()};el.classList.add('pressed')});
+    sl.addEventListener('pointermove',e=>{if(!p)return;const dx=e.clientX-p.x0,dy=e.clientY-p.y0;
+      if(!p.mode){if(t&&Math.abs(dx)>8&&Math.abs(dx)>Math.abs(dy)){p.mode='x';el.classList.add('sw');try{sl.setPointerCapture(e.pointerId)}catch(_){}el.classList.remove('pressed')}
+        else if(Math.abs(dx)>8||Math.abs(dy)>8){p=null;el.classList.remove('pressed');return}}
+      if(p.mode==='x'){let x=Math.min(0,dx);if(x<-108)x=-108-(-(x+108))*.3;sl.style.transform=`translateX(${x}px)`;p.x=x}});
+    sl.addEventListener('pointerup',()=>{if(!p)return;el.classList.remove('pressed');const st=p;p=null;
+      if(st.mode==='x'){if((st.x||0)<-70){del(el,t)}else{sl.style.transform='';setTimeout(()=>el.classList.remove('sw'),300)}return}
+      if(t){openTask(t.id);return}
+      if(!g)return;
+      const id=m?m.id:g.id;open.has(id)?open.delete(id):open.add(id);el.classList.toggle('open')});
+    sl.addEventListener('pointercancel',()=>{p=null;el.classList.remove('pressed')});
+    onLongPress(sl,()=>{if(t)openTask(t.id);else if(m)openMile(g,m);else if(g)openGoal(g)});
+    const d=el.querySelector(':scope>.del');if(d)d.onclick=()=>del(el,t);
   });
 }
-function openAgentSheet(kind,obj){
-  const title=kind==='plan'?'フライトプランを書かせる':kind==='goal'?'このゴールをAIと進める':kind==='mile'?'この中の目標をAIと進める':'このタスクをAIと一緒にこなす';
-  openSheet(body=>{
-    body.innerHTML=`<div class="sh-kicker">${esc(kind==='mile'?obj.m.title:obj.title)}</div><div class="sh-title">${title}</div>
-      <div class="pl-lead">上位ゴールからここまでの文脈を全部渡す。前段階の説明は要らない。終わったら AI が data.json に書き戻し、チェックが付く。</div>
-      <div class="sh-sec">どのAIで</div>${agentList(kind,obj)}`;
-    bindAgents(body,kind,obj);
-  });
+function del(el,t){
+  el.animate([{height:el.offsetHeight+'px',opacity:1},{height:'0px',opacity:0}],{duration:280,easing:'cubic-bezier(.22,.9,.28,1)',fill:'both'}).onfinish=()=>{
+    S.del[t.id]=Date.now();S.tasks=S.tasks.filter(x=>x.id!==t.id);save()};
 }
+
+/* ============================================================ sheet */
+const sheet=document.getElementById('sheet'), sheetBody=document.getElementById('sheetBody'), dim=document.getElementById('dim');
+let sheetOpen=false, anim=null;
+function openSheet(build){sheetBody.scrollTop=0;sheetBody.replaceChildren();build(sheetBody);sheet.style.display='block';sheet.style.transform='';dim.classList.add('show');
+  if(anim)anim.cancel();anim=sheet.animate([{transform:'translateY(105%)'},{transform:'translateY(0)'}],{duration:380,easing:'cubic-bezier(.22,.9,.28,1)',fill:'both'});sheetOpen=true}
+function closeSheet(fromY){if(!sheetOpen)return;if(anim)anim.cancel();dim.classList.remove('show');
+  anim=sheet.animate([{transform:`translateY(${fromY||0}px)`},{transform:'translateY(105%)'}],{duration:260,easing:'cubic-bezier(.4,0,.7,1)',fill:'both'});
+  anim.onfinish=()=>{sheet.style.display='none';const n=document.getElementById('setNode');if(n.parentElement===sheetBody){n.style.display='none';document.body.appendChild(n)}};sheetOpen=false}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
+onTap(dim,()=>closeSheet());
+let sd=null;
+sheet.addEventListener('pointerdown',e=>{if(!e.target.closest('.grab'))return;sd={y0:e.clientY,y:0,moved:false};if(anim)anim.cancel();try{sheet.setPointerCapture(e.pointerId)}catch(_){}});
+sheet.addEventListener('pointermove',e=>{if(!sd)return;const dy=e.clientY-sd.y0;if(Math.abs(dy)>4)sd.moved=true;sd.y=dy;sheet.style.transform=`translateY(${Math.max(0,dy)}px)`});
+const sEnd=()=>{if(!sd)return;const dy=sd.y,mv=sd.moved;sd=null;if(mv&&dy>120)closeSheet(dy);else{sheet.style.transform='';if(anim)anim.cancel();anim=sheet.animate([{transform:`translateY(${dy}px)`},{transform:'translateY(0)'}],{duration:320,easing:'cubic-bezier(.32,1.5,.45,1)',fill:'both'})}};
+sheet.addEventListener('pointerup',sEnd);sheet.addEventListener('pointercancel',sEnd);
+const armDel=(btn,label,fn)=>{btn.onclick=()=>{if(!btn.classList.contains('arm')){btn.classList.add('arm');btn.textContent='本当に削除する';setTimeout(()=>{btn.classList.remove('arm');btn.textContent=label},2600);return}fn()}};
+
+function openTask(tid){const t=taskOf(tid);if(!t)return;const g=goalOf(t.goalId),m=g&&g.miles.find(x=>x.id===t.mileId);
+  openSheet(body=>{
+    body.innerHTML=`<div class="kick">${g?esc(g.title):''}${m?' › '+esc(m.title):''}</div><div class="ttl">${esc(t.title)}</div><div class="sub">${t.date?t.date.replace(/-/g,'/'):'期日なし'}${t.done?'　完了':''}</div>
+      <div class="sec">完了の基準</div><div class="txt${t.criteria?'':' dim'}">${t.criteria?esc(t.criteria):'まだ無い — ✦ で決めてもらう'}</div>
+      <div class="sec">ステップ</div>${t.steps.length?t.steps.map(s=>`<div class="st${s.done?' done':''}" data-s="${s.id}"><div class="chk">${CK}</div><span>${esc(s.title)}</span></div>`).join(''):'<div class="txt dim">まだ無い</div>'}
+      ${t.log.length?`<div class="sec">ログ</div><div class="lg">${t.log.slice().reverse().map(l=>`<div class="${l.who==='ai'?'ai':''}"><small>${fmtT(l.t)}${l.who==='ai'?' · Claude':''}</small>${esc(l.text)}</div>`).join('')}</div>`:''}
+      <button class="btn" id="bAI">✦ Claude Code で進める</button>
+      <button class="btn plain" id="bDone">${t.done?'未完了に戻す':'完了にする'}</button>
+      <button class="btn danger" id="bDel">削除</button>`;
+    body.querySelectorAll('.st').forEach(r=>onTap(r,()=>{const s=t.steps.find(x=>x.id===r.dataset.s);s.done=!s.done;r.classList.toggle('done',s.done);t.u=Date.now();saveQuiet();render()}));
+    body.querySelector('#bAI').onclick=()=>{launch(promptFor('task',g,m,t));closeSheet()};
+    body.querySelector('#bDone').onclick=()=>{t.done=!t.done;t.u=Date.now();closeSheet();save()};
+    armDel(body.querySelector('#bDel'),'削除',()=>{S.del[t.id]=Date.now();S.tasks=S.tasks.filter(x=>x.id!==t.id);closeSheet();save()});
+  })}
+function openMile(g,m){openSheet(body=>{const ts=mileTasks(m);
+    body.innerHTML=`<div class="kick">${esc(g.title)}</div><div class="ttl">${esc(m.title)}</div><div class="sub">${m.done?'達成':ts.length?`${ts.filter(x=>x.done).length}/${ts.length} 完了`:'タスクなし'}</div>
+      <button class="btn" id="bAI">✦ Claude Code で進める</button>
+      <button class="btn plain" id="bDone">${m.done?'未達成に戻す':'達成にする'}</button>
+      <button class="btn danger" id="bDel">中の目標を削除</button>`;
+    body.querySelector('#bAI').onclick=()=>{launch(promptFor('mile',g,m));closeSheet()};
+    body.querySelector('#bDone').onclick=()=>{m.done=!m.done;g.u=Date.now();closeSheet();save()};
+    armDel(body.querySelector('#bDel'),'中の目標を削除',()=>{g.miles=g.miles.filter(x=>x.id!==m.id);g.u=Date.now();S.tasks.forEach(t=>{if(t.mileId===m.id){t.mileId=null;t.u=Date.now()}});closeSheet();save()});
+  })}
+function openGoal(g){openSheet(body=>{const p=g.plan;
+    body.innerHTML=`<div class="kick">ゴール</div><div class="ttl">${esc(g.title)}</div><div class="sub">${g.deadline?g.deadline.replace(/-/g,'/')+'　'+(dleft(g.deadline)<0?`${-dleft(g.deadline)}日超過`:`あと${dleft(g.deadline)}日`):'期限なし'}</div>
+      <div class="sec">完了の基準</div><div class="txt${g.criteria?'':' dim'}">${g.criteria?esc(g.criteria):'まだ無い — ✦ で決めてもらう'}</div>
+      ${g.note?`<div class="sec">メモ</div><div class="txt">${esc(g.note)}</div>`:''}
+      ${p.route.length?`<div class="sec">通る道</div>${p.route.map((r,i)=>`<div class="pl">${i+1}. ${esc(r.title)}${r.when?`<em>${esc(r.when)}</em>`:''}</div>`).join('')}`:''}
+      ${p.cargo.length?`<div class="sec">要る人・モノ・お金</div>${p.cargo.map(c=>`<div class="pl">${esc(c.title)}${c.due?`<em>${md(c.due)}</em>`:''}</div>`).join('')}`:''}
+      ${p.alt.length?`<div class="sec">分かれ道</div>${p.alt.map(a=>`<div class="pl">もし${esc(a.cond)}なら → ${esc(a.risk)}<div class="h">一手：${esc(a.hedge)}</div></div>`).join('')}`:''}
+      <button class="btn" id="bAI">✦ Claude Code で進める</button>
+      <button class="btn danger" id="bDel">ゴールを削除</button>`;
+    body.querySelector('#bAI').onclick=()=>{launch(promptFor('goal',g));closeSheet()};
+    armDel(body.querySelector('#bDel'),'ゴールを削除',()=>{S.del[g.id]=Date.now();S.goals=S.goals.filter(x=>x.id!==g.id);S.tasks.forEach(t=>{if(t.goalId===g.id){t.goalId=null;t.mileId=null;t.u=Date.now()}});closeSheet();save()});
+  })}
+document.getElementById('newBtn').onclick=()=>launch(promptNew());
+onLongPress(document.getElementById('h1'),()=>openSheet(body=>{const n=document.getElementById('setNode');n.style.display='block';document.getElementById('repoInput').value=localStorage.getItem('purpose.repo')||'';body.appendChild(n)}));
+
+/* ============================================================ sync（GitHub data.json） */
+function mergeState(a,b){const out=emptyState();out.del={...a.del,...b.del};
+  for(const k of Object.keys(out.del))for(const src of[a.del,b.del])if(src[k]&&src[k]>out.del[k])out.del[k]=src[k];
+  const pick=(la,lb)=>{const m=new Map();[...la,...lb].forEach(e=>{if(!e||!e.id)return;const ex=m.get(e.id);if(!ex||(e.u||0)>(ex.u||0))m.set(e.id,e)});return[...m.values()].filter(e=>!(out.del[e.id]&&out.del[e.id]>(e.u||0)))};
+  COLS.forEach(k=>{out[k]=pick(a[k]||[],b[k]||[])});return norm(out)}
+const tok=()=>localStorage.getItem('purpose.token')||'';
+const b64e=s=>btoa(String.fromCharCode(...new TextEncoder().encode(s)));
+const b64d=s=>new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\n/g,'')),c=>c.charCodeAt(0)));
+async function gh(path,opt={}){const h={'Accept':'application/vnd.github+json',...(opt.headers||{})};if(tok())h['Authorization']='Bearer '+tok();
+  const r=await fetch(`https://api.github.com/repos/${REPO}/${path}`,{...opt,headers:h});if(!r.ok&&r.status!==404)throw new Error('GitHub '+r.status);return r.status===404?null:r.json()}
+async function pull(){const j=await gh(`contents/${PATH}?ref=${BRANCH}&t=${Date.now()}`);if(!j)return false;sha=j.sha;
+  let remote;try{remote=JSON.parse(b64d(j.content))}catch(e){return false}
+  const before=JSON.stringify(S);S=mergeState(S,Object.assign(emptyState(),remote));persist();if(JSON.stringify(S)!==before)render();lastPull=Date.now();return true}
+async function push(){const body={message:'update from Purpose app',content:b64e(JSON.stringify(S,null,2)),branch:BRANCH};if(sha)body.sha=sha;
+  try{const j=await gh(`contents/${PATH}`,{method:'PUT',body:JSON.stringify(body)});if(j&&j.content){sha=j.content.sha;setStat('同期済み '+new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'}))}}
+  catch(e){try{await pull();body.sha=sha;body.content=b64e(JSON.stringify(S,null,2));const j2=await gh(`contents/${PATH}`,{method:'PUT',body:JSON.stringify(body)});if(j2&&j2.content){sha=j2.content.sha;setStat('同期済み（マージ）')}}catch(e2){setStat('同期エラー — 後で再試行')}}}
+function schedulePush(){if(!tok())return;clearTimeout(pushT);pushT=setTimeout(push,3500)}
+function setStat(m){const el=document.getElementById('syncStat');if(el)el.textContent=m||''}
+document.getElementById('btnSave').onclick=async()=>{const v=document.getElementById('tokenInput').value.trim();if(v)localStorage.setItem('purpose.token',v);
+  const rp=document.getElementById('repoInput').value.trim();if(rp)localStorage.setItem('purpose.repo',rp);
+  if(!tok()){toast(rp?'パスを保存した':'トークンを入れて');return}
+  document.getElementById('tokenInput').value='';setStat('同期中…');try{await pull();await push();toast('同期した')}catch(e){setStat('接続できない — トークンを確認');toast('同期に失敗')}};
 
 /* ============================================================ boot */
 render();
 pull().then(ok=>{if(tok())setStat(ok?'同期済み（読み書き）':'リモート未作成')}).catch(()=>{});
-document.addEventListener('visibilitychange',()=>{
-  if(document.visibilityState==='visible'&&Date.now()-lastPull>60000)pull().catch(()=>{});
-});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&Date.now()-lastPull>60000)pull().catch(()=>{})});
 setInterval(()=>{if(document.visibilityState==='visible'&&Date.now()-lastPull>90000)pull().catch(()=>{})},30000);
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
-
-/* テスト用（Browserペインの合成タップ） */
-window.__tap=sel=>{const el=document.querySelector(sel);if(!el)return'no:'+sel;
-  const r=el.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;
-  ['pointerdown','pointerup'].forEach(t=>el.dispatchEvent(new PointerEvent(t,{bubbles:true,clientX:x,clientY:y,pointerId:1})));
-  el.dispatchEvent(new MouseEvent('click',{bubbles:true,clientX:x,clientY:y}));return'ok'};
+window.__tap=sel=>{const el=document.querySelector(sel);if(!el)return'no:'+sel;const r=el.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;
+  ['pointerdown','pointerup'].forEach(t=>el.dispatchEvent(new PointerEvent(t,{bubbles:true,clientX:x,clientY:y,pointerId:1})));el.dispatchEvent(new MouseEvent('click',{bubbles:true,clientX:x,clientY:y}));return'ok'};
 </script>
 </body>
 </html>
