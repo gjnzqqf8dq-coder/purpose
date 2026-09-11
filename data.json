@@ -632,6 +632,45 @@
    "goalId": "g_dentsu_final",
    "mileId": "m_ds_kadai",
    "u": 1789096125946
+  },
+  {
+   "id": "t_culta_derby_deepen",
+   "title": "苺ダービーを競合案より深い制度設計にする",
+   "date": "2026-09-11",
+   "criteria": "日本ダービーとCULTAの本質的な共通構造が一文で説明でき、参加者・育種・販売が翌年へ循環する企画構造が決まっている。",
+   "steps": [
+    {
+     "id": "s_culta_derby_research",
+     "title": "日本ダービーの創設目的・出走体系・参加装置を調べる",
+     "done": true
+    },
+    {
+     "id": "s_culta_derby_difference",
+     "title": "食べ比べレース案との違いを言語化する",
+     "done": true
+    },
+    {
+     "id": "s_culta_derby_system",
+     "title": "血統・出走・予想・優勝品種販売が循環する制度を決める",
+     "done": false
+    },
+    {
+     "id": "s_culta_derby_core",
+     "title": "3分企画のコアアイデアを一文に固定する",
+     "done": false
+    }
+   ],
+   "log": [
+    {
+     "t": 1789096688384,
+     "who": "ai",
+     "text": "JRA資料を確認。日本ダービーは単なる人気レースではなく、競走体系の確立と競走馬の資質向上を目的に創設された。差別化の核はレース演出ではなく、育種を国民が応援し、予想と予約購入が翌年の品種普及を支える制度をイチゴ産業へ移植すること。"
+    }
+   ],
+   "done": false,
+   "goalId": "g_dentsu_final",
+   "mileId": "m_ds_kadai",
+   "u": 1789096688384
   }
  ],
  "del": {
