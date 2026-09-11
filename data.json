@@ -583,6 +583,40 @@
    "goalId": "g_dentsu_final",
    "mileId": "m_ds_kadai",
    "u": 1789094961007
+  },
+  {
+   "id": "t_culta_b500",
+   "title": "イチゴを外して、Bの機構と具体例を500個発散する",
+   "date": "2026-09-11",
+   "criteria": "Bの抽象的な機構が分類され、異分野の具体例500個がチャット上に並んでいる。",
+   "steps": [
+    {
+     "id": "s_culta_b500_extract",
+     "title": "Minecraft・Mellojoy・HYROX・オリンピック・Spotifyの転用可能な機構を抽出する",
+     "done": true
+    },
+    {
+     "id": "s_culta_b500_expand",
+     "title": "25の抽象カテゴリへ広げる",
+     "done": true
+    },
+    {
+     "id": "s_culta_b500_list",
+     "title": "各カテゴリ20個、合計500個の具体例を出す",
+     "done": true
+    }
+   ],
+   "log": [
+    {
+     "t": 1789095424325,
+     "who": "ai",
+     "text": "イチゴとの適合を外し、Bを機構で分類。Minecraft＝参加型世界・UGC・検閲回避、Mellojoy＝触感・ASMR・収集・希少性、HYROX＝標準化・計測・競技化、オリンピック＝世界共通儀式・招致・国家的象徴、Spotify＝配信・推薦・印税・個人データ化。25分類×20個＝500個をチャットに提示。"
+    }
+   ],
+   "done": true,
+   "goalId": "g_dentsu_final",
+   "mileId": "m_ds_kadai",
+   "u": 1789095424325
   }
  ],
  "del": {
