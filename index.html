@@ -25,7 +25,15 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 main{flex:1;min-height:0;overflow-y:auto;padding:calc(env(safe-area-inset-top) + 22px) 20px calc(env(safe-area-inset-bottom) + 60px);
   -webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-y:contain}
 main::-webkit-scrollbar{display:none}
-h1{font-size:28px;font-weight:700;letter-spacing:-.02em;line-height:1.2;margin:0 0 18px}
+.head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:0 0 18px}
+h1{font-size:28px;font-weight:700;letter-spacing:-.02em;line-height:1.2;margin:0}
+.agent{display:flex;align-items:center;gap:9px;padding-top:6px;cursor:pointer;-webkit-user-select:none}
+.agent span{font-size:13px;font-weight:600;color:var(--gray3);letter-spacing:-.01em;transition:color .25s}
+.agent.on span{color:var(--ink)}
+.sw{position:relative;width:51px;height:31px;border-radius:16px;background:var(--gray3);transition:background .25s;flex:none}
+.sw::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.15),0 1px 1px rgba(0,0,0,.08);transition:transform .25s cubic-bezier(.32,1.3,.45,1)}
+.agent.on .sw{background:var(--ink)}
+.agent.on .sw::after{transform:translateX(20px)}
 h1 small{display:block;font-size:12px;font-weight:500;color:var(--gray);letter-spacing:.02em;margin-top:5px;font-variant-numeric:tabular-nums}
 
 /* 新しいゴール＝1タップで Claude Code */
@@ -42,16 +50,6 @@ h1 small{display:block;font-size:12px;font-weight:500;color:var(--gray);letter-s
 .row.pressed .sl{background:var(--well);transition:background .06s}
 .row.d1 .sl{padding-left:26px}
 .row.d2 .sl{padding-left:52px}
-/* 入れ子の線：ゴールの点(x=11)から中の目標へ、中の目標の丸(x=37)からタスクへ */
-.row.d1>.sl::before,.row.d1>.sl::after,.row.d2>.sl::before,.row.d2>.sl::after,.row.d2::before{content:"";position:absolute;background:var(--gray3);pointer-events:none}
-.row.d1>.sl::before{left:10.5px;top:0;bottom:0;width:1px}
-.row.d1:last-child>.sl::before{bottom:50%}
-.row.d1>.sl::after{left:10.5px;top:50%;width:11px;height:1px}
-.row.d2::before{left:10.5px;top:0;bottom:0;width:1px;z-index:1}
-.row.d1:last-child .row.d2::before{display:none}
-.row.d2>.sl::before{left:36.5px;top:0;bottom:0;width:1px}
-.row.d2:last-child>.sl::before{bottom:50%}
-.row.d2>.sl::after{left:36.5px;top:50%;width:11px;height:1px}
 .chk{flex:none;width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--gray3);display:grid;place-items:center;transition:.25s}
 .chk svg{width:11px;height:11px;opacity:0;transform:scale(.4);transition:.25s cubic-bezier(.32,1.5,.45,1)}
 .row.done .chk{background:var(--ink);box-shadow:none}
@@ -123,8 +121,8 @@ h1 small{display:block;font-size:12px;font-weight:500;color:var(--gray);letter-s
 <body>
 <div id="app">
 <main id="main">
-  <h1 id="h1">Purpose<small id="cap"></small></h1>
-  <button id="newBtn"><i>＋</i><div><b>新しいゴール</b><small>Claude Code が開く。答えるだけ。</small></div></button>
+  <div class="head"><h1 id="h1">Purpose<small id="cap"></small></h1><div class="agent" id="agent" role="switch"><span>Codex</span><div class="sw"></div></div></div>
+  <button id="newBtn"><i>＋</i><div><b>新しいゴール</b><small id="newSub">Claude Code が開く。答えるだけ。</small></div></button>
   <div id="tree"></div>
 </main>
 </div>
@@ -190,7 +188,7 @@ const goalDone=g=>(g.miles||[]).length>0&&g.miles.every(m=>m.done);
 const sortedGoals=()=>[...S.goals].sort((a,b)=>(goalDone(a)-goalDone(b))||((a.deadline||'9999')<(b.deadline||'9999')?-1:1));
 
 /* ============================================================ Claude Code へ（1タップ） */
-const WS=()=>`作業場：${repoPath()}（正データ data.json）。まず CLAUDE.md を読み、その規律に従う。`;
+const WS=()=>`作業場：${repoPath()}（正データ data.json）。まず ${isCodex()?'AGENTS.md':'CLAUDE.md'} を読み、その規律に従う。`;
 function chain(kind,g,m,t){
   const ms=g.miles||[];
   const L=[`## ゴール「${g.title}」（id ${g.id}）`,`- 期限 ${g.deadline||'なし'}`,`- 完了の基準：${g.criteria||'（未定）'}`,g.note?`- メモ：${g.note}`:'',
@@ -212,14 +210,12 @@ function chain(kind,g,m,t){
 }
 function promptNew(){return `Purpose で新しいゴールを立てたい。
 ${WS()}
-まず CLAUDE.md を読み、「壁打ちプロトコル」の通りに進める。
-
-やってほしいこと
-- 最初の質問は「いま一番達成したい状態は？ いつまでに、どうなっていたいか」。以後は毎ターン「私の発言の言い換え → 飛躍を1つ指摘 → 質問1つ（例2〜5個）」
-- 私が言ったことの1段下を必ず掘る。「それは何が満たされれば起きる？」「それは何で成り立っている？」「そのために具体的に何をする？」「全部やったら本当に届く？」。断定や量の言葉（絶対・毎回・全部）は根拠を聞く。論理の飛躍は全部詰める
-- 構造の中身（中の目標・タスク）を自分で埋めない。私が言っていないものを data.json に置かない。事実（課題文・日程・過去の記録）は自分で調べる
-- 材料が並んだだけで100%と言わない。各層が私の言葉で埋まり、条件が数字か成果物で書け、末端がそのまま実行できる1文になり、飛躍が残っていないときだけ100%
-- 100%になったらドラフトを見せて1回確認 → ゴール → 中の目標 → 日付つきタスク（完了の基準・ステップ）を data.json に入れ子で書き、git add data.json && git commit && git push`}
+${S.goals.length?'\n## いまあるゴール\n'+sortedGoals().map(x=>`- ${x.title}（${x.deadline||'期限なし'}／${(x.miles||[]).filter(m=>m.done).length}/${(x.miles||[]).length}）`).join('\n')+'\n':''}
+進め方
+1. すぐに逆質問から始める（最初の質問：「いま一番達成したい状態は？ いつまでに、どうなっていたいか」）。CLAUDE.md の「壁打ちプロトコル」に従い、質問は一度に1つ。解像度が100%になるまで終わらない
+   100% ＝ 目標の構造が分解され、定量的な達成条件が決まり、末端の「次にやること」が AI がそのまま実行できる粒度まで書けている状態
+2. 100%になったら、ゴール → 中の目標（3〜5）→ 日付つきタスク（完了の基準・ステップつき）→ フライトプラン を data.json に入れ子で書く
+3. git add data.json && git commit && git push で反映。私はアプリでこなすだけ`}
 function promptFor(kind,g,m,t){
   if(kind==='goal')return `Purpose のゴール「${g.title}」を、私と一緒に進めてください。
 ${WS()}
@@ -254,11 +250,16 @@ ${g?chain('task',g,m,t):`## タスク「${t.title}」（id ${t.id}／ゴール�
 4. 進めたら steps の done と log（who:"ai"）を更新。完了の基準に届いたら done:true にして push（アプリのチェックが付く）。報告は3行`;
 }
 const isIOS=/iPhone|iPad|iPod/.test(navigator.userAgent);
+const isCodex=()=>localStorage.getItem('purpose.agent')==='codex';
+const agentName=()=>isCodex()?'Codex':'Claude Code';
+function syncAgent(){document.getElementById('agent').classList.toggle('on',isCodex());
+  const s=document.getElementById('newSub');if(s)s.textContent=`${agentName()} が開く。答えるだけ。`}
+document.getElementById('agent').onclick=()=>{localStorage.setItem('purpose.agent',isCodex()?'claude':'codex');syncAgent();toast(agentName()+' に切り替えた')};
 function launch(p){
   copyText(p);
-  if(isIOS){toast('指示文をコピーした。Mac の Claude Code に貼る');return}
-  location.href='claude://code/new?q='+encodeURIComponent(p);
-  toast('Claude Code を開く');
+  if(isIOS){toast(`指示文をコピーした。Mac の ${agentName()} に貼る`);return}
+  location.href=(isCodex()?'codex://new?prompt=':'claude://code/new?q=')+encodeURIComponent(p);
+  toast(agentName()+' を開く');
 }
 
 /* ============================================================ render（入れ子） */
@@ -348,7 +349,7 @@ function openTask(tid){const t=taskOf(tid);if(!t)return;const g=goalOf(t.goalId)
       <div class="sec">完了の基準</div><div class="txt${t.criteria?'':' dim'}">${t.criteria?esc(t.criteria):'まだ無い — ✦ で決めてもらう'}</div>
       <div class="sec">ステップ</div>${t.steps.length?t.steps.map(s=>`<div class="st${s.done?' done':''}" data-s="${s.id}"><div class="chk">${CK}</div><span>${esc(s.title)}</span></div>`).join(''):'<div class="txt dim">まだ無い</div>'}
       ${t.log.length?`<div class="sec">ログ</div><div class="lg">${t.log.slice().reverse().map(l=>`<div class="${l.who==='ai'?'ai':''}"><small>${fmtT(l.t)}${l.who==='ai'?' · Claude':''}</small>${esc(l.text)}</div>`).join('')}</div>`:''}
-      <button class="btn" id="bAI">✦ Claude Code で進める</button>
+      <button class="btn" id="bAI">✦ ${agentName()} で進める</button>
       <button class="btn plain" id="bDone">${t.done?'未完了に戻す':'完了にする'}</button>
       <button class="btn danger" id="bDel">削除</button>`;
     body.querySelectorAll('.st').forEach(r=>onTap(r,()=>{const s=t.steps.find(x=>x.id===r.dataset.s);s.done=!s.done;r.classList.toggle('done',s.done);t.u=Date.now();saveQuiet();render()}));
@@ -358,7 +359,7 @@ function openTask(tid){const t=taskOf(tid);if(!t)return;const g=goalOf(t.goalId)
   })}
 function openMile(g,m){openSheet(body=>{const ts=mileTasks(m);
     body.innerHTML=`<div class="kick">${esc(g.title)}</div><div class="ttl">${esc(m.title)}</div><div class="sub">${m.done?'達成':ts.length?`${ts.filter(x=>x.done).length}/${ts.length} 完了`:'タスクなし'}</div>
-      <button class="btn" id="bAI">✦ Claude Code で進める</button>
+      <button class="btn" id="bAI">✦ ${agentName()} で進める</button>
       <button class="btn plain" id="bDone">${m.done?'未達成に戻す':'達成にする'}</button>
       <button class="btn danger" id="bDel">中の目標を削除</button>`;
     body.querySelector('#bAI').onclick=()=>{launch(promptFor('mile',g,m));closeSheet()};
@@ -372,7 +373,7 @@ function openGoal(g){openSheet(body=>{const p=g.plan;
       ${p.route.length?`<div class="sec">通る道</div>${p.route.map((r,i)=>`<div class="pl">${i+1}. ${esc(r.title)}${r.when?`<em>${esc(r.when)}</em>`:''}</div>`).join('')}`:''}
       ${p.cargo.length?`<div class="sec">要る人・モノ・お金</div>${p.cargo.map(c=>`<div class="pl">${esc(c.title)}${c.due?`<em>${md(c.due)}</em>`:''}</div>`).join('')}`:''}
       ${p.alt.length?`<div class="sec">分かれ道</div>${p.alt.map(a=>`<div class="pl">もし${esc(a.cond)}なら → ${esc(a.risk)}<div class="h">一手：${esc(a.hedge)}</div></div>`).join('')}`:''}
-      <button class="btn" id="bAI">✦ Claude Code で進める</button>
+      <button class="btn" id="bAI">✦ ${agentName()} で進める</button>
       <button class="btn danger" id="bDel">ゴールを削除</button>`;
     body.querySelector('#bAI').onclick=()=>{launch(promptFor('goal',g));closeSheet()};
     armDel(body.querySelector('#bDel'),'ゴールを削除',()=>{S.del[g.id]=Date.now();S.goals=S.goals.filter(x=>x.id!==g.id);S.tasks.forEach(t=>{if(t.goalId===g.id){t.goalId=null;t.mileId=null;t.u=Date.now()}});closeSheet();save()});
@@ -404,7 +405,7 @@ document.getElementById('btnSave').onclick=async()=>{const v=document.getElement
   document.getElementById('tokenInput').value='';setStat('同期中…');try{await pull();await push();toast('同期した')}catch(e){setStat('接続できない — トークンを確認');toast('同期に失敗')}};
 
 /* ============================================================ boot */
-render();
+syncAgent();render();
 pull().then(ok=>{if(tok())setStat(ok?'同期済み（読み書き）':'リモート未作成')}).catch(()=>{});
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&Date.now()-lastPull>60000)pull().catch(()=>{})});
 setInterval(()=>{if(document.visibilityState==='visible'&&Date.now()-lastPull>90000)pull().catch(()=>{})},30000);
