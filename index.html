@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" href="icon-512.png">
 <title>Purpose</title>
 <style>
-/* Purpose v17 — 白黒。ゴール → 中の目標 → タスク の入れ子だけ。書くのは Claude Code、私はこなす */
+/* Purpose v18 — ゴール／体／記憶。v17 — 白黒。ゴール → 中の目標 → タスク の入れ子だけ。書くのは Claude Code、私はこなす */
 :root{color-scheme:light;
   --ink:#000;--ink2:#3c3c43;--gray:#8a8a8e;--gray3:#c7c7cc;--sep:#e5e5ea;--fill:#f2f2f7;--well:#fafafa;
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Hiragino Sans","Noto Sans JP",sans-serif}
@@ -115,6 +115,43 @@ h1 small{display:block;font-size:12px;font-weight:500;color:var(--gray);letter-s
 #toast{position:fixed;top:calc(env(safe-area-inset-top) + 14px);left:50%;transform:translateX(-50%) translateY(-90px);z-index:30;padding:11px 20px;font-size:13.5px;font-weight:600;
   border-radius:999px;background:var(--ink);color:#fff;transition:.4s cubic-bezier(.32,1.5,.45,1);white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis}
 #toast.show{transform:translateX(-50%) translateY(0)}
+
+/* v18：ゴール／体／記憶 + 毎時の次の一手 */
+.seg{display:flex;gap:4px;padding:3px;border-radius:11px;background:var(--fill);margin:0 0 18px}
+.seg button{flex:1;padding:7px 0;border-radius:8px;font-size:13.5px;font-weight:600;color:var(--gray);transition:background .2s,color .2s}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.view{display:none}.view.on{display:block}
+.coach{border-radius:14px;box-shadow:inset 0 0 0 1px var(--sep);padding:14px 16px;margin:0 0 14px;cursor:pointer}
+.coach .k{font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--gray);display:flex;justify-content:space-between}
+.coach b{display:block;font-size:15.5px;font-weight:600;margin-top:6px;line-height:1.45}
+.coach ol{margin:6px 0 0 18px;font-size:13.5px;line-height:1.7;color:var(--ink2)}
+.big{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px;border-radius:14px;background:var(--ink);color:#fff;font-size:15px;font-weight:600;margin:0 0 10px}
+.big.plain{background:var(--fill);color:var(--ink)}
+.big:active{transform:scale(.98)}
+.kp{display:flex;gap:8px;margin:4px 0 18px}
+.kp div{flex:1;padding:11px 0;border-radius:12px;background:var(--fill);text-align:center}
+.kp b{display:block;font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.kp small{font-size:11px;color:var(--gray)}
+.h2{font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--gray);margin:22px 0 6px}
+.ml{display:flex;gap:12px;align-items:center;padding:10px 0;box-shadow:0 .5px 0 var(--sep);cursor:pointer}
+.ml img,.ml .ph{flex:none;width:52px;height:52px;border-radius:10px;object-fit:cover;background:var(--fill)}
+.ml .tt small{white-space:normal}
+.wk{padding:10px 0;box-shadow:0 .5px 0 var(--sep);font-size:14px;line-height:1.6}
+.wk em{font-style:normal;color:var(--gray);font-size:12px;margin-right:8px;font-variant-numeric:tabular-nums}
+.wk .s{color:var(--ink2);font-size:13px}
+.fm{display:grid;grid-template-columns:1fr 64px 56px 48px 28px;gap:6px;align-items:center;margin-bottom:6px}
+.fm input,.inp{width:100%;border:none;background:var(--fill);border-radius:10px;font-family:inherit;font-size:16px;padding:10px;outline:none;color:var(--ink);user-select:text;-webkit-user-select:text;min-width:0}
+.fm .x{color:var(--gray3);font-size:18px}
+.fh{display:grid;grid-template-columns:1fr 64px 56px 48px 28px;gap:6px;font-size:10.5px;color:var(--gray);margin:2px 0 4px;padding-left:4px}
+.add{font-size:13.5px;color:var(--ink);font-weight:600;padding:8px 0}
+.row2{display:flex;gap:8px}.row2>*{flex:1}
+.note{font-size:13px;color:var(--gray);line-height:1.8;padding:14px 0}
+.mi{padding:11px 0;box-shadow:0 .5px 0 var(--sep);cursor:pointer}
+.mi b{display:block;font-size:14.5px;font-weight:600;line-height:1.4}
+.mi small{display:block;font-size:12px;color:var(--gray);margin-top:2px;line-height:1.5}
+.ty{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.08em;color:var(--gray);margin-right:6px}
+.mbody{font-size:13.5px;line-height:1.85;color:var(--ink2);white-space:pre-wrap;word-break:break-word;user-select:text;-webkit-user-select:text}
+.pill{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--fill);color:var(--gray);margin-left:6px;vertical-align:2px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -122,18 +159,25 @@ h1 small{display:block;font-size:12px;font-weight:500;color:var(--gray);letter-s
 <div id="app">
 <main id="main">
   <div class="head"><h1 id="h1">Purpose<small id="cap"></small></h1><div class="agent" id="agent" role="switch"><span>Codex</span><div class="sw"></div></div></div>
+  <nav class="seg" id="seg"><button data-v="goal">ゴール</button><button data-v="body">体</button><button data-v="mem">記憶</button></nav>
+  <section class="view" id="v-goal">
+  <div id="coach"></div>
   <button id="newBtn"><i>＋</i><div><b>新しいゴール</b><small id="newSub">Claude Code が開く。答えるだけ。</small></div></button>
   <div id="tree"></div>
+  </section>
+  <section class="view" id="v-body"></section>
+  <section class="view" id="v-mem"></section>
+  <input type="file" id="cam" accept="image/*" capture="environment" hidden>
 </main>
 </div>
 <div id="dim"></div>
 <div id="sheet"><div class="grab"><i></i></div><div id="sheetBody"></div></div>
 <div id="setNode" class="setwrap" style="display:none">
   <div class="ttl">設定</div>
-  <p>正データは GitHub の data.json。Claude Code が書き、ここは表示するだけ。アプリからのチェックを書き戻すにはトークンを一度だけ保存。</p>
+  <p>正データは GitHub の data.json（公開）と purpose-private（非公開：体・記憶・次の一手）。トークンは両方のリポジトリに Contents: Read/Write を付けて一度だけ保存。</p>
   <input type="password" id="tokenInput" placeholder="GitHub token（Contents: Read/Write）" autocomplete="off">
   <p>作業場（リポジトリ）のパス。Claude Code を開く時に渡す。</p>
-  <input type="text" id="repoInput" placeholder="~/Downloads/claude box/_作業ファイル/purpose" autocomplete="off">
+  <input type="text" id="repoInput" placeholder="~/Downloads/Purpose/_作業/purpose" autocomplete="off">
   <button class="btn" id="btnSave">保存して同期</button>
   <div class="stat" id="syncStat"></div>
 </div>
@@ -158,7 +202,7 @@ function norm(s){
 function persist(){localStorage.setItem(KEY,JSON.stringify(S))}
 function save(){persist();schedulePush();render()}
 function saveQuiet(){persist();schedulePush()}
-const repoPath=()=>localStorage.getItem('purpose.repo')||'~/Downloads/claude box/_作業ファイル/purpose';
+const repoPath=()=>localStorage.getItem('purpose.repo')||'~/Downloads/Purpose/_作業/purpose';
 
 /* ============================================================ util */
 const pad=n=>String(n).padStart(2,'0');
@@ -402,13 +446,173 @@ function setStat(m){const el=document.getElementById('syncStat');if(el)el.textCo
 document.getElementById('btnSave').onclick=async()=>{const v=document.getElementById('tokenInput').value.trim();if(v)localStorage.setItem('purpose.token',v);
   const rp=document.getElementById('repoInput').value.trim();if(rp)localStorage.setItem('purpose.repo',rp);
   if(!tok()){toast(rp?'パスを保存した':'トークンを入れて');return}
-  document.getElementById('tokenInput').value='';setStat('同期中…');try{await pull();await push();toast('同期した')}catch(e){setStat('接続できない — トークンを確認');toast('同期に失敗')}};
+  document.getElementById('tokenInput').value='';setStat('同期中…');try{await pull();await push();await pullP();toast(pState==='ok'?'同期した':'同期した（purpose-private には入れない）')}catch(e){setStat('接続できない — トークンを確認');toast('同期に失敗')}};
+
+/* ============================================================ v18：非公開データ（体・記憶・次の一手）
+   公開リポジトリには載せない。private.json / memory.json / photos/ は purpose-private（非公開）に置く。
+   書くのはアプリ（食事写真・筋トレ・メモ）と毎時の解析タスク（解析結果・次の一手・記憶の写し） */
+const PREPO='gjnzqqf8dq-coder/purpose-private', PKEY='purpose.p1';
+const emptyP=()=>({v:1,meals:[],workouts:[],inbox:[],coach:[],body:{},del:{}});
+const normP=p=>{['meals','workouts','inbox','coach'].forEach(k=>{if(!Array.isArray(p[k]))p[k]=[]});if(!p.body||typeof p.body!=='object')p.body={};if(!p.del||typeof p.del!=='object')p.del={};return p};
+let P=(()=>{try{const d=JSON.parse(localStorage.getItem(PKEY));if(d)return normP(Object.assign(emptyP(),d))}catch(e){}return emptyP()})();
+let pSha=null, pState=tok()?'loading':'notoken', pPushT=null, MEM=null;
+const persistP=()=>{try{localStorage.setItem(PKEY,JSON.stringify(P))}catch(e){/* 容量超過時はサムネを捨てて再保存 */const q=JSON.parse(JSON.stringify(P));q.meals.forEach(m=>delete m.thumb);try{localStorage.setItem(PKEY,JSON.stringify(q))}catch(_){}}};
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+async function ghP(path,opt={}){if(!tok())throw new Error('notoken');
+  const r=await fetch(`https://api.github.com/repos/${PREPO}/${path}`,{...opt,headers:{'Accept':'application/vnd.github+json','Authorization':'Bearer '+tok(),...(opt.headers||{})}});
+  if(r.status===404||r.status===403||r.status===401){const e=new Error('noaccess');e.status=r.status;throw e}
+  if(!r.ok)throw new Error('GitHub '+r.status);return r.json()}
+function mergeP(a,b){const o=emptyP();o.del={...a.del};for(const[k,v]of Object.entries(b.del||{}))if(!o.del[k]||v>o.del[k])o.del[k]=v;
+  const pick=(la,lb)=>{const m=new Map();[...la,...lb].forEach(e=>{if(!e||!e.id)return;const x=m.get(e.id);if(!x||(e.u||0)>(x.u||0))m.set(e.id,e)});
+    return[...m.values()].filter(e=>!(o.del[e.id]&&o.del[e.id]>=(e.u||0))).sort((x,y)=>(x.t||0)-(y.t||0))};
+  ['meals','workouts','inbox'].forEach(k=>o[k]=pick(a[k]||[],b[k]||[]));
+  /* 解析タスクが書く欄はリモートが正 */
+  o.coach=(b.coach&&b.coach.length)?b.coach:(a.coach||[]);
+  o.body=((b.body||{}).u||0)>=((a.body||{}).u||0)?(b.body||{}):a.body;
+  /* 解析済みのサムネが消えていたら手元のを残す */
+  o.meals.forEach(m=>{if(!m.thumb){const l=(a.meals||[]).find(x=>x.id===m.id);if(l&&l.thumb)m.thumb=l.thumb}});
+  return normP(o)}
+async function pullP(){try{const j=await ghP(`contents/private.json?ref=main&t=${Date.now()}`);pSha=j.sha;
+    const remote=JSON.parse(b64d(j.content));const before=JSON.stringify(P);P=mergeP(P,Object.assign(emptyP(),remote));persistP();pState='ok';
+    if(JSON.stringify(P)!==before)renderAux();return true}
+  catch(e){pState=e.message==='notoken'?'notoken':e.message==='noaccess'?'noaccess':'error';renderAux();return false}}
+async function pushP(){if(!tok())return;const body={message:'update from Purpose app (private)',content:b64e(JSON.stringify(P,null,1)),branch:'main'};if(pSha)body.sha=pSha;
+  try{const j=await ghP('contents/private.json',{method:'PUT',body:JSON.stringify(body)});pSha=j.content.sha}
+  catch(e){try{await pullP();body.sha=pSha;body.content=b64e(JSON.stringify(P,null,1));const j=await ghP('contents/private.json',{method:'PUT',body:JSON.stringify(body)});pSha=j.content.sha}catch(_){toast('同期できなかった — 後で再送')}}}
+function saveP(now){persistP();renderAux();clearTimeout(pPushT);pPushT=setTimeout(pushP,now?50:2500)}
+const pNotice=()=>pState==='notoken'?'記録は GitHub に保存する。タイトル長押し → 設定でトークンを入れる（purpose と purpose-private の両方に Contents: Read/Write）。'
+  :pState==='noaccess'?'いまのトークンでは非公開リポジトリ purpose-private に入れない。GitHub のトークン設定で purpose-private を足す（Contents: Read/Write）。':'';
+
+/* ------------------------------------------------ 画面の切替 */
+let VIEW=localStorage.getItem('purpose.view')||'goal';
+function setView(v){VIEW=v;localStorage.setItem('purpose.view',v);
+  document.querySelectorAll('#seg button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));
+  document.getElementById('main').scrollTop=0;renderAux();if(v==='mem'&&!MEM)loadMem()}
+document.querySelectorAll('#seg button').forEach(b=>b.onclick=()=>setView(b.dataset.v));
+function renderAux(){renderCoach();if(VIEW==='body')renderBody();if(VIEW==='mem')renderMem()}
+
+/* ------------------------------------------------ 次の一手（毎時の解析） */
+const ago=t=>{const m=Math.round((Date.now()-t)/6e4);return m<1?'いま':m<60?m+'分前':m<1440?Math.round(m/60)+'時間前':Math.round(m/1440)+'日前'};
+const PRIV_WS='~/Downloads/Purpose/_作業/purpose-private';
+const promptHourly=()=>`Purpose の毎時解析をいま1回だけ実行して。手順は ~/.claude/scheduled-tasks/purpose-hourly/SKILL.md に書いてある（作業場 ${PRIV_WS} と ${repoPath()}）。報告は3行`;
+function renderCoach(){const el=document.getElementById('coach');const c=P.coach[P.coach.length-1];
+  if(!c){el.innerHTML='';return}
+  el.innerHTML=`<div class="coach"><div class="k"><span>次の一手</span><span>${ago(c.t)}</span></div><b>${esc(c.title)}</b>${(c.points||[]).length?`<ol>${c.points.slice(0,3).map(x=>`<li>${esc(x)}</li>`).join('')}</ol>`:''}</div>`;
+  el.firstChild.onclick=openCoach}
+function openCoach(){openSheet(body=>{
+  body.innerHTML=`<div class="kick">毎時、入れたもの全部（ゴール・食事・筋トレ・メモ）を読んで書く</div><div class="ttl">次の一手</div>
+    ${P.coach.slice().reverse().slice(0,12).map(c=>`<div class="sec">${fmtT(c.t)}</div><div class="txt" style="color:var(--ink);font-weight:600">${esc(c.title)}</div>${(c.points||[]).map((x,i)=>`<div class="pl">${i+1}. ${esc(x)}</div>`).join('')}`).join('')||'<div class="note">まだ無い。毎時0分に書かれる。</div>'}
+    <button class="btn" id="bNow">✦ いま解析する</button>`;
+  body.querySelector('#bNow').onclick=()=>{launch(promptHourly());closeSheet()}})}
+
+/* ------------------------------------------------ 体：食事写真 */
+function shrink(file,max,q){return new Promise((res,rej)=>{const img=new Image();img.onload=()=>{const k=Math.min(1,max/Math.max(img.width,img.height));
+  const c=document.createElement('canvas');c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+  URL.revokeObjectURL(img.src);res(c.toDataURL('image/jpeg',q))};img.onerror=rej;img.src=URL.createObjectURL(file)})}
+const cam=document.getElementById('cam');
+cam.onchange=async()=>{const f=cam.files[0];cam.value='';if(!f)return;
+  if(pState!=='ok'&&!(await pullP())){toast('保存先に入れない');renderBody();return}
+  toast('送っている…');
+  try{const [full,thumb]=await Promise.all([shrink(f,1280,.82),shrink(f,180,.7)]);const id=uid(),d=new Date();
+    const path=`photos/${fmt(d)}_${pad(d.getHours())}${pad(d.getMinutes())}_${id}.jpg`;
+    await ghP('contents/'+encodeURI(path),{method:'PUT',body:JSON.stringify({message:'meal photo',content:full.split(',')[1],branch:'main'})});
+    const h=d.getHours(), slot=h<10?'朝':h<15?'昼':h<18?'間食':'夜';
+    P.meals.push({id,t:Date.now(),date:fmt(d),slot,photo:path,thumb,status:'pending',u:Date.now()});saveP(true);toast('送った。次の解析で中身が出る')}
+  catch(e){toast(e.message==='noaccess'?'purpose-private に入れない':'送れなかった')}};
+const mealsOn=day=>P.meals.filter(m=>m.date===day).sort((a,b)=>a.t-b.t);
+const sum=(ms,k)=>Math.round(ms.reduce((s,m)=>s+((m.total||{})[k]||0),0));
+const photoCache={};
+async function photoURL(path){if(photoCache[path])return photoCache[path];
+  const r=await fetch(`https://api.github.com/repos/${PREPO}/contents/${encodeURI(path)}`,{headers:{'Accept':'application/vnd.github.raw','Authorization':'Bearer '+tok()}});
+  if(!r.ok)throw new Error('photo');return photoCache[path]=URL.createObjectURL(await r.blob())}
+function openMeal(id){const m=P.meals.find(x=>x.id===id);if(!m)return;
+  openSheet(body=>{const t=m.total||{};
+    body.innerHTML=`<img id="mImg" src="${m.thumb||''}" style="width:100%;border-radius:14px;margin-top:6px;background:var(--fill);aspect-ratio:4/3;object-fit:cover">
+      <div class="ttl">${esc(m.slot||'食事')}　${md(m.date)} ${fmtT(m.t).split(' ')[1]}</div>
+      ${m.status==='done'?`<div class="kp" style="margin-top:12px"><div><b>${t.kcal??'—'}</b><small>kcal</small></div><div><b>${t.p??'—'}</b><small>P g</small></div><div><b>${t.f??'—'}</b><small>F g</small></div><div><b>${t.c??'—'}</b><small>C g</small></div></div>
+        ${(m.items||[]).map(i=>`<div class="pl">${esc(i.name)}<em>${i.kcal??''}kcal　P${i.p??'-'}</em></div>`).join('')}
+        ${m.comment?`<div class="sec">ひとこと</div><div class="txt">${esc(m.comment)}</div>`:''}`
+      :`<div class="note">解析待ち。毎時の解析で、写っているもの・kcal・PFC が入る。</div><button class="btn" id="bNow">✦ いま解析する</button>`}
+      <button class="btn danger" id="bDel">この記録を削除</button>`;
+    photoURL(m.photo).then(u=>{const i=body.querySelector('#mImg');if(i)i.src=u}).catch(()=>{});
+    const bn=body.querySelector('#bNow');if(bn)bn.onclick=()=>{launch(promptHourly());closeSheet()};
+    armDel(body.querySelector('#bDel'),'この記録を削除',()=>{P.del[m.id]=Date.now();P.meals=P.meals.filter(x=>x.id!==m.id);closeSheet();saveP(true)})})}
+
+/* ------------------------------------------------ 体：筋トレ */
+let WK=null; /* 入力中の下書き */
+const blankWK=()=>({date:TODAY,sets:[{ex:'',kg:'',reps:'',sets:'3'}],weight:'',memo:''});
+function parseHist(h){/* "60kg×10回, 60kg×10回, 90kg×5回" → 同じものをまとめる */
+  return h.sets.flatMap(s=>{const out=[];s.v.split(/,\s*/).forEach(x=>{const m=x.match(/(?:([\d.]+)kg|自重)×(\d+)回/);if(!m)return;
+    const kg=m[1]||'',reps=m[2],l=out[out.length-1];if(l&&l.kg===kg&&l.reps===reps)l.sets=String(+l.sets+1);else out.push({ex:s.ex,kg,reps,sets:'1'})});return out})}
+function wkLines(){const pend=P.workouts.filter(w=>w.status!=='done').map(w=>({date:w.date,pending:true,txt:w.sets.map(s=>`${s.ex} ${s.kg?s.kg+'kg×':''}${s.reps}×${s.sets}`).join('／'),weight:w.weight}));
+  const hist=(P.body.history||[]).slice().reverse().map(h=>({date:h.date,txt:h.sets.map(s=>`${s.ex} ${s.v.split(/,\s*/)[0]}${s.v.split(/,\s*/).length>1?'×'+s.v.split(/,\s*/).length:''}`).join('／'),weight:h.weight}));
+  return[...pend,...hist].sort((a,b)=>a.date<b.date?1:-1)}
+function renderBody(){const el=document.getElementById('v-body');
+  if(pNotice()){el.innerHTML=`<div class="note">${pNotice()}</div>`;return}
+  const ms=mealsOn(TODAY),done=ms.filter(m=>m.status==='done'),wait=ms.length-done.length;
+  if(!WK)WK=blankWK();
+  const ex=(P.body.exercises||[]);
+  el.innerHTML=`<div class="kp"><div><b>${done.length?sum(done,'kcal'):'—'}</b><small>今日 kcal</small></div><div><b>${done.length?sum(done,'p'):'—'}</b><small>P g</small></div><div><b>${ms.length}</b><small>食事${wait?`（待ち${wait}）`:''}</small></div></div>
+    <button class="big" id="bCam">ご飯を撮って送る</button>
+    ${ms.length?`<div class="h2">今日のご飯</div>${ms.map(m=>`<div class="ml" data-id="${m.id}">${m.thumb?`<img src="${m.thumb}">`:'<div class="ph"></div>'}<div class="tt"><b>${esc(m.slot||'食事')}　${fmtT(m.t).split(' ')[1]}${m.status==='done'?'':'<span class="pill">解析待ち</span>'}</b><small>${m.status==='done'?esc((m.items||[]).map(i=>i.name).join('・'))+`　${(m.total||{}).kcal??'?'}kcal`:'次の解析で中身が出る'}</small></div></div>`).join('')}`:''}
+    <div class="h2">筋トレを記録</div>
+    <div class="row2" style="margin-bottom:8px"><input class="inp" type="date" id="wDate" value="${WK.date}"><input class="inp" id="wWeight" inputmode="decimal" placeholder="体重 kg" value="${esc(WK.weight)}"></div>
+    ${(P.body.history||[]).length?`<div style="display:flex;gap:6px;overflow-x:auto;margin:0 0 10px;scrollbar-width:none">${(P.body.history||[]).slice(-4).reverse().map((h,i)=>`<button class="pill" style="margin:0;padding:6px 10px;font-size:12px;flex:none" data-h="${h.date}">${md(h.date)}と同じ</button>`).join('')}</div>`:''}
+    <div class="fh"><span>種目</span><span>kg</span><span>回</span><span>セット</span><span></span></div>
+    ${WK.sets.map((s,i)=>`<div class="fm" data-i="${i}"><input list="exl" data-k="ex" value="${esc(s.ex)}" placeholder="種目"><input data-k="kg" inputmode="decimal" value="${esc(s.kg)}" placeholder="自重"><input data-k="reps" inputmode="numeric" value="${esc(s.reps)}"><input data-k="sets" inputmode="numeric" value="${esc(s.sets)}"><button class="x" data-del="${i}">×</button></div>`).join('')}
+    <datalist id="exl">${ex.map(x=>`<option value="${esc(x)}">`).join('')}</datalist>
+    <button class="add" id="wAdd">＋ 種目を足す</button>
+    <input class="inp" id="wMemo" placeholder="メモ（部位・調子など）" value="${esc(WK.memo)}" style="margin:4px 0 0">
+    <button class="big" id="wSave" style="margin-top:12px">記録する</button>
+    <div class="h2">これまで</div>
+    ${wkLines().slice(0,14).map(w=>`<div class="wk"><em>${md(w.date)}</em>${w.pending?'<span class="pill" style="margin:0 6px 0 0">取込待ち</span>':''}${w.weight?`<em>${esc(w.weight)}kg</em>`:''}<div class="s">${esc(w.txt)}</div></div>`).join('')||'<div class="note">まだ無い</div>'}`;
+  el.querySelector('#bCam').onclick=()=>cam.click();
+  el.querySelectorAll('.ml').forEach(r=>onTap(r,()=>openMeal(r.dataset.id)));
+  const keep=()=>{WK.date=el.querySelector('#wDate').value||TODAY;WK.weight=el.querySelector('#wWeight').value.trim();WK.memo=el.querySelector('#wMemo').value.trim();
+    el.querySelectorAll('.fm').forEach(r=>{const s=WK.sets[+r.dataset.i];r.querySelectorAll('input').forEach(x=>s[x.dataset.k]=x.value.trim())})};
+  el.querySelectorAll('input').forEach(x=>x.addEventListener('input',keep));
+  el.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{keep();WK.sets.splice(+b.dataset.del,1);if(!WK.sets.length)WK.sets.push(blankWK().sets[0]);renderBody()});
+  el.querySelector('#wAdd').onclick=()=>{keep();const l=WK.sets[WK.sets.length-1];WK.sets.push({ex:'',kg:'',reps:l.reps||'',sets:l.sets||'3'});renderBody();const f=el.querySelectorAll('.fm input[data-k="ex"]');f[f.length-1].focus()};
+  el.querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{keep();const h=(P.body.history||[]).find(x=>x.date===b.dataset.h);if(h){WK.sets=parseHist(h);renderBody();toast(md(h.date)+' のメニューを入れた。数字だけ直す')}});
+  el.querySelector('#wSave').onclick=()=>{keep();const sets=WK.sets.filter(s=>s.ex&&s.reps).map(s=>({ex:s.ex,kg:s.kg?+s.kg:'',reps:+s.reps,sets:+(s.sets||1)}));
+    if(!sets.length&&!WK.weight){toast('種目と回数を入れて');return}
+    P.workouts.push({id:uid(),t:Date.now(),date:WK.date,sets,weight:WK.weight,memo:WK.memo,status:'pending',u:Date.now()});WK=null;saveP(true);toast('記録した。次の解析で筋トレ記録に入る')};
+}
+
+/* ------------------------------------------------ 記憶 */
+let memQ='';
+async function loadMem(){try{MEM=await ghP(`contents/memory.json?ref=main&t=${Date.now()}`,{headers:{'Accept':'application/vnd.github.raw'}})}catch(e){MEM={items:[],err:e.message}}renderMem()}
+const TY={user:'人',feedback:'約束',project:'案件',reference:'参照',workflow:'手順'};
+function renderMem(){const el=document.getElementById('v-mem');
+  if(pNotice()){el.innerHTML=`<div class="note">${pNotice()}</div>`;return}
+  const inb=P.inbox.slice().reverse().slice(0,6);
+  const items=(MEM&&MEM.items)||[];
+  el.innerHTML=`<div class="row2" style="margin-bottom:8px"><input class="inp" id="mAdd" placeholder="覚えておいてほしいこと"><button class="big" id="mSend" style="flex:none;width:72px;margin:0;padding:10px">送る</button></div>
+    ${inb.length?inb.map(x=>`<div class="wk"><em>${fmtT(x.t)}</em>${x.status==='done'?'':'<span class="pill" style="margin:0">次の解析で反映</span>'}<div class="s">${esc(x.text)}${x.reply?`<br><span style="color:var(--gray)">→ ${esc(x.reply)}</span>`:''}</div></div>`).join(''):''}
+    <input class="inp" id="mQ" placeholder="記憶を探す（${items.length}件）" value="${esc(memQ)}" style="margin:18px 0 4px">
+    <div id="mList"></div>
+    ${MEM&&MEM.t?`<div class="note">Claude Code のメモリーの写し（${ago(MEM.t)}に更新・連絡先などは載せない）</div>`:''}
+    <button class="big plain" id="mAI">✦ 記憶を見直してもらう</button>`;
+  const qi=el.querySelector('#mQ');qi.oninput=()=>{memQ=qi.value;memList()};memList();
+  el.querySelector('#mSend').onclick=()=>{const v=el.querySelector('#mAdd').value.trim();if(!v)return;P.inbox.push({id:uid(),t:Date.now(),text:v,status:'pending',u:Date.now()});saveP(true);toast('送った。次の解析で記憶に入る')};
+  el.querySelector('#mAI').onclick=()=>launch(`Claude Code のメモリー（~/.claude/projects/-Users-kuwatawatarunozomi-Claude-Code/memory/）を見直して。古い・重複・間違いを直し、MEMORY.md の索引を整える。終わったら python3 ${PRIV_WS}/tools/sync.py memory で Purpose の記憶タブに写す。報告は3行`);
+}
+function memList(){const el=document.getElementById('mList');if(!el)return;const items=(MEM&&MEM.items)||[], q=memQ.trim().toLowerCase();
+  const hit=q?items.filter(m=>(m.title+m.hook+m.body).toLowerCase().includes(q)):items;
+  el.innerHTML=!MEM?'<div class="note">読み込み中…</div>':MEM.err?'<div class="note">記憶を読めなかった</div>':hit.slice(0,80).map(m=>`<div class="mi" data-id="${esc(m.id)}"><b><span class="ty">${TY[m.type]||esc(m.type)}</span>${esc(m.title)}</b><small>${esc(m.hook)}</small></div>`).join('')||'<div class="note">見つからない</div>';
+  el.querySelectorAll('.mi').forEach(r=>onTap(r,()=>openMem(r.dataset.id)))}
+function openMem(id){const m=((MEM&&MEM.items)||[]).find(x=>x.id===id);if(!m)return;
+  openSheet(body=>{body.innerHTML=`<div class="kick">${TY[m.type]||esc(m.type)}　${ago(m.mtime)}に更新</div><div class="ttl">${esc(m.title)}</div><div class="sub">${esc(m.hook)}</div><div class="sec">中身</div><div class="mbody">${esc(m.body)}</div>
+    <button class="btn" id="bAI">✦ この記憶を直す</button>`;
+    body.querySelector('#bAI').onclick=()=>{launch(`Claude Code のメモリー ${m.id}.md（~/.claude/projects/-Users-kuwatawatarunozomi-Claude-Code/memory/）を私と一緒に直したい。まず中身を読んで、古くなっていそうな所を1つずつ聞いて。直したら python3 ${PRIV_WS}/tools/sync.py memory`);closeSheet()}})}
 
 /* ============================================================ boot */
-syncAgent();render();
+syncAgent();render();setView(VIEW);pullP();
 pull().then(ok=>{if(tok())setStat(ok?'同期済み（読み書き）':'リモート未作成')}).catch(()=>{});
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&Date.now()-lastPull>60000)pull().catch(()=>{})});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&Date.now()-lastPull>60000)pull().catch(()=>{});if(document.visibilityState==='visible')pullP()});
 setInterval(()=>{if(document.visibilityState==='visible'&&Date.now()-lastPull>90000)pull().catch(()=>{})},30000);
+setInterval(()=>{if(document.visibilityState==='visible')pullP()},120000);
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 window.__tap=sel=>{const el=document.querySelector(sel);if(!el)return'no:'+sel;const r=el.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;
   ['pointerdown','pointerup'].forEach(t=>el.dispatchEvent(new PointerEvent(t,{bubbles:true,clientX:x,clientY:y,pointerId:1})));el.dispatchEvent(new MouseEvent('click',{bubbles:true,clientX:x,clientY:y}));return'ok'};
