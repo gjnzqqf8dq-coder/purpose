@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" href="icon-512.png">
 <title>Purpose</title>
 <style>
-/* Purpose v18 — ゴール／体／記憶。v17 — 白黒。ゴール → 中の目標 → タスク の入れ子だけ。書くのは Claude Code、私はこなす */
+/* Purpose v19 — YouTube（指定チャンネルの新着をサムネ→要約で届ける）。v18 — ゴール／体／記憶。v17 — 白黒。ゴール → 中の目標 → タスク の入れ子だけ。書くのは Claude Code、私はこなす */
 :root{color-scheme:light;
   --ink:#000;--ink2:#3c3c43;--gray:#8a8a8e;--gray3:#c7c7cc;--sep:#e5e5ea;--fill:#f2f2f7;--well:#fafafa;
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Hiragino Sans","Noto Sans JP",sans-serif}
@@ -152,6 +152,48 @@ h1 small{display:block;font-size:12px;font-weight:500;color:var(--gray);letter-s
 .ty{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.08em;color:var(--gray);margin-right:6px}
 .mbody{font-size:13.5px;line-height:1.85;color:var(--ink2);white-space:pre-wrap;word-break:break-word;user-select:text;-webkit-user-select:text}
 .pill{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--fill);color:var(--gray);margin-left:6px;vertical-align:2px}
+
+/* v19：YouTube（メッセージ形式。サムネ → 要約の順に届く） */
+.seg button{position:relative}
+.seg button .dot{position:absolute;top:5px;right:calc(50% - 34px);width:7px;height:7px;border-radius:50%;background:var(--ink)}
+.ytbar{position:sticky;top:-22px;z-index:3;display:flex;align-items:center;gap:10px;margin:-22px -20px 6px;padding:22px 20px 10px;background:rgba(255,255,255,.92);
+  -webkit-backdrop-filter:saturate(1.8) blur(18px);backdrop-filter:saturate(1.8) blur(18px);box-shadow:0 .5px 0 var(--sep)}
+.ytbar .who{flex:1;min-width:0;display:flex;align-items:center;gap:9px;font-size:15px;font-weight:600}
+.ytbar .who span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ytbar .who small{font-size:12px;font-weight:500;color:var(--gray);flex:none}
+.ytbar .x{flex:none;width:22px;height:22px;border-radius:50%;background:var(--fill);color:var(--gray);font-size:13px;line-height:22px;text-align:center}
+.lsbtn{flex:none;display:flex;align-items:center;gap:6px;padding:8px 13px;border-radius:999px;background:var(--ink);color:#fff;font-size:13px;font-weight:600}
+.lsbtn svg{width:15px;height:15px}
+.av{flex:none;width:34px;height:34px;border-radius:50%;object-fit:cover;background:var(--fill)}
+.av.s{width:26px;height:26px}
+.dsep{text-align:center;font-size:11.5px;font-weight:600;color:var(--gray);margin:22px 0 8px;font-variant-numeric:tabular-nums}
+.yr{display:flex;gap:9px;align-items:flex-end;margin:0 0 14px}
+.yr .col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.yr .nm{font-size:11.5px;color:var(--gray);margin:0 0 1px 4px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.yth{position:relative;display:block;width:min(86%,330px);aspect-ratio:16/9;border-radius:18px 18px 18px 6px;overflow:hidden;background:var(--fill)}
+.yth img{width:100%;height:100%;object-fit:cover;display:block}
+.yth b{position:absolute;right:7px;bottom:7px;padding:2px 6px;border-radius:6px;background:rgba(0,0,0,.72);color:#fff;font-size:11px;font-weight:600;font-variant-numeric:tabular-nums}
+.yth i{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.yth i::after{content:"";width:46px;height:46px;border-radius:50%;background:rgba(0,0,0,.55) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 7l9 5-9 5z' fill='%23fff'/%3E%3C/svg%3E") center/22px no-repeat}
+.ybub{max-width:min(92%,420px);padding:11px 14px 12px;border-radius:18px 18px 18px 6px;background:var(--fill);cursor:pointer;user-select:text;-webkit-user-select:text}
+.ybub .vt{font-size:11.5px;color:var(--gray);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ybub .one{font-size:15px;font-weight:700;line-height:1.5;margin-top:5px;letter-spacing:-.01em}
+.ybub .cl{font-size:13.5px;line-height:1.7;color:var(--ink2);margin-top:6px}
+.ybub ol{list-style:none;margin:8px 0 0;counter-reset:n}
+.ybub li{counter-increment:n;position:relative;padding-left:22px;margin-top:7px;font-size:13.5px;line-height:1.6}
+.ybub li::before{content:counter(n);position:absolute;left:0;top:2px;width:16px;height:16px;border-radius:50%;background:var(--ink);color:#fff;font-size:10px;font-weight:700;text-align:center;line-height:16px}
+.ybub li b{font-weight:600}
+.ybub li span{display:none;color:var(--ink2);font-size:13px;margin-top:2px}
+.ybub .tk{display:none;margin-top:10px;padding-top:9px;box-shadow:0 -.5px 0 var(--gray3);font-size:13.5px;line-height:1.7;font-weight:600}
+.ybub .more{font-size:12px;color:var(--gray);margin-top:8px;font-weight:600}
+.ybub.open li span{display:block}.ybub.open .tk{display:block}.ybub.open .more{display:none}
+.tm{font-size:10.5px;color:var(--gray);margin-left:4px;font-variant-numeric:tabular-nums}
+.chl{display:flex;gap:12px;align-items:center;padding:11px 0;box-shadow:0 .5px 0 var(--sep);cursor:pointer}
+.chl .tt{flex:1;min-width:0}
+.chl b{display:block;font-size:14.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chl small{display:block;font-size:12px;color:var(--gray);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chl em{flex:none;font-style:normal;font-size:11.5px;color:var(--gray);font-variant-numeric:tabular-nums}
+.chl.on b::after{content:" ✓"}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -159,7 +201,7 @@ h1 small{display:block;font-size:12px;font-weight:500;color:var(--gray);letter-s
 <div id="app">
 <main id="main">
   <div class="head"><h1 id="h1">Purpose<small id="cap"></small></h1><div class="agent" id="agent" role="switch"><span>Codex</span><div class="sw"></div></div></div>
-  <nav class="seg" id="seg"><button data-v="goal">ゴール</button><button data-v="body">体</button><button data-v="mem">記憶</button></nav>
+  <nav class="seg" id="seg"><button data-v="goal">ゴール</button><button data-v="body">体</button><button data-v="mem">記憶</button><button data-v="yt">YouTube</button></nav>
   <section class="view" id="v-goal">
   <div id="coach"></div>
   <button id="newBtn"><i>＋</i><div><b>新しいゴール</b><small id="newSub">Claude Code が開く。答えるだけ。</small></div></button>
@@ -167,6 +209,7 @@ h1 small{display:block;font-size:12px;font-weight:500;color:var(--gray);letter-s
   </section>
   <section class="view" id="v-body"></section>
   <section class="view" id="v-mem"></section>
+  <section class="view" id="v-yt"></section>
   <input type="file" id="cam" accept="image/*" capture="environment" hidden>
 </main>
 </div>
@@ -488,9 +531,9 @@ let VIEW=localStorage.getItem('purpose.view')||'goal';
 function setView(v){VIEW=v;localStorage.setItem('purpose.view',v);
   document.querySelectorAll('#seg button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
   document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));
-  document.getElementById('main').scrollTop=0;renderAux();if(v==='mem'&&!MEM)loadMem()}
+  document.getElementById('main').scrollTop=0;renderAux();if(v==='mem'&&!MEM)loadMem();if(v==='yt')loadYT(true)}
 document.querySelectorAll('#seg button').forEach(b=>b.onclick=()=>setView(b.dataset.v));
-function renderAux(){renderCoach();if(VIEW==='body')renderBody();if(VIEW==='mem')renderMem()}
+function renderAux(){renderCoach();if(VIEW==='body')renderBody();if(VIEW==='mem')renderMem();if(VIEW==='yt')renderYT()}
 
 /* ------------------------------------------------ 次の一手（毎時の解析） */
 const ago=t=>{const m=Math.round((Date.now()-t)/6e4);return m<1?'いま':m<60?m+'分前':m<1440?Math.round(m/60)+'時間前':Math.round(m/1440)+'日前'};
@@ -607,10 +650,60 @@ function openMem(id){const m=((MEM&&MEM.items)||[]).find(x=>x.id===id);if(!m)ret
     <button class="btn" id="bAI">✦ この記憶を直す</button>`;
     body.querySelector('#bAI').onclick=()=>{launch(`Claude Code のメモリー ${m.id}.md（~/.claude/projects/-Users-kuwatawatarunozomi-Claude-Code/memory/）を私と一緒に直したい。まず中身を読んで、古くなっていそうな所を1つずつ聞いて。直したら python3 ${PRIV_WS}/tools/sync.py memory`);closeSheet()}})}
 
+
+/* ------------------------------------------------ YouTube（v19）
+   指定チャンネルの新着を毎日1回見つけ、サムネ → 構造化した要約の順で「届く」。
+   正データは公開リポジトリの youtube.json（tools/youtube.py と定期タスク purpose-youtube が書く。トークン不要で読める） */
+let YTD=null, ytCh=localStorage.getItem('purpose.ytch')||'', ytSeen=+(localStorage.getItem('purpose.ytseen')||0), ytLoaded=0;
+const chOf=id=>((YTD&&YTD.channels)||[]).find(c=>c.id===id)||{name:'',avatar:''};
+const hms=s=>{s=Math.round(s||0);const h=Math.floor(s/3600),m=Math.floor(s%3600/60);return(h?h+':'+pad(m):m)+':'+pad(s%60)};
+const dLabel=t=>{const d=new Date(t),k=fmt(d);return k===TODAY?'今日':k===fmt(new Date(Date.now()-864e5))?'昨日':`${d.getMonth()+1}月${d.getDate()}日（${WDJ[d.getDay()]}）`};
+const LSICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.2" fill="currentColor"/><circle cx="4.5" cy="12" r="1.2" fill="currentColor"/><circle cx="4.5" cy="18" r="1.2" fill="currentColor"/></svg>';
+async function loadYT(toBottom){
+  if(YTD&&Date.now()-ytLoaded<60000){renderYT(toBottom);return}
+  try{const r=await fetch('youtube.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw 0;YTD=await r.json();ytLoaded=Date.now();try{localStorage.setItem('purpose.yt',JSON.stringify(YTD))}catch(_){}}
+  catch(e){if(!YTD){try{YTD=JSON.parse(localStorage.getItem('purpose.yt'))}catch(_){}}}
+  ytDot();if(VIEW==='yt')renderYT(toBottom)}
+function ytDot(){const b=document.querySelector('#seg [data-v="yt"]');if(!b)return;const last=Math.max(0,...((YTD&&YTD.msgs)||[]).map(m=>m.at||m.t));
+  let d=b.querySelector('.dot');const show=last>ytSeen&&VIEW!=='yt';if(show&&!d){d=document.createElement('i');d.className='dot';b.appendChild(d)}if(!show&&d)d.remove()}
+function renderYT(toBottom){const el=document.getElementById('v-yt');
+  if(!YTD){el.innerHTML='<div class="note">読み込み中…</div>';return}
+  const msgs=(YTD.msgs||[]).filter(m=>!ytCh||m.ch===ytCh), c=ytCh?chOf(ytCh):null;
+  let html=`<div class="ytbar"><div class="who">${c?`<img class="av s" src="${esc(c.avatar)}" referrerpolicy="no-referrer"><span>${esc(c.name)}</span><button class="x" id="ytAll">×</button>`:`<span>すべて</span><small>${(YTD.channels||[]).length}チャンネル</small>`}</div><button class="lsbtn" id="ytList">${LSICON}リスト</button></div>`;
+  let day='', prev='';
+  msgs.forEach(m=>{const ch=chOf(m.ch), dl=dLabel(m.t);
+    if(dl!==day){html+=`<div class="dsep">${dl}</div>`;day=dl;prev=''}
+    const url='https://www.youtube.com/watch?v='+m.id;
+    html+=`<div class="yr"><img class="av" src="${esc(ch.avatar)}" referrerpolicy="no-referrer" data-ch="${esc(m.ch)}"><div class="col">
+      ${prev!==m.ch?`<div class="nm">${esc(ch.name)}</div>`:''}
+      <a class="yth" href="${url}" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/${esc(m.id)}/hqdefault.jpg"><i></i><b>${hms(m.dur)}</b></a>
+      <div class="ybub" data-id="${esc(m.id)}"><div class="vt">${esc(m.title)}</div><div class="one">${esc(m.one)}</div>${m.claim?`<div class="cl">${esc(m.claim)}</div>`:''}
+        <ol>${(m.points||[]).map(p=>`<li><b>${esc(p.h)}</b><span>${esc(p.b)}</span></li>`).join('')}</ol>${m.take?`<div class="tk">→ ${esc(m.take)}</div>`:''}<div class="more">タップで全文</div></div>
+      <span class="tm">${pad(new Date(m.t).getHours())}:${pad(new Date(m.t).getMinutes())} 投稿</span></div></div>`;prev=m.ch});
+  if(!msgs.length)html+=`<div class="note">${ytCh?'このチャンネルの要約はまだ無い。':'まだ届いていない。'}毎朝、新着があればここに届く。</div>`;
+  el.innerHTML=html;
+  el.querySelector('#ytList').onclick=openYTList;
+  const xa=el.querySelector('#ytAll');if(xa)xa.onclick=()=>setYTCh('');
+  el.querySelectorAll('.ybub').forEach(b=>onTap(b,()=>{if(getSelection().toString())return;b.classList.toggle('open')}));
+  el.querySelectorAll('.av[data-ch]').forEach(a=>onTap(a,()=>setYTCh(a.dataset.ch)));
+  const last=Math.max(0,...(YTD.msgs||[]).map(m=>m.at||m.t));if(last>ytSeen){ytSeen=last;localStorage.setItem('purpose.ytseen',last)}ytDot();
+  if(toBottom)requestAnimationFrame(()=>{const mn=document.getElementById('main');mn.scrollTop=mn.scrollHeight})}
+function setYTCh(id){ytCh=id;localStorage.setItem('purpose.ytch',id);renderYT(true)}
+function openYTList(){openSheet(body=>{const ms=(YTD&&YTD.msgs)||[];
+  const rows=(YTD.channels||[]).map(c=>{const mine=ms.filter(m=>m.ch===c.id),l=mine[mine.length-1];return{c,n:mine.length,l}}).sort((a,b)=>((b.l||{}).t||0)-((a.l||{}).t||0));
+  body.innerHTML=`<div class="ttl">チャンネル</div><div class="sub">毎朝、新着を見つけたらサムネと要約が届く</div>
+    <div class="chl${ytCh?'':' on'}" data-ch=""><div class="av" style="display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">ALL</div><div class="tt"><b>すべて</b><small>${ms.length}本の要約</small></div></div>
+    ${rows.map(({c,n,l})=>`<div class="chl${ytCh===c.id?' on':''}" data-ch="${esc(c.id)}"><img class="av" src="${esc(c.avatar)}" referrerpolicy="no-referrer"><div class="tt"><b>${esc(c.name)}</b><small>${l?esc(l.one||l.title):'まだ届いていない'}</small></div><em>${l?ago(l.t):''}${n?`<br>${n}本`:''}</em></div>`).join('')}
+    <button class="btn" id="ytAdd">＋ チャンネルを足す</button>
+    <button class="btn plain" id="ytNow">✦ いま新着を確かめる</button>`;
+  body.querySelectorAll('.chl').forEach(r=>onTap(r,()=>{closeSheet();setYTCh(r.dataset.ch)}));
+  body.querySelector('#ytAdd').onclick=()=>{launch(`Purpose の YouTube 欄にチャンネルを足したい。どのチャンネルか私に聞いて、YouTube で特定したら cd ${repoPath()} && python3 tools/youtube.py add-channel <チャンネルID> で足し、youtube.json を commit・push して。報告は1行`);closeSheet()};
+  body.querySelector('#ytNow').onclick=()=>{launch(`Purpose の YouTube 欄の更新をいま1回だけ実行して。手順は ~/.claude/scheduled-tasks/purpose-youtube/SKILL.md に書いてある。報告は1行`);closeSheet()}})}
+
 /* ============================================================ boot */
-syncAgent();render();setView(VIEW);pullP();
+syncAgent();render();setView(VIEW);pullP();if(VIEW!=='yt')loadYT();
 pull().then(ok=>{if(tok())setStat(ok?'同期済み（読み書き）':'リモート未作成')}).catch(()=>{});
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&Date.now()-lastPull>60000)pull().catch(()=>{});if(document.visibilityState==='visible')pullP()});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&Date.now()-lastPull>60000)pull().catch(()=>{});if(document.visibilityState==='visible'){pullP();loadYT(VIEW==='yt')}});
 setInterval(()=>{if(document.visibilityState==='visible'&&Date.now()-lastPull>90000)pull().catch(()=>{})},30000);
 setInterval(()=>{if(document.visibilityState==='visible')pullP()},120000);
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
